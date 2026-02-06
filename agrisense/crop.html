@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<title>Crop Selection</title>
+<link rel="stylesheet" href="crop.css">
+</head>
+
+<body>
+<div class="overlay"></div>
+
+<!-- 🌐 Right side small highlighted language switcher -->
+<div class="lang-box">
+  <select id="lang" onchange="changeLang()">
+    <option value="hi">HI</option>
+    <option value="en">EN</option>
+    <option value="bh">BH</option>
+    <option value="mr">MR</option>
+    <option value="pa">PA</option>
+  </select>
+</div>
+
+<div class="container">
+  <h1 id="heading">🌱 फसल चयन</h1>
+  <p id="sub">खेती की जानकारी भरें</p>
+
+  <div class="card">
+    <label id="soilL">🌍 मिट्टी का प्रकार</label>
+    <select id="soil"></select>
+
+    <label id="seasonL">🌦 मौसम</label>
+    <select id="season"></select>
+
+    <label id="waterL">💧 पानी उपलब्धता</label>
+    <select id="water"></select>
+
+    <button id="btn" onclick="recommend()">🌾 फसल सुझाव</button>
+  </div>
+
+  <div id="result"></div>
+</div>
+
+<script src="crop.js"></script>
+</body>
+</html>

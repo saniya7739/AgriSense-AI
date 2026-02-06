@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<title>AgriSense AI – Dashboard</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Segoe UI",sans-serif;
+}
+
+body{
+  background:url("farm.jpg") no-repeat center center fixed;
+  background-size:cover;
+}
+
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.45);
+  z-index:-1;
+}
+
+#lang{
+  position:fixed;
+  top:20px;
+  right:20px;
+  padding:10px 14px;
+  font-size:16px;
+  border-radius:10px;
+  z-index:10;
+}
+
+.header{
+  padding:60px 20px 40px;
+  text-align:center;
+}
+
+.header h1{
+  font-size:46px;
+  font-weight:900;
+  color:#F1F8E9;
+  text-shadow:0 4px 8px #1B5E20;
+  animation:slideDown 1s ease;
+}
+
+@keyframes slideDown{
+  from{opacity:0;transform:translateY(-40px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+.features{
+  display:flex;
+  flex-direction:column;
+  gap:26px;
+  padding:30px 20px 60px;
+  max-width:520px;
+  margin:auto;
+}
+
+.feature{
+  background:#e8d8b0;
+  padding:34px;
+  font-size:24px;
+  border-radius:28px;
+  color:#333;
+  cursor:pointer;
+  animation:pop 0.8s ease;
+  text-decoration:none;
+}
+
+.feature:hover{
+  transform:scale(1.03);
+}
+
+@keyframes pop{
+  from{opacity:0;transform:translateY(40px) scale(0.9);}
+  to{opacity:1;transform:translateY(0) scale(1);}
+}
+
+.popup{
+  position:fixed;
+  inset:0;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  background:rgba(0,0,0,0.6);
+}
+
+.popup-card{
+  background:#e8d8b0;
+  padding:40px;
+  border-radius:26px;
+  text-align:center;
+  width:90%;
+  max-width:420px;
+}
+
+.popup-card button{
+  margin-top:22px;
+  padding:14px 34px;
+  font-size:18px;
+  border:none;
+  border-radius:30px;
+  background:#2e7d32;
+  color:white;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+<div class="overlay"></div>
+
+<select id="lang" onchange="changeLang()">
+  <option value="hi">हिंदी</option>
+  <option value="en">English</option>
+  <option value="bh">Bhojpuri</option>
+  <option value="mr">Marathi</option>
+  <option value="pa">Punjabi</option>
+</select>
+
+<div class="header">
+  <h1 id="dashTitle">🌾 किसान डैशबोर्ड</h1>
+</div>
+
+<div class="features">
+  <!-- ✅ NEW LINK -->
+  <a href="crop.html" class="feature" id="f1">🌱 फसल चयन</a>
+
+  <!-- ✅ NEW LINK -->
+  <a href="disease.html" class="feature" id="f2">📷 रोग पहचान</a>
+
+  <!-- ❌ OLD FEATURES SAME -->
+  <div class="feature" id="f3" onclick="openPop()">🌦 मौसम सलाह</div>
+  <div class="feature" id="f4" onclick="openPop()">🧑‍🌾 एआई किसान मित्र</div>
+  <div class="feature" id="f5" onclick="openPop()">🧪 मिट्टी एवं उर्वरक</div>
+  <div class="feature" id="f6" onclick="openPop()">🏪 मंडी मूल्य</div>
+  <div class="feature" id="f7" onclick="openPop()">🏛 सरकारी योजनाएँ</div>
+  <div class="feature" id="f8" onclick="openPop()">🚨 आपातकालीन अलर्ट</div>
+</div>
+
+<div class="popup" id="popup">
+  <div class="popup-card">
+    <p>🌱 यह सुविधा जल्द उपलब्ध होगी</p>
+    <button onclick="closePop()">बंद करें</button>
+  </div>
+</div>
+
+<script>
+const TEXT = {
+  hi:{
+    title:"🌾 किसान डैशबोर्ड",
+    features:[
+      "🌱 फसल चयन",
+      "📷 रोग पहचान",
+      "🌦 मौसम सलाह",
+      "🧑‍🌾 एआई किसान मित्र",
+      "🧪 मिट्टी एवं उर्वरक",
+      "🏪 मंडी मूल्य",
+      "🏛 सरकारी योजनाएँ",
+      "🚨 आपातकालीन अलर्ट"
+    ]
+  },
+  en:{
+    title:"🌾 Farmer Dashboard",
+    features:[
+      "🌱 Crop Selection",
+      "📷 Disease Detection",
+      "🌦 Weather Advice",
+      "🧑‍🌾 AI Kisan Mitra",
+      "🧪 Soil & Fertilizer",
+      "🏪 Market Price",
+      "🏛 Govt Schemes",
+      "🚨 Emergency Alerts"
+    ]
+  },
+  bh:{
+    title:"🌾 किसान डैशबोर्ड",
+    features:[
+      "🌱 फसल चुने",
+      "📷 रोग पहिचान",
+      "🌦 मौसम सलाह",
+      "🧑‍🌾 एआई किसान साथी",
+      "🧪 माटी अउ खाद",
+      "🏪 मंडी भाव",
+      "🏛 सरकारी योजना",
+      "🚨 आपात सूचना"
+    ]
+  },
+  mr:{
+    title:"🌾 शेतकरी डॅशबोर्ड",
+    features:[
+      "🌱 पीक निवड",
+      "📷 रोग ओळख",
+      "🌦 हवामान सल्ला",
+      "🧑‍🌾 एआय शेतकरी मित्र",
+      "🧪 माती व खत",
+      "🏪 बाजार भाव",
+      "🏛 सरकारी योजना",
+      "🚨 आपत्कालीन सूचना"
+    ]
+  },
+  pa:{
+    title:"🌾 ਕਿਸਾਨ ਡੈਸ਼ਬੋਰਡ",
+    features:[
+      "🌱 ਫਸਲ ਚੋਣ",
+      "📷 ਰੋਗ ਪਛਾਣ",
+      "🌦 ਮੌਸਮ ਸਲਾਹ",
+      "🧑‍🌾 ਏਆਈ ਕਿਸਾਨ ਮਿਤਰ",
+      "🧪 ਮਿੱਟੀ ਤੇ ਖਾਦ",
+      "🏪 ਮੰਡੀ ਭਾਅ",
+      "🏛 ਸਰਕਾਰੀ ਯੋਜਨਾਵਾਂ",
+      "🚨 ਐਮਰਜੈਂਸੀ ਅਲਰਟ"
+    ]
+  }
+};
+
+function changeLang(){
+  const l=document.getElementById("lang").value;
+  dashTitle.innerText=TEXT[l].title;
+  for(let i=0;i<8;i++){
+    document.getElementById("f"+(i+1)).innerText=TEXT[l].features[i];
+  }
+}
+
+function openPop(){
+  popup.style.display="flex";
+}
+function closePop(){
+  popup.style.display="none";
+}
+</script>
+
+</body>
+</html>

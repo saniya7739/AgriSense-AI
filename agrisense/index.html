@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<title>AgriSense AI</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Segoe UI",sans-serif;
+}
+html,body{
+  width:100%;
+  height:100%;
+}
+body{
+  background:url("farm.jpg") no-repeat center center fixed;
+  background-size:cover;
+}
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.45);
+  z-index:-1;
+}
+#lang{
+  position:fixed;
+  top:20px;
+  right:20px;
+  padding:10px 14px;
+  font-size:16px;
+  border-radius:10px;
+}
+.container{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+.card{
+  background:#e8d8b0;
+  padding:40px;
+  border-radius:26px;
+  width:90%;
+  max-width:480px;
+  text-align:center;
+  animation:pop 1s ease;
+}
+@keyframes pop{
+  from{opacity:0;transform:translateY(50px) scale(0.9);}
+  to{opacity:1;transform:translateY(0) scale(1);}
+}
+h1{
+  color:#1b5e20;
+  font-size:36px;
+  font-weight:800;
+  margin-bottom:16px;
+  animation:slide 1s ease;
+}
+@keyframes slide{
+  from{opacity:0;transform:translateY(-30px);}
+  to{opacity:1;transform:translateY(0);}
+}
+p{
+  font-size:20px;
+  color:#333;
+  margin-bottom:22px;
+}
+input{
+  width:90%;
+  padding:14px;
+  font-size:18px;
+  border-radius:12px;
+  border:1px solid #ccc;
+  margin-bottom:18px;
+}
+.login-btn{
+  background:#2e7d32;
+  color:white;
+  border:none;
+  padding:14px 36px;
+  font-size:20px;
+  border-radius:30px;
+  cursor:pointer;
+}
+.guest-btn{
+  margin-top:14px;
+  font-size:18px;
+  color:#2e7d32;
+  background:none;
+  border:2px solid #2e7d32;
+  padding:10px 28px;
+  border-radius:25px;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+<div class="overlay"></div>
+
+<select id="lang" onchange="changeLang()">
+  <option value="hi">हिंदी</option>
+  <option value="en">English</option>
+  <option value="bh">Bhojpuri</option>
+  <option value="mr">Marathi</option>
+  <option value="pa">Punjabi</option>
+</select>
+
+<div class="container">
+  <div class="card">
+    <h1 id="title">👨‍🌾 किसान का स्वागत है</h1>
+    <p id="tagline">AI Powered Farming Assistant</p>
+
+    <input id="mobileInput" type="text" placeholder="📱 मोबाइल नंबर">
+
+    <button class="login-btn" id="loginBtn" onclick="login()">Login</button>
+    <br>
+    <button class="guest-btn" id="guestBtn" onclick="guest()">Guest के रूप में जारी रखें</button>
+  </div>
+</div>
+
+<script>
+const TEXT={
+  hi:{
+    title:"👨‍🌾 किसान का स्वागत है",
+    tag:"AI Powered Farming Assistant",
+    mobile:"📱 मोबाइल नंबर",
+    login:"Login",
+    guest:"Guest के रूप में जारी रखें"
+  },
+  en:{
+    title:"👨‍🌾 Welcome Farmer",
+    tag:"AI Powered Farming Assistant",
+    mobile:"📱 Mobile Number",
+    login:"Login",
+    guest:"Continue as Guest"
+  },
+  bh:{
+    title:"👨‍🌾 किसान के स्वागत बा",
+    tag:"AI से चल रहल खेती साथी",
+    mobile:"📱 मोबाइल नंबर",
+    login:"Login",
+    guest:"Guest बन के आगे बढ़ीं"
+  },
+  mr:{
+    title:"👨‍🌾 शेतकऱ्याचे स्वागत आहे",
+    tag:"AI आधारित शेती सहाय्यक",
+    mobile:"📱 मोबाईल नंबर",
+    login:"Login",
+    guest:"Guest म्हणून पुढे जा"
+  },
+  pa:{
+    title:"👨‍🌾 ਕਿਸਾਨ ਦਾ ਸਵਾਗਤ ਹੈ",
+    tag:"AI ਆਧਾਰਿਤ ਖੇਤੀ ਸਹਾਇਕ",
+    mobile:"📱 ਮੋਬਾਈਲ ਨੰਬਰ",
+    login:"Login",
+    guest:"Guest ਵਜੋਂ ਜਾਰੀ ਰੱਖੋ"
+  }
+};
+
+function changeLang(){
+  const l=document.getElementById("lang").value;
+  document.getElementById("title").innerText=TEXT[l].title;
+  document.getElementById("tagline").innerText=TEXT[l].tag;
+  document.getElementById("mobileInput").placeholder=TEXT[l].mobile;
+  document.getElementById("loginBtn").innerText=TEXT[l].login;
+  document.getElementById("guestBtn").innerText=TEXT[l].guest;
+}
+
+/* 🔥 FIXED CONNECTION */
+function login(){
+  window.location.href="dashboard.html";
+}
+function guest(){
+  window.location.href="dashboard.html";
+}
+</script>
+
+</body>
+</html>

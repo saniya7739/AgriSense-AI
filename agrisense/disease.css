@@ -1,0 +1,104 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Segoe UI",sans-serif;
+}
+
+body{
+  min-height:100vh;
+  background:url("farm.jpg") no-repeat center center fixed;
+  background-size:cover;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.45);
+  z-index:-1;
+}
+
+/* LANGUAGE SWITCHER */
+#lang{
+  position:fixed;
+  top:16px;
+  right:16px;
+  padding:6px 10px;
+  border-radius:8px;
+  font-weight:700;
+  background:#e8d8b0;
+  z-index:10;
+}
+
+/* CONTAINER */
+.container{
+  width:92%;
+  max-width:520px;
+  background:rgba(255,255,255,0.1);
+  backdrop-filter:blur(6px);
+  border-radius:28px;
+  padding:36px 26px;
+  text-align:center;
+  animation:fadeUp 1s ease;
+}
+
+h1{
+  font-size:40px;
+  font-weight:900;
+  color:#F1F8E9;
+  text-shadow:0 4px 8px #1B5E20;
+}
+
+p{
+  font-size:18px;
+  color:#eee;
+  margin:14px 0 26px;
+}
+
+.card{
+  background:#e8d8b0;
+  border-radius:26px;
+  padding:26px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.card label{
+  font-size:18px;
+  font-weight:700;
+}
+
+.card input{
+  padding:10px;
+  border-radius:10px;
+}
+
+.card button{
+  margin-top:10px;
+  padding:14px;
+  font-size:20px;
+  font-weight:800;
+  border:none;
+  border-radius:30px;
+  background:#fbc02d;
+  cursor:pointer;
+}
+
+#result{
+  margin-top:24px;
+  background:#e8d8b0;
+  border-radius:22px;
+  padding:22px;
+  font-size:17px;
+  text-align:left;
+  white-space:pre-line;
+}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(40px);}
+  to{opacity:1;transform:translateY(0);}
+}

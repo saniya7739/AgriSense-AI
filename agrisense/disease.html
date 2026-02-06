@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<title>AgriSense AI – Disease Detection</title>
+<link rel="stylesheet" href="disease.css">
+</head>
+
+<body>
+<div class="overlay"></div>
+
+<!-- 🌍 LANGUAGE SWITCHER -->
+<select id="lang" onchange="changeLang()">
+  <option value="hi">HI</option>
+  <option value="en">EN</option>
+  <option value="bh">BH</option>
+  <option value="mr">MR</option>
+  <option value="pa">PA</option>
+</select>
+
+<div class="container">
+
+  <h1 id="title">📷 फसल रोग पहचान</h1>
+  <p id="subtitle">फसल की फोटो अपलोड करें या कैमरा से क्लिक करें</p>
+
+  <div class="card">
+
+    <label id="uploadText">📁 फोटो अपलोड करें</label>
+    <input type="file" id="upload" accept="image/*">
+
+    <label id="cameraText">📸 कैमरा से फोटो लें</label>
+    <input type="file" id="camera" accept="image/*" capture="environment">
+
+    <button id="detectBtn" onclick="detectDisease()">🔍 रोग पहचानें</button>
+
+  </div>
+
+  <div id="result"></div>
+
+</div>
+
+<script src="disease.js"></script>
+</body>
+</html>
