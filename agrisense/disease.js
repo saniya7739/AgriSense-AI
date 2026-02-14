@@ -84,27 +84,35 @@ d:[
 };
 
 function changeLang(){
-const L=DATA[currentLang=document.getElementById("lang").value];
-title.innerText=L.title;
-subtitle.innerText=L.subtitle;
-uploadText.innerText=L.upload;
-cameraText.innerText=L.camera;
-detectBtn.innerText=L.btn;
-result.innerText="";
+  const langSelect = document.getElementById("lang");
+  currentLang = langSelect.value;
+  const L = DATA[currentLang];
+  
+  document.getElementById("title").innerText = L.title;
+  document.getElementById("subtitle").innerText = L.subtitle;
+  document.getElementById("uploadText").innerText = L.upload;
+  document.getElementById("cameraText").innerText = L.camera;
+  document.getElementById("detectBtn").innerText = L.btn;
+  document.getElementById("result").innerText = "";
 }
 
 function detectDisease(){
-if(!upload.files[0] && !camera.files[0]){
-alert(currentLang==="hi"?"पहले फोटो डालें":"Please upload image");
-return;
-}
-result.innerText=DATA[currentLang].analyzing;
-setTimeout(showResult,2000);
+  const upload = document.getElementById("upload");
+  const camera = document.getElementById("camera");
+  const result = document.getElementById("result");
+  
+  if(!upload.files[0] && !camera.files[0]){
+    alert(currentLang==="hi"?"पहले फोटो डालें":"Please upload image");
+    return;
+  }
+  result.innerText=DATA[currentLang].analyzing;
+  setTimeout(showResult,2000);
 }
 
 function showResult(){
-let out=DATA[currentLang].result+"\n\n";
-DATA[currentLang].d.sort(()=>0.5-Math.random()).slice(0,3)
-.forEach(x=>out+="✔ "+x[0]+" → "+x[1]+"\n");
-result.innerText=out;
+  const result = document.getElementById("result");
+  let out=DATA[currentLang].result+"\n\n";
+  DATA[currentLang].d.sort(()=>0.5-Math.random()).slice(0,3)
+  .forEach(x=>out+="✔ "+x[0]+" → "+x[1]+"\n");
+  result.innerText=out;
 }

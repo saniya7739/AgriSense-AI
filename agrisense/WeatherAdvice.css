@@ -1,0 +1,315 @@
+/* 🌦 Weather Advice Styling */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  background: url("farm.jpg") no-repeat center center fixed;
+  background-size: cover;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: -1;
+}
+
+/* Language Selector Button */
+.lang-selector {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
+}
+
+.lang-selector select {
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 12px;
+  border: 2px solid #2e7d32;
+  background: #e8d8b0;
+  color: #333;
+  cursor: pointer;
+  min-width: 150px;
+  transition: all 0.3s ease;
+}
+
+.lang-selector select:hover {
+  background: #d4c490;
+}
+
+/* Back button */
+.back-btn {
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  background: #e8d8b0;
+  color: #333;
+  padding: 10px 16px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  background: #d4c490;
+  transform: translateX(-4px);
+}
+
+/* Center content */
+.container {
+  max-width: 520px;
+  margin: 110px auto;
+  text-align: center;
+  color: #F1F8E9;
+}
+
+h1 {
+  font-size: 42px;
+  font-weight: 900;
+  text-shadow: 0 4px 8px #1B5E20;
+  animation: slideDown 1s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+p {
+  margin: 12px 0 28px;
+  font-size: 18px;
+}
+
+.card {
+  background: #e8d8b0;
+  padding: 32px;
+  border-radius: 26px;
+  color: #333;
+  animation: pop 0.8s ease;
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+label {
+  display: block;
+  margin-top: 18px;
+  text-align: left;
+  font-weight: 600;
+}
+
+select {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  border-radius: 10px;
+  border: 2px solid #2e7d32;
+  font-size: 16px;
+  background: white;
+  cursor: pointer;
+}
+
+select:focus {
+  outline: none;
+  border-color: #1b5e20;
+}
+
+.weather-btn {
+  margin-top: 26px;
+  padding: 14px;
+  width: 100%;
+  border: none;
+  border-radius: 30px;
+  background: #2e7d32;
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.weather-btn:hover {
+  background: #1b5e20;
+  transform: scale(1.02);
+}
+
+.weather-btn:active {
+  transform: scale(0.98);
+}
+
+/* Weather Result Display */
+.weather-result {
+  margin-top: 28px;
+  animation: slideUp 0.6s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.weather-card {
+  background: white;
+  padding: 28px;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.weather-card h2 {
+  color: #2e7d32;
+  font-size: 28px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.weather-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.info-box {
+  background: #F1F8E9;
+  padding: 16px;
+  border-radius: 12px;
+  border-left: 4px solid #2e7d32;
+}
+
+.info-box .label {
+  display: block;
+  font-size: 14px;
+  color: #1b5e20;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.info-box .value {
+  display: block;
+  font-size: 24px;
+  font-weight: 800;
+  color: #2e7d32;
+}
+
+/* Advice Box */
+.advice-box {
+  background: #E8F5E9;
+  padding: 20px;
+  border-radius: 14px;
+  margin-top: 20px;
+  text-align: left;
+  border: 2px solid #2e7d32;
+}
+
+.advice-box h3 {
+  color: #1b5e20;
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.advice-box ul {
+  list-style: none;
+}
+
+.advice-box li {
+  padding: 8px 0;
+  color: #333;
+  border-bottom: 1px solid #C8E6C9;
+  font-size: 15px;
+}
+
+.advice-box li:before {
+  content: "✓ ";
+  color: #2e7d32;
+  font-weight: 800;
+  margin-right: 6px;
+}
+
+.advice-box li:last-child {
+  border-bottom: none;
+}
+
+/* Warning Box */
+.warning-box {
+  background: #FFF3E0;
+  border: 2px solid #FF6F00;
+  border-radius: 14px;
+  padding: 16px;
+  margin-top: 16px;
+  text-align: left;
+}
+
+.warning-box h3 {
+  color: #E65100;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.warning-box p {
+  color: #BF360C;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Utility Classes */
+.hidden {
+  display: none !important;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .container {
+    margin: 80px 16px;
+  }
+
+  h1 {
+    font-size: 32px;
+  }
+
+  .card {
+    padding: 24px;
+  }
+
+  .weather-info {
+    grid-template-columns: 1fr;
+  }
+
+  .back-btn {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+
+  .lang-box {
+    padding: 4px;
+  }
+}

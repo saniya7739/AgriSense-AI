@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<title>AI Kisan Mitra</title>
+<link rel="stylesheet" href="AIKisanMitra.css">
+</head>
+
+<body>
+<div class="overlay"></div>
+
+<div class="lang-selector">
+  <select id="lang" onchange="changeLang()">
+    <option value="hi">🇮🇳 हिंदी</option>
+    <option value="en">🇬🇧 English</option>
+    <option value="bh">🗣️ Bhojpuri</option>
+    <option value="mr">🇮🇳 Marathi</option>
+    <option value="pa">🇮🇳 ਪੰਜਾਬੀ</option>
+  </select>
+</div>
+
+<a href="dashboard.html" class="back-btn">← Back</a>
+
+<div class="container">
+  <h1 id="heading">🧑‍🌾 एआई किसान मित्र</h1>
+  <p id="sub">अपने सवालों का जवाब पाएं</p>
+
+  <div class="card">
+    <label id="catL">🎯 विषय चुनें</label>
+    <select id="category" onchange="updateQuestions()">
+      <option value="">-- Select Topic --</option>
+    </select>
+
+    <label id="qL">❓ प्रश्न चुनें</label>
+    <select id="question"></select>
+
+    <button id="btn" onclick="getAnswer()" class="submit-btn">💡 उत्तर प्राप्त करें</button>
+
+    <div id="answerBox" class="answer-box hidden">
+      <h3 id="ansTitle"></h3>
+      <p id="ansText"></p>
+    </div>
+  </div>
+</div>
+
+<script src="AIKisanMitra.js"></script>
+</body>
+</html>

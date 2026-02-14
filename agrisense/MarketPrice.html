@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<title>Market Price</title>
+<link rel="stylesheet" href="MarketPrice.css">
+</head>
+
+<body>
+<div class="overlay"></div>
+
+<div class="lang-selector">
+  <select id="lang" onchange="changeLang()">
+    <option value="hi">🇮🇳 हिंदी</option>
+    <option value="en">🇬🇧 English</option>
+    <option value="bh">🗣️ Bhojpuri</option>
+    <option value="mr">🇮🇳 Marathi</option>
+    <option value="pa">🇮🇳 ਪੰਜਾਬੀ</option>
+  </select>
+</div>
+
+<a href="dashboard.html" class="back-btn">← Back</a>
+
+<div class="container">
+  <h1 id="heading">🏪 मंडी मूल्य</h1>
+  <p id="sub">फसलों के वर्तमान मंडी मूल्य जानें</p>
+
+  <div class="card">
+    <label id="cropL">🌾 फसल चुनें</label>
+    <select id="crop" onchange="getPrice()"></select>
+
+    <div id="priceBox" class="price-box hidden">
+      <div class="price-item">
+        <span class="label" id="priceL">वर्तमान मूल्य:</span>
+        <span class="price" id="currentPrice"></span>
+      </div>
+      <div class="price-item">
+        <span class="label" id="highL">उच्चतम:</span>
+        <span class="price high" id="highPrice"></span>
+      </div>
+      <div class="price-item">
+        <span class="label" id="lowL">न्यूनतम:</span>
+        <span class="price low" id="lowPrice"></span>
+      </div>
+      <div class="price-item">
+        <span class="label" id="avgL">औसत:</span>
+        <span class="price avg" id="avgPrice"></span>
+      </div>
+      
+      <div class="update-info">
+        <p id="updateMsg">अंतिम अपडेट: आज</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="MarketPrice.js"></script>
+</body>
+</html>

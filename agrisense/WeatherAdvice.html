@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<title>Weather Advice</title>
+<link rel="stylesheet" href="WeatherAdvice.css">
+</head>
+
+<body>
+<div class="overlay"></div>
+
+<!-- 🌐 Language switcher -->
+<div class="lang-selector">
+  <select id="lang" onchange="changeLang()">
+    <option value="hi">🇮🇳 हिंदी</option>
+    <option value="en">🇬🇧 English</option>
+    <option value="bh">🗣️ Bhojpuri</option>
+    <option value="mr">🇮🇳 Marathi</option>
+    <option value="pa">🇮🇳 ਪੰਜਾਬੀ</option>
+  </select>
+</div>
+
+<!-- Back button -->
+<a href="dashboard.html" class="back-btn">← Back</a>
+
+<div class="container">
+  <h1 id="heading">🌦 मौसम सलाह</h1>
+  <p id="sub">अपने खेत के लिए मौसम की जानकारी प्राप्त करें</p>
+
+  <div class="card">
+    <!-- Location Input -->
+    <label id="locL">📍 अपना जिला चुनें</label>
+    <select id="location"></select>
+
+    <!-- Get Weather Button -->
+    <button id="btn" onclick="getWeather()" class="weather-btn">🌤 मौसम जानकारी प्राप्त करें</button>
+
+    <!-- Weather Display -->
+    <div id="weatherResult" class="weather-result hidden">
+      <div class="weather-card">
+        <h2 id="locName"></h2>
+        
+        <div class="weather-info">
+          <div class="info-box">
+            <span class="label">🌡 तापमान</span>
+            <span id="tempDisplay" class="value"></span>
+          </div>
+          <div class="info-box">
+            <span class="label">💧 नमी</span>
+            <span id="humidityDisplay" class="value"></span>
+          </div>
+          <div class="info-box">
+            <span class="label">💨 हवा की गति</span>
+            <span id="windDisplay" class="value"></span>
+          </div>
+          <div class="info-box">
+            <span class="label">🌧 वर्षा की संभावना</span>
+            <span id="rainDisplay" class="value"></span>
+          </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div id="advice" class="advice-box">
+          <h3 id="adviceTitle">💡 खेती की सलाह</h3>
+          <ul id="adviceList"></ul>
+        </div>
+
+        <!-- Warning -->
+        <div id="warning" class="warning-box hidden">
+          <h3>⚠️ सावधानी</h3>
+          <p id="warningText"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Data Message -->
+    <div id="noData" class="hidden">
+      <p id="noDataMsg">कृपया पहले एक जिला चुनें</p>
+    </div>
+  </div>
+</div>
+
+<script src="WeatherAdvice.js"></script>
+</body>
+</html>

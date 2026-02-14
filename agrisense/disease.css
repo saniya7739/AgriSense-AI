@@ -21,16 +21,49 @@ body{
   z-index:-1;
 }
 
-/* LANGUAGE SWITCHER */
-#lang{
+/* LANGUAGE SELECTOR */
+.lang-selector{
   position:fixed;
-  top:16px;
-  right:16px;
-  padding:6px 10px;
-  border-radius:8px;
-  font-weight:700;
-  background:#e8d8b0;
+  top:20px;
+  right:20px;
   z-index:10;
+}
+
+.lang-selector select{
+  padding:12px 16px;
+  font-size:16px;
+  font-weight:600;
+  border-radius:12px;
+  border:2px solid #2e7d32;
+  background:#e8d8b0;
+  color:#333;
+  cursor:pointer;
+  min-width:150px;
+}
+
+.lang-selector select:hover{
+  background:#d4c490;
+}
+
+/* BACK BUTTON */
+.back-btn{
+  position:fixed;
+  top:20px;
+  left:20px;
+  background:#e8d8b0;
+  color:#333;
+  padding:12px 16px;
+  border-radius:12px;
+  text-decoration:none;
+  font-weight:600;
+  z-index:10;
+  transition:all 0.3s ease;
+  font-size:16px;
+}
+
+.back-btn:hover{
+  background:#d4c490;
+  transform:translateX(-4px);
 }
 
 /* CONTAINER */
@@ -46,7 +79,7 @@ body{
 }
 
 h1{
-  font-size:40px;
+  font-size:38px;
   font-weight:900;
   color:#F1F8E9;
   text-shadow:0 4px 8px #1B5E20;
@@ -56,6 +89,7 @@ p{
   font-size:18px;
   color:#eee;
   margin:14px 0 26px;
+  font-weight:500;
 }
 
 .card{
@@ -68,24 +102,37 @@ p{
 }
 
 .card label{
-  font-size:18px;
+  margin-bottom:7px;
   font-weight:700;
+  color:#1b5e20;
 }
 
 .card input{
-  padding:10px;
+  padding:12px;
   border-radius:10px;
+  font-size:16px;
+  border:2px solid #2e7d32;
 }
 
 .card button{
   margin-top:10px;
   padding:14px;
-  font-size:20px;
-  font-weight:800;
+  font-size:18px;
+  font-weight:700;
   border:none;
   border-radius:30px;
-  background:#fbc02d;
+  background:#2e7d32;
+  color:white;
   cursor:pointer;
+  transition:all 0.3s ease;
+}
+
+.card button:hover{
+  background:#1b5e20;
+  transform:scale(1.02)c02d;
+  cursor:pointer;
+  font-weight:500;
+  color:#333;
 }
 
 #result{

@@ -24,14 +24,28 @@ body{
   z-index:-1;
 }
 
-#lang{
+/* Language Selector Button */
+.lang-selector{
   position:fixed;
   top:20px;
   right:20px;
-  padding:10px 14px;
-  font-size:16px;
-  border-radius:10px;
   z-index:10;
+}
+
+.lang-selector select{
+  padding:12px 16px;
+  font-size:16px;
+  font-weight:600;
+  border-radius:12px;
+  border:2px solid #2e7d32;
+  background:#e8d8b0;
+  color:#333;
+  cursor:pointer;
+  min-width:150px;
+}
+
+.lang-selector select:hover{
+  background:#d4c490;
 }
 
 .header{
@@ -40,7 +54,7 @@ body{
 }
 
 .header h1{
-  font-size:46px;
+  font-size:44px;
   font-weight:900;
   color:#F1F8E9;
   text-shadow:0 4px 8px #1B5E20;
@@ -64,50 +78,24 @@ body{
 .feature{
   background:#e8d8b0;
   padding:34px;
-  font-size:24px;
+  font-size:20px;
+  font-weight:600;
   border-radius:28px;
   color:#333;
   cursor:pointer;
   animation:pop 0.8s ease;
   text-decoration:none;
+  transition:all 0.3s ease;
 }
 
 .feature:hover{
-  transform:scale(1.03);
+  transform:scale(1.04);
+  box-shadow:0 8px 16px rgba(0,0,0,0.2);
 }
 
 @keyframes pop{
   from{opacity:0;transform:translateY(40px) scale(0.9);}
   to{opacity:1;transform:translateY(0) scale(1);}
-}
-
-.popup{
-  position:fixed;
-  inset:0;
-  display:none;
-  justify-content:center;
-  align-items:center;
-  background:rgba(0,0,0,0.6);
-}
-
-.popup-card{
-  background:#e8d8b0;
-  padding:40px;
-  border-radius:26px;
-  text-align:center;
-  width:90%;
-  max-width:420px;
-}
-
-.popup-card button{
-  margin-top:22px;
-  padding:14px 34px;
-  font-size:18px;
-  border:none;
-  border-radius:30px;
-  background:#2e7d32;
-  color:white;
-  cursor:pointer;
 }
 </style>
 </head>
@@ -115,39 +103,30 @@ body{
 <body>
 <div class="overlay"></div>
 
-<select id="lang" onchange="changeLang()">
-  <option value="hi">हिंदी</option>
-  <option value="en">English</option>
-  <option value="bh">Bhojpuri</option>
-  <option value="mr">Marathi</option>
-  <option value="pa">Punjabi</option>
-</select>
+<div class="lang-selector">
+  <select id="lang" onchange="changeLang()">
+    <option value="hi">🇮🇳 हिंदी</option>
+    <option value="en">🇬🇧 English</option>
+    <option value="bh">🗣️ Bhojpuri</option>
+    <option value="mr">🇮🇳 Marathi</option>
+    <option value="pa">🇮🇳 ਪੰਜਾਬੀ</option>
+  </select>
+</div>
 
 <div class="header">
   <h1 id="dashTitle">🌾 किसान डैशबोर्ड</h1>
 </div>
 
 <div class="features">
-  <!-- ✅ NEW LINK -->
+  <!-- ✅ FEATURE LINKS -->
   <a href="crop.html" class="feature" id="f1">🌱 फसल चयन</a>
-
-  <!-- ✅ NEW LINK -->
   <a href="disease.html" class="feature" id="f2">📷 रोग पहचान</a>
-
-  <!-- ❌ OLD FEATURES SAME -->
-  <div class="feature" id="f3" onclick="openPop()">🌦 मौसम सलाह</div>
-  <div class="feature" id="f4" onclick="openPop()">🧑‍🌾 एआई किसान मित्र</div>
-  <div class="feature" id="f5" onclick="openPop()">🧪 मिट्टी एवं उर्वरक</div>
-  <div class="feature" id="f6" onclick="openPop()">🏪 मंडी मूल्य</div>
-  <div class="feature" id="f7" onclick="openPop()">🏛 सरकारी योजनाएँ</div>
-  <div class="feature" id="f8" onclick="openPop()">🚨 आपातकालीन अलर्ट</div>
-</div>
-
-<div class="popup" id="popup">
-  <div class="popup-card">
-    <p>🌱 यह सुविधा जल्द उपलब्ध होगी</p>
-    <button onclick="closePop()">बंद करें</button>
-  </div>
+  <a href="WeatherAdvice.html" class="feature" id="f3">🌦 मौसम सलाह</a>
+  <a href="AIKisanMitra.html" class="feature" id="f4">🧑‍🌾 एआई किसान मित्र</a>
+  <a href="SoilFertilizer.html" class="feature" id="f5">🧪 मिट्टी एवं उर्वरक</a>
+  <a href="MarketPrice.html" class="feature" id="f6">🏪 मंडी मूल्य</a>
+  <a href="GovtSchemes.html" class="feature" id="f7">🏛 सरकारी योजनाएँ</a>
+  <a href="EmergencyAlert.html" class="feature" id="f8">🚨 आपातकालीन अलर्ट</a>
 </div>
 
 <script>
@@ -220,18 +199,14 @@ const TEXT = {
 };
 
 function changeLang(){
-  const l=document.getElementById("lang").value;
-  dashTitle.innerText=TEXT[l].title;
-  for(let i=0;i<8;i++){
-    document.getElementById("f"+(i+1)).innerText=TEXT[l].features[i];
+  const lang = document.getElementById("lang");
+  const l = lang.value;
+  
+  document.getElementById("dashTitle").innerText = TEXT[l].title;
+  for(let i = 0; i < 8; i++){
+    const el = document.getElementById("f" + (i + 1));
+    if(el) el.innerText = TEXT[l].features[i];
   }
-}
-
-function openPop(){
-  popup.style.display="flex";
-}
-function closePop(){
-  popup.style.display="none";
 }
 </script>
 
