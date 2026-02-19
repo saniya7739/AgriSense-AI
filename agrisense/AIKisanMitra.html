@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Kisan Mitra</title>
+  <link rel="stylesheet" href="AIKisanMitra.css">
+</head>
+<body>
+  <div class="overlay"></div>
+
+  <div class="lang-selector">
+    <select id="lang" onchange="changeLang()">
+      <option value="hi">Hindi</option>
+      <option value="en">English</option>
+      <option value="bh">Bhojpuri</option>
+      <option value="mr">Marathi</option>
+      <option value="pa">Punjabi</option>
+    </select>
+  </div>
+
+  <a href="dashboard.html" class="back-btn">Back</a>
+
+  <div class="container">
+    <h1 id="heading">AI Kisan Mitra</h1>
+    <p id="sub">Get answers to your farming questions</p>
+
+    <div class="card">
+      <label id="catL">Select Topic</label>
+      <select id="category" onchange="updateQuestions()">
+        <option value="">-- Select Topic --</option>
+      </select>
+
+      <label id="qL">Select Question</label>
+      <select id="question"></select>
+      <button id="btn" type="button" onclick="getAnswer()" class="submit-btn">Get Saved Answer</button>
+
+      <label id="askL">Ask your own question</label>
+      <textarea id="userQuestion" rows="4" placeholder="Type your farming question"></textarea>
+
+      <div class="action-row">
+        <button id="micBtn" type="button" class="aux-btn" onclick="startListening()">Speak</button>
+        <button id="askBtn" type="button" class="submit-btn" onclick="askAssistant()">Ask Kisan Sahayak</button>
+        <button id="speakBtn" type="button" class="aux-btn" onclick="speakAnswer()">Listen</button>
+      </div>
+
+      <div id="answerBox" class="answer-box hidden">
+        <h3 id="ansTitle"></h3>
+        <p id="ansText"></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="AIKisanMitra.js"></script>
+</body>
+</html>

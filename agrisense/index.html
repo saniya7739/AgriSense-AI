@@ -1,7 +1,8 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AgriSense AI</title>
 <style>
 *{
@@ -18,27 +19,30 @@ body{
   background:url("farm.jpg") no-repeat center center fixed;
   background-size:cover;
 }
-
-/* Overlay for dimming background */
 .overlay{
   position:fixed;
   inset:0;
   background:rgba(0,0,0,0.45);
   z-index:-1;
 }
-
-/* Language selector */
-#lang{
+.lang-selector{
   position:fixed;
   top:20px;
   right:20px;
-  padding:10px 14px;
-  font-size:16px;
-  border-radius:10px;
   z-index:10;
 }
-
-/* Main container */
+.lang-selector select{
+  padding:12px 16px;
+  font-size:16px;
+  font-weight:600;
+  border-radius:12px;
+  border:2px solid #2e7d32;
+  background:#e8d8b0;
+  color:#333;
+  cursor:pointer;
+  min-width:140px;
+}
+.lang-selector select:hover{ background:#d4c490; }
 .container{
   min-height:100vh;
   display:flex;
@@ -47,8 +51,6 @@ body{
   position:relative;
   z-index:1;
 }
-
-/* Login Card */
 .card{
   background:#e8d8b0;
   padding:40px;
@@ -57,33 +59,35 @@ body{
   max-width:480px;
   text-align:center;
   animation:pop 1s ease;
+  box-shadow:0 8px 20px rgba(0,0,0,0.3);
 }
 @keyframes pop{
-  from{opacity:0;transform:translateY(50px) scale(0.9);}
-  to{opacity:1;transform:translateY(0) scale(1);}
+  from{opacity:0;transform:translateY(50px) scale(0.9);} 
+  to{opacity:1;transform:translateY(0) scale(1);} 
 }
 h1{
   color:#1b5e20;
-  font-size:36px;
+  font-size:40px;
   font-weight:800;
   margin-bottom:16px;
   animation:slide 1s ease;
 }
 @keyframes slide{
-  from{opacity:0;transform:translateY(-30px);}
-  to{opacity:1;transform:translateY(0);}
+  from{opacity:0;transform:translateY(-30px);} 
+  to{opacity:1;transform:translateY(0);} 
 }
 p{
-  font-size:20px;
+  font-size:18px;
   color:#333;
   margin-bottom:22px;
+  font-weight:500;
 }
 input{
-  width:90%;
+  width:95%;
   padding:14px;
-  font-size:18px;
+  font-size:17px;
   border-radius:12px;
-  border:1px solid #ccc;
+  border:2px solid #2e7d32;
   margin-bottom:18px;
 }
 .login-btn{
@@ -91,26 +95,32 @@ input{
   color:white;
   border:none;
   padding:14px 36px;
-  font-size:20px;
+  font-size:18px;
+  font-weight:600;
   border-radius:30px;
   cursor:pointer;
+  transition:all 0.3s ease;
+  width:95%;
 }
+.login-btn:hover{ background:#1b5e20; transform:scale(1.02); }
 .guest-btn{
   margin-top:14px;
-  font-size:18px;
+  font-size:17px;
   color:#2e7d32;
   background:none;
   border:2px solid #2e7d32;
-  padding:10px 28px;
+  padding:12px 28px;
   border-radius:25px;
   cursor:pointer;
+  font-weight:600;
+  transition:all 0.3s ease;
+  width:95%;
 }
-
-/* Intro overlay */
+.guest-btn:hover{ background:#2e7d32; color:white; }
 #introOverlay{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,0.55); /* lighter background */
+  background:rgba(0,0,0,0.55);
   color:white;
   display:flex;
   flex-direction:column;
@@ -137,42 +147,37 @@ input{
   cursor:pointer;
   transition:0.3s;
 }
-#startBtn:hover{
-  background:#1b5e20;
-}
+#startBtn:hover{ background:#1b5e20; }
 @keyframes introFade{
-  from{opacity:0;}
-  to{opacity:1;}
+  from{opacity:0;} 
+  to{opacity:1;} 
 }
 </style>
 </head>
 <body>
-
-<!-- Background overlay -->
 <div class="overlay"></div>
 
-<!-- Language selector -->
-<select id="lang" onchange="changeLang()">
-  <option value="hi">हिंदी</option>
-  <option value="en">English</option>
-  <option value="bh">Bhojpuri</option>
-  <option value="mr">Marathi</option>
-  <option value="pa">Punjabi</option>
-</select>
+<div class="lang-selector">
+  <select id="lang" onchange="changeLang()">
+    <option value="hi">हिन्दी</option>
+    <option value="en">English</option>
+    <option value="bh">Bhojpuri</option>
+    <option value="mr">Marathi</option>
+    <option value="pa">ਪੰਜਾਬੀ</option>
+  </select>
+</div>
 
-<!-- Intro Overlay -->
 <div id="introOverlay">
-  <h1 id="introTitle">👨‍🌾 Welcome To AgriSense AI / क्रिषि मित्र</h1>
+  <h1 id="introTitle">Welcome To AgriSense AI / कृषि मित्र</h1>
   <button id="startBtn" onclick="startApp()">Start</button>
 </div>
 
-<!-- Main Container with login card -->
 <div class="container" id="mainContent" style="display:none;">
   <div class="card">
-    <h1 id="title">👨‍🌾 किसान का स्वागत है</h1>
+    <h1 id="title">किसान का स्वागत है</h1>
     <p id="tagline">AI Powered Farming Assistant</p>
 
-    <input id="mobileInput" type="text" placeholder="📱 मोबाइल नंबर">
+    <input id="mobileInput" type="text" placeholder="मोबाइल नंबर">
 
     <button class="login-btn" id="loginBtn" onclick="login()">लॉगिन</button>
     <br>
@@ -181,72 +186,72 @@ input{
 </div>
 
 <script>
-const TEXT={
+const TEXT = {
   hi:{
-    title:"👨‍🌾 किसान का स्वागत है",
+    title:"किसान का स्वागत है",
     tag:"AI Powered Farming Assistant",
-    mobile:"📱 मोबाइल नंबर",
+    mobile:"मोबाइल नंबर",
     login:"लॉगिन",
     guest:"अतिथि के रूप में जारी रखें",
-    intro:"👨‍🌾 Welcome To AgriSense AI / क्रिषि मित्र"
+    intro:"Welcome To AgriSense AI / कृषि मित्र"
   },
   en:{
-    title:"👨‍🌾 Welcome Farmer",
+    title:"Welcome Farmer",
     tag:"AI Powered Farming Assistant",
-    mobile:"📱 Mobile Number",
+    mobile:"Mobile Number",
     login:"Login",
     guest:"Continue as Guest",
-    intro:"👨‍🌾 Welcome To AgriSense AI / Krishi Mitra"
+    intro:"Welcome To AgriSense AI / Krishi Mitra"
   },
   bh:{
-    title:"👨‍🌾 किसान के स्वागत बा",
+    title:"किसान के स्वागत बा",
     tag:"AI से चल रहल खेती साथी",
-    mobile:"📱 मोबाइल नंबर",
-    login:"Login",
+    mobile:"मोबाइल नंबर",
+    login:"लॉगिन",
     guest:"Guest बन के आगे बढ़ीं",
-    intro:"👨‍🌾 Welcome To AgriSense AI / Krishi Mitra"
+    intro:"Welcome To AgriSense AI / Krishi Mitra"
   },
   mr:{
-    title:"👨‍🌾 शेतकऱ्याचे स्वागत आहे",
+    title:"शेतकऱ्याचे स्वागत आहे",
     tag:"AI आधारित शेती सहाय्यक",
-    mobile:"📱 मोबाईल नंबर",
-    login:"Login",
+    mobile:"मोबाइल नंबर",
+    login:"लॉगिन",
     guest:"Guest म्हणून पुढे जा",
-    intro:"👨‍🌾 Welcome To AgriSense AI / Krishi Mitra"
+    intro:"Welcome To AgriSense AI / Krishi Mitra"
   },
   pa:{
-    title:"👨‍🌾 ਕਿਸਾਨ ਦਾ ਸਵਾਗਤ ਹੈ",
+    title:"ਕਿਸਾਨ ਦਾ ਸਵਾਗਤ ਹੈ",
     tag:"AI ਆਧਾਰਿਤ ਖੇਤੀ ਸਹਾਇਕ",
-    mobile:"📱 ਮੋਬਾਈਲ ਨੰਬਰ",
-    login:"Login",
+    mobile:"ਮੋਬਾਈਲ ਨੰਬਰ",
+    login:"ਲੌਗਿਨ",
     guest:"Guest ਵਜੋਂ ਜਾਰੀ ਰੱਖੋ",
-    intro:"👨‍🌾 Welcome To AgriSense AI / Krishi Mitra"
+    intro:"Welcome To AgriSense AI / Krishi Mitra"
   }
 };
 
-/* Language switcher */
 function changeLang(){
-  const l=document.getElementById("lang").value;
-  document.getElementById("title").innerText=TEXT[l].title;
-  document.getElementById("tagline").innerText=TEXT[l].tag;
-  document.getElementById("mobileInput").placeholder=TEXT[l].mobile;
-  document.getElementById("loginBtn").innerText=TEXT[l].login;
-  document.getElementById("guestBtn").innerText=TEXT[l].guest;
-  document.getElementById("introTitle").innerText=TEXT[l].intro;
+  const l = document.getElementById("lang").value;
+  document.getElementById("title").innerText = TEXT[l].title;
+  document.getElementById("tagline").innerText = TEXT[l].tag;
+  document.getElementById("mobileInput").placeholder = TEXT[l].mobile;
+  document.getElementById("loginBtn").innerText = TEXT[l].login;
+  document.getElementById("guestBtn").innerText = TEXT[l].guest;
+  document.getElementById("introTitle").innerText = TEXT[l].intro;
 }
 
-/* Start button to hide intro overlay */
 function startApp(){
-  document.getElementById("introOverlay").style.display="none";
-  document.getElementById("mainContent").style.display="flex";
+  document.getElementById("introOverlay").style.display = "none";
+  document.getElementById("mainContent").style.display = "flex";
 }
 
-/* Login / Guest navigation */
 function login(){
-  window.location.href="dashboard.html";
+  sessionStorage.setItem("agriLoggedIn","1");
+  window.location.href = "dashboard.html";
 }
+
 function guest(){
-  window.location.href="dashboard.html";
+  sessionStorage.setItem("agriLoggedIn","1");
+  window.location.href = "dashboard.html";
 }
 </script>
 

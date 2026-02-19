@@ -81,6 +81,10 @@ const CROP_RULES = {
 };
 
 function loadOptions(lang){
+  const soil = document.getElementById("soil");
+  const season = document.getElementById("season");
+  const water = document.getElementById("water");
+  
   soil.innerHTML="";
   season.innerHTML="";
   water.innerHTML="";
@@ -90,20 +94,27 @@ function loadOptions(lang){
 }
 
 function changeLang(){
-  const l=lang.value;
-  heading.innerText=DATA[l].heading;
-  sub.innerText=DATA[l].sub;
-  soilL.innerText=DATA[l].soilL;
-  seasonL.innerText=DATA[l].seasonL;
-  waterL.innerText=DATA[l].waterL;
-  btn.innerText=DATA[l].btn;
+  const lang = document.getElementById("lang");
+  const l = lang.value;
+  
+  document.getElementById("heading").innerText = DATA[l].heading;
+  document.getElementById("sub").innerText = DATA[l].sub;
+  document.getElementById("soilL").innerText = DATA[l].soilL;
+  document.getElementById("seasonL").innerText = DATA[l].seasonL;
+  document.getElementById("waterL").innerText = DATA[l].waterL;
+  document.getElementById("btn").innerText = DATA[l].btn;
   loadOptions(l);
-  result.innerText="";
+  document.getElementById("result").innerText = "";
 }
 
 /* 🔍 REAL RECOMMENDATION */
 function recommend(){
-  const l=lang.value;
+  const lang = document.getElementById("lang");
+  const l = lang.value;
+  const soil = document.getElementById("soil");
+  const season = document.getElementById("season");
+  const water = document.getElementById("water");
+  const result = document.getElementById("result");
 
   const soilVal=soil.value.includes("काली")||soil.value.includes("Black")?"Black Soil":
                 soil.value.includes("दोमट")||soil.value.includes("Loamy")?"Loamy Soil":"Sandy Soil";

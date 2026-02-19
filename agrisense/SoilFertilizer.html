@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<title>Soil & Fertilizer</title>
+<link rel="stylesheet" href="SoilFertilizer.css">
+</head>
+
+<body>
+<div class="overlay"></div>
+
+<div class="lang-selector">
+  <select id="lang" onchange="changeLang()">
+    <option value="hi">🇮🇳 हिंदी</option>
+    <option value="en">🇬🇧 English</option>
+    <option value="bh">🗣️ Bhojpuri</option>
+    <option value="mr">🇮🇳 Marathi</option>
+    <option value="pa">🇮🇳 ਪੰਜਾਬੀ</option>
+  </select>
+</div>
+
+<a href="dashboard.html" class="back-btn">← Back</a>
+
+<div class="container">
+  <h1 id="heading">🧪 मिट्टी एवं उर्वरक</h1>
+  <p id="sub">अपनी मिट्टी के अनुसार उर्वरक जानें</p>
+
+  <div class="card">
+    <label id="soilL">🌍 मिट्टी का प्रकार</label>
+    <select id="soilType" onchange="updateSoilInfo()"></select>
+
+    <label id="cropL">🌾 फसल का नाम</label>
+    <select id="crop" onchange="updateFertilizer()"></select>
+
+    <button id="btn" onclick="getRecommendation()" class="submit-btn">📊 सुझाव प्राप्त करें</button>
+
+    <div id="resultBox" class="result-box hidden">
+      <h3 id="resTitle"></h3>
+      <div class="info-section">
+        <h4 id="fertL">🥗 आवश्यक पोषक तत्व</h4>
+        <ul id="fertList"></ul>
+      </div>
+      <div class="info-section">
+        <h4 id="doseL">💊 खुराक (प्रति हेक्टेयर)</h4>
+        <div id="doseInfo"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="SoilFertilizer.js"></script>
+</body>
+</html>

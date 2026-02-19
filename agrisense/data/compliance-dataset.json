@@ -1,0 +1,24 @@
+﻿{
+  "version": "1.0.0",
+  "updatedAt": "2026-02-18",
+  "rules": [
+    {
+      "id": "C-001",
+      "title": "Pesticide Usage Log",
+      "category": "agro-chemicals",
+      "severity": "high",
+      "requiredDocuments": ["spray-register", "invoice"],
+      "regions": ["all"],
+      "effectiveFrom": "2026-01-01"
+    },
+    {
+      "id": "C-002",
+      "title": "Water Use Declaration",
+      "category": "water",
+      "severity": "medium",
+      "requiredDocuments": ["water-source-proof"],
+      "regions": ["all"],
+      "effectiveFrom": "2026-01-01"
+    }
+  ]
+}

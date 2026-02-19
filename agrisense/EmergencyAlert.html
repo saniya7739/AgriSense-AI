@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<title>Emergency Alert</title>
+<link rel="stylesheet" href="EmergencyAlert.css">
+</head>
+
+<body>
+<div class="overlay"></div>
+
+<div class="lang-selector">
+  <select id="lang" onchange="changeLang()">
+    <option value="hi">🇮🇳 हिंदी</option>
+    <option value="en">🇬🇧 English</option>
+    <option value="bh">🗣️ Bhojpuri</option>
+    <option value="mr">🇮🇳 Marathi</option>
+    <option value="pa">🇮🇳 ਪੰਜਾਬੀ</option>
+  </select>
+</div>
+
+<a href="dashboard.html" class="back-btn">← Back</a>
+
+<div class="container">
+  <h1 id="heading">🚨 आपातकालीन अलर्ट</h1>
+  <p id="sub">महत्वपूर्ण खेती संबंधी चेतावनियाँ</p>
+
+  <div class="alerts-list" id="alertsList"></div>
+
+  <div class="bottom-section">
+    <h3 id="reportTitle">⚠️ समस्या की रिपोर्ट करें</h3>
+    <div class="report-card">
+      <label id="problemL">समस्या का प्रकार:</label>
+      <select id="problem">
+        <option value="">-- Select --</option>
+      </select>
+      
+      <label id="descL">विवरण:</label>
+      <textarea id="description" placeholder="अपनी समस्या का विवरण दें"></textarea>
+      
+      <button id="reportBtn" onclick="submitReport()">📤 रिपोर्ट भेजें</button>
+    </div>
+  </div>
+</div>
+
+<script src="EmergencyAlert.js"></script>
+</body>
+</html>
