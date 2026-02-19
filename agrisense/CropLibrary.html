@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>फसल ज्ञान केंद्र</title>
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to right, #d0f0c0, #a8e6a3);
+}
+
+header {
+    background: #2e7d32;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.search-box {
+    text-align: center;
+    margin: 15px;
+}
+
+.search-box input {
+    padding: 14px;
+    width: 70%;
+    border-radius: 8px;
+    border: 1px solid #4caf50;
+    font-size: 16px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.crop-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    overflow-x: auto;
+    padding: 15px 0;
+}
+
+.crop-card {
+    background: #68af6b;
+    color: #1b5e20;
+    padding: 40px; /* increased padding */
+    border-radius: 15px;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    transition: 0.3s;
+    flex: 0 0 250px; /* bigger width */
+    text-align: center;
+    font-size: 20px; /* bigger font */
+    font-weight: bold;
+}
+
+.crop-card:hover {
+    transform: scale(1.08);
+    background: #81c784;
+}
+
+.crop-details {
+    background: #c8e6c9;
+    padding: 30px;
+    border-radius: 15px;
+    margin-top: 25px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    font-size: 16px;
+    color: #1b5e20;
+}
+
+@media(max-width: 768px){
+    .crop-card{
+        flex: 0 0 200px;
+        font-size: 18px;
+        padding: 30px;
+    }
+    .search-box input{
+        width: 90%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>🌿 स्मार्ट फसल ज्ञान केंद्र</h1>
+</header>
+
+<div class="search-box">
+<input type="text" id="searchInput" placeholder="फसल खोजें...">
+</div>
+
+<div class="container">
+<div class="crop-list" id="cropList"></div>
+<div class="crop-details" id="cropDetails">
+<h2>फसल चुनें</h2>
+</div>
+</div>
+
+<script>
+const crops = {
+"गेहूं": {season:"रबी",soil:"दोमट मिट्टी",sowing:"नवंबर - दिसंबर",irrigation:"4-5 बार",fertilizer:"एनपीके (120:60:40)",pests:"एफिड्स",treatment:"नीम तेल"},
+"धान": {season:"खरीफ",soil:"चिकनी मिट्टी",sowing:"जून - जुलाई",irrigation:"लगातार पानी",fertilizer:"एनपीके (100:50:50)",pests:"तना छेदक",treatment:"कीटनाशक"},
+"मक्का": {season:"खरीफ",soil:"दोमट मिट्टी",sowing:"जून - जुलाई",irrigation:"3-4 बार",fertilizer:"एनपीके (120:60:40)",pests:"फॉल आर्मी वर्म",treatment:"स्पिनोसैड"},
+"कपास": {season:"खरीफ",soil:"काली मिट्टी",sowing:"मई - जून",irrigation:"6-7 बार",fertilizer:"एनपीके (80:40:40)",pests:"बोलवर्म",treatment:"बीटी कपास"},
+"गन्ना": {season:"वार्षिक",soil:"गहरी दोमट मिट्टी",sowing:"फरवरी - मार्च",irrigation:"10-15 बार",fertilizer:"एनपीके (250:115:115)",pests:"शूट बोरर",treatment:"कार्बोफ्यूरान"},
+"आलू": {season:"रबी",soil:"बलुई दोमट मिट्टी",sowing:"अक्टूबर - नवंबर",irrigation:"6-8 बार",fertilizer:"एनपीके (150:80:100)",pests:"आलू कीट",treatment:"नीम तेल"},
+"टमाटर": {season:"सभी मौसम",soil:"अच्छी जल निकासी वाली मिट्टी",sowing:"जुलाई - अगस्त",irrigation:"साप्ताहिक",fertilizer:"एनपीके (100:50:50)",pests:"सफेद मक्खी",treatment:"नीम तेल + कीटनाशक"},
+"सरसों": {season:"रबी",soil:"जलोढ़ मिट्टी",sowing:"अक्टूबर",irrigation:"2-3 बार",fertilizer:"एनपीके (80:40:40)",pests:"एफिड्स",treatment:"थायमेथोक्साम"},
+"बाजरा": {season:"खरीफ",soil:"बलुई मिट्टी",sowing:"जून - जुलाई",irrigation:"2-3 बार",fertilizer:"एनपीके (60:30:30)",pests:"शूट फ्लाई",treatment:"बीज उपचार"},
+"जौ": {season:"रबी",soil:"दोमट मिट्टी",sowing:"अक्टूबर - नवंबर",irrigation:"2-3 बार",fertilizer:"एनपीके (60:30:20)",pests:"एफिड्स",treatment:"नीम तेल"},
+"मूंगफली": {season:"खरीफ",soil:"बलुई दोमट",sowing:"जून - जुलाई",irrigation:"3-4 बार",fertilizer:"एनपीके (20:40:40)",pests:"लीफ माइनर",treatment:"नीम तेल"},
+"सोयाबीन": {season:"खरीफ",soil:"दोमट मिट्टी",sowing:"जून - जुलाई",irrigation:"3 बार",fertilizer:"एनपीके (25:50:50)",pests:"सोयाबीन बीन बीटल",treatment:"कीटनाशक छिड़काव"},
+"चना": {season:"रबी",soil:"हल्की दोमट मिट्टी",sowing:"अक्टूबर - नवंबर",irrigation:"2 बार",fertilizer:"एनपीके (60:30:20)",pests:"चना कीट",treatment:"नीम तेल"},
+"अरहर": {season:"खरीफ",soil:"दोमट मिट्टी",sowing:"जून - जुलाई",irrigation:"2-3 बार",fertilizer:"एनपीके (25:50:50)",pests:"अरहर कीट",treatment:"कीटनाशक"},
+"कद्दू": {season:"खरीफ",soil:"दोमट मिट्टी",sowing:"जून",irrigation:"साप्ताहिक",fertilizer:"एनपीके (40:30:30)",pests:"पौधे कीट",treatment:"नीम तेल"},
+"भिंडी": {season:"खरीफ",soil:"दोमट मिट्टी",sowing:"जुलाई - अगस्त",irrigation:"साप्ताहिक",fertilizer:"एनपीके (50:30:30)",pests:"एफिड्स",treatment:"नीम तेल + कीटनाशक"},
+"बैगन": {season:"सभी मौसम",soil:"दोमट मिट्टी",sowing:"जून - जुलाई",irrigation:"साप्ताहिक",fertilizer:"एनपीके (50:50:50)",pests:"सफेद मक्खी",treatment:"नीम तेल"},
+"लौकी": {season:"खरीफ",soil:"दोमट मिट्टी",sowing:"जून",irrigation:"साप्ताहिक",fertilizer:"एनपीके (40:30:30)",pests:"कीट",treatment:"नीम तेल"},
+"खीरा": {season:"खरीफ",soil:"दोमट मिट्टी",sowing:"जून - जुलाई",irrigation:"साप्ताहिक",fertilizer:"एनपीके (30:20:20)",pests:"कीट",treatment:"नीम तेल"},
+"फूलगोभी": {season: "रबी",soil: "दोमट या बलुई मिट्टी",sowing: "अक्टूबर - नवंबर",irrigation: "3-4 बार", fertilizer: "एनपीके (80:60:40)",pests: "कैप्सिकम वर्म, एफिड्स",treatment: "नीम तेल या जैविक कीटनाशक"
+}
+
+};
+
+const cropList = document.getElementById("cropList");
+const cropDetails = document.getElementById("cropDetails");
+const searchInput = document.getElementById("searchInput");
+
+function loadCrops(filter=""){
+    cropList.innerHTML="";
+    Object.keys(crops).forEach(crop=>{
+        if(crop.includes(filter)){
+            let div=document.createElement("div");
+            div.className="crop-card";
+            div.innerText=crop;
+            div.onclick=()=>showDetails(crop);
+            cropList.appendChild(div);
+        }
+    });
+}
+
+function showDetails(crop){
+    let data=crops[crop];
+    let info=`
+        <h2>${crop}</h2>
+        <p><b>मौसम:</b> ${data.season}</p>
+        <p><b>मिट्टी:</b> ${data.soil}</p>
+        <p><b>बुवाई:</b> ${data.sowing}</p>
+        <p><b>सिंचाई:</b> ${data.irrigation}</p>
+        <p><b>खाद:</b> ${data.fertilizer}</p>
+        <p><b>कीट:</b> ${data.pests}</p>
+        <p><b>उपचार:</b> ${data.treatment}</p>
+    `;
+    cropDetails.innerHTML=info;
+}
+
+searchInput.addEventListener("keyup",()=>{loadCrops(searchInput.value);});
+loadCrops();
+</script>
+
+</body>
+</html>

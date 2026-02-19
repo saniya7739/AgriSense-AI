@@ -127,6 +127,11 @@ body{
   <a href="MarketPrice.html" class="feature" id="f6">🏪 मंडी मूल्य</a>
   <a href="GovtSchemes.html" class="feature" id="f7">🏛 सरकारी योजनाएँ</a>
   <a href="EmergencyAlert.html" class="feature" id="f8">🚨 आपातकालीन अलर्ट</a>
+  <a href="FarmerCommunity.html" class="feature" id="f9">💬 किसान समुदाय</a>
+  <a href="RequestPickup.html" class="feature" id="f10">🚚 पिकअप अनुरोध</a>
+  <a href="CropLibrary.html" class="feature" id="f11">📚 फसल ज्ञान केंद्र</a>
+
+
 </div>
 
 <script>
@@ -203,7 +208,7 @@ function changeLang(){
   const l = lang.value;
   
   document.getElementById("dashTitle").innerText = TEXT[l].title;
-  for(let i = 0; i < 8; i++){
+  for(let i = 0; i < 11; i++){
     const el = document.getElementById("f" + (i + 1));
     if(el) el.innerText = TEXT[l].features[i];
   }
