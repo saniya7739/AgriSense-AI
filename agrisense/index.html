@@ -159,11 +159,11 @@ input{
 
 <div class="lang-selector">
   <select id="lang" onchange="changeLang()">
-    <option value="hi">हिन्दी</option>
-    <option value="en">English</option>
-    <option value="bh">Bhojpuri</option>
-    <option value="mr">Marathi</option>
-    <option value="pa">ਪੰਜਾਬੀ</option>
+    <option value="hi">🇮🇳 हिंदी</option>
+    <option value="en">🇬🇧 English</option>
+    <option value="bh">🗣️ Bhojpuri</option>
+    <option value="mr">🇮🇳 Marathi</option>
+    <option value="pa">🇮🇳 ਪੰਜਾਬੀ</option>
   </select>
 </div>
 
@@ -188,42 +188,42 @@ input{
 <script>
 const TEXT = {
   hi:{
-    title:"किसान का स्वागत है",
+    title:"👨‍🌾 किसान का स्वागत है",
     tag:"AI Powered Farming Assistant",
-    mobile:"मोबाइल नंबर",
-    login:"लॉगिन",
-    guest:"अतिथि के रूप में जारी रखें",
+    mobile:"📱 मोबाइल नंबर",
+    login:"Login",
+    guest:"Guest के रूप में जारी रखें",
     intro:"Welcome To AgriSense AI / कृषि मित्र"
   },
   en:{
-    title:"Welcome Farmer",
+    title:"👨‍🌾 Welcome Farmer",
     tag:"AI Powered Farming Assistant",
-    mobile:"Mobile Number",
+    mobile:"📱 Mobile Number",
     login:"Login",
     guest:"Continue as Guest",
     intro:"Welcome To AgriSense AI / Krishi Mitra"
   },
   bh:{
-    title:"किसान के स्वागत बा",
+    title:"👨‍🌾 किसान के स्वागत बा",
     tag:"AI से चल रहल खेती साथी",
-    mobile:"मोबाइल नंबर",
-    login:"लॉगिन",
+    mobile:"📱 मोबाइल नंबर",
+    login:"Login",
     guest:"Guest बन के आगे बढ़ीं",
     intro:"Welcome To AgriSense AI / Krishi Mitra"
   },
   mr:{
-    title:"शेतकऱ्याचे स्वागत आहे",
+    title:"👨‍🌾 शेतकऱ्याचे स्वागत आहे",
     tag:"AI आधारित शेती सहाय्यक",
-    mobile:"मोबाइल नंबर",
-    login:"लॉगिन",
+    mobile:"📱 मोबाईल नंबर",
+    login:"Login",
     guest:"Guest म्हणून पुढे जा",
     intro:"Welcome To AgriSense AI / Krishi Mitra"
   },
   pa:{
-    title:"ਕਿਸਾਨ ਦਾ ਸਵਾਗਤ ਹੈ",
+    title:"👨‍🌾 ਕਿਸਾਨ ਦਾ ਸਵਾਗਤ ਹੈ",
     tag:"AI ਆਧਾਰਿਤ ਖੇਤੀ ਸਹਾਇਕ",
-    mobile:"ਮੋਬਾਈਲ ਨੰਬਰ",
-    login:"ਲੌਗਿਨ",
+    mobile:"📱 ਮੋਬਾਈਲ ਨੰਬਰ",
+    login:"Login",
     guest:"Guest ਵਜੋਂ ਜਾਰੀ ਰੱਖੋ",
     intro:"Welcome To AgriSense AI / Krishi Mitra"
   }
@@ -245,7 +245,6 @@ function startApp(){
 }
 
 function login(){
-  sessionStorage.setItem("agriLoggedIn","1");
   window.location.href = "dashboard.html";
 }
 

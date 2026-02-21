@@ -11,37 +11,37 @@
 
   <div class="lang-selector">
     <select id="lang" onchange="changeLang()">
-      <option value="hi">Hindi</option>
-      <option value="en">English</option>
-      <option value="bh">Bhojpuri</option>
-      <option value="mr">Marathi</option>
-      <option value="pa">Punjabi</option>
+      <option value="hi">🇮🇳 हिंदी</option>
+      <option value="en">🇬🇧 English</option>
+      <option value="bh">🗣️ Bhojpuri</option>
+      <option value="mr">🇮🇳 Marathi</option>
+      <option value="pa">🇮🇳 ਪੰਜਾਬੀ</option>
     </select>
   </div>
 
-  <a href="dashboard.html" class="back-btn">Back</a>
+  <a href="dashboard.html" class="back-btn">← Back</a>
 
   <div class="container">
-    <h1 id="heading">AI Kisan Mitra</h1>
-    <p id="sub">Get answers to your farming questions</p>
+    <h1 id="heading">🧑‍🌾 एआई किसान मित्र</h1>
+    <p id="sub">अपने सवालों का जवाब पाएं</p>
 
     <div class="card">
-      <label id="catL">Select Topic</label>
+      <label id="catL">🎯 विषय चुनें</label>
       <select id="category" onchange="updateQuestions()">
         <option value="">-- Select Topic --</option>
       </select>
 
-      <label id="qL">Select Question</label>
+      <label id="qL">❓ प्रश्न चुनें</label>
       <select id="question"></select>
-      <button id="btn" type="button" onclick="getAnswer()" class="submit-btn">Get Saved Answer</button>
+      <button id="btn" type="button" onclick="getAnswer()" class="submit-btn">💡 उत्तर प्राप्त करें</button>
 
-      <label id="askL">Ask your own question</label>
+      <label id="askL">💬 अपना सवाल पूछें</label>
       <textarea id="userQuestion" rows="4" placeholder="Type your farming question"></textarea>
 
       <div class="action-row">
-        <button id="micBtn" type="button" class="aux-btn" onclick="startListening()">Speak</button>
-        <button id="askBtn" type="button" class="submit-btn" onclick="askAssistant()">Ask Kisan Sahayak</button>
-        <button id="speakBtn" type="button" class="aux-btn" onclick="speakAnswer()">Listen</button>
+        <button id="micBtn" type="button" class="aux-btn" onclick="startListening()">🎤 Speak</button>
+        <button id="askBtn" type="button" class="submit-btn" onclick="askAssistant()">🤖 Ask Kisan Sahayak</button>
+        <button id="speakBtn" type="button" class="aux-btn" onclick="speakAnswer()">🔊 Listen</button>
       </div>
 
       <div id="answerBox" class="answer-box hidden">
