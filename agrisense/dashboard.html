@@ -1,101 +1,78 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<title>AgriSense AI – Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgriSense AI - Dashboard</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:"Segoe UI",sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",sans-serif;}
+body{background:url("farm.jpg") no-repeat center center fixed;background-size:cover;}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:-1;}
 
-body{
-  background:url("farm.jpg") no-repeat center center fixed;
-  background-size:cover;
-}
+.lang-selector{position:fixed;top:20px;right:20px;z-index:10;}
+.lang-selector select{padding:12px 16px;font-size:16px;font-weight:600;border-radius:12px;border:2px solid #2e7d32;background:#e8d8b0;color:#333;cursor:pointer;min-width:150px;}
+.lang-selector select:hover{background:#d4c490;}
 
-.overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.45);
-  z-index:-1;
-}
+.header{padding:60px 20px 40px;text-align:center;}
+.header h1{font-size:44px;font-weight:900;color:#F1F8E9;text-shadow:0 4px 8px #1B5E20;animation:slideDown 1s ease;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-40px);}to{opacity:1;transform:translateY(0);}}
 
-/* Language Selector Button */
-.lang-selector{
-  position:fixed;
-  top:20px;
-  right:20px;
-  z-index:10;
-}
+.features{display:flex;flex-direction:column;gap:26px;padding:30px 20px 60px;max-width:520px;margin:auto;}
+.feature{background:#e8d8b0;padding:28px 30px;font-size:20px;font-weight:600;border-radius:28px;color:#333;cursor:pointer;animation:pop 0.8s ease;text-decoration:none;transition:all 0.3s ease;}
+.feature:hover{transform:scale(1.03);box-shadow:0 8px 16px rgba(0,0,0,0.2);}
+@keyframes pop{from{opacity:0;transform:translateY(40px) scale(0.9);}to{opacity:1;transform:translateY(0) scale(1);}}
 
-.lang-selector select{
-  padding:12px 16px;
-  font-size:16px;
-  font-weight:600;
-  border-radius:12px;
-  border:2px solid #2e7d32;
-  background:#e8d8b0;
-  color:#333;
-  cursor:pointer;
-  min-width:150px;
-}
+.feature-compliance{display:flex;flex-direction:column;gap:8px;}
+.feature-main{display:flex;align-items:center;gap:10px;}
+.feature-icon{font-size:22px;}
+.feature-preview{display:flex;gap:12px;flex-wrap:wrap;font-size:14px;font-weight:700;color:#1b5e20;}
 
-.lang-selector select:hover{
-  background:#d4c490;
-}
+.voice-assistant{position:fixed;right:20px;bottom:20px;z-index:1200;}
+.bot-toggle{width:72px;height:72px;border:none;border-radius:50%;background:#4CAF50;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 18px rgba(0,0,0,0.25);transition:transform 0.25s ease, box-shadow 0.25s ease;}
+.bot-toggle:hover{transform:scale(1.1);}
+.bot-toggle i{font-size:22px;margin-bottom:2px;}
+.bot-toggle span{font-size:11px;font-weight:700;line-height:1;}
 
-.header{
-  padding:60px 20px 40px;
-  text-align:center;
-}
+.chat-panel{position:fixed;right:20px;bottom:100px;width:350px;height:500px;background:#fff;border-radius:15px;box-shadow:0 5px 20px rgba(0,0,0,0.2);overflow:hidden;display:flex;flex-direction:column;transform:translateY(16px);opacity:0;pointer-events:none;transition:opacity 0.25s ease, transform 0.25s ease;}
+.chat-panel.open{transform:translateY(0);opacity:1;pointer-events:auto;}
+.chat-header{background:#4CAF50;color:#fff;padding:12px;display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.chat-header span{font-weight:700;font-size:15px;}
+.chat-header select{border:none;border-radius:8px;padding:6px 8px;font-weight:600;}
+.chat-messages{flex:1;padding:12px;overflow-y:auto;background:#f8fbf8;}
+.message{display:flex;align-items:flex-start;gap:8px;margin-bottom:12px;}
+.message .bubble{max-width:78%;padding:10px 12px;border-radius:12px;font-size:14px;line-height:1.35;white-space:pre-wrap;}
+.message.bot .bubble{background:#eaf7eb;color:#1c4f21;}
+.message.user{justify-content:flex-end;}
+.message.user .bubble{background:#4CAF50;color:#fff;}
+.chat-input{display:flex;gap:8px;padding:10px;border-top:1px solid #e4e4e4;background:#fff;}
+.chat-input input{flex:1;padding:10px;border:1px solid #ccc;border-radius:10px;outline:none;font-size:14px;}
+.chat-input button{width:38px;border:none;border-radius:10px;background:#4CAF50;color:#fff;cursor:pointer;}
+.chat-input button:hover{background:#3f9843;}
+.chat-input button.listening{background:#d32f2f;}
 
-.header h1{
-  font-size:44px;
-  font-weight:900;
-  color:#F1F8E9;
-  text-shadow:0 4px 8px #1B5E20;
-  animation:slideDown 1s ease;
-}
+.compliance-fab{position:fixed;left:20px;bottom:20px;z-index:1200;border:none;border-radius:999px;background:#2e7d32;color:#fff;padding:12px 16px;font-weight:700;cursor:pointer;box-shadow:0 8px 18px rgba(0,0,0,0.25);display:flex;gap:8px;align-items:center;}
+.compliance-fab:hover{background:#1b5e20;}
 
-@keyframes slideDown{
-  from{opacity:0;transform:translateY(-40px);}
-  to{opacity:1;transform:translateY(0);}
-}
+.hidden{display:none !important;}
+.compliance-modal{position:fixed;inset:0;z-index:1400;}
+.compliance-modal-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.55);}
+.compliance-modal-content{position:relative;width:min(1100px, calc(100% - 24px));max-height:calc(100vh - 24px);overflow:auto;margin:12px auto;border-radius:16px;background:#f5f7f5;box-shadow:0 16px 36px rgba(0,0,0,0.32);padding:14px;}
+.compliance-modal-header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;}
+.compliance-modal-header h2{margin:0;font-size:22px;color:#1b5e20;display:flex;gap:8px;align-items:center;}
+.compliance-modal-actions{display:flex;gap:8px;}
+.compliance-refresh-btn,.compliance-close-btn{border:none;border-radius:10px;cursor:pointer;font-weight:700;padding:10px 12px;}
+.compliance-refresh-btn{background:#2e7d32;color:#fff;}
+.compliance-close-btn{background:#ececec;color:#333;}
+.compliance-dashboard-root{min-height:420px;}
 
-.features{
-  display:flex;
-  flex-direction:column;
-  gap:26px;
-  padding:30px 20px 60px;
-  max-width:520px;
-  margin:auto;
-}
-
-.feature{
-  background:#e8d8b0;
-  padding:34px;
-  font-size:20px;
-  font-weight:600;
-  border-radius:28px;
-  color:#333;
-  cursor:pointer;
-  animation:pop 0.8s ease;
-  text-decoration:none;
-  transition:all 0.3s ease;
-}
-
-.feature:hover{
-  transform:scale(1.04);
-  box-shadow:0 8px 16px rgba(0,0,0,0.2);
-}
-
-@keyframes pop{
-  from{opacity:0;transform:translateY(40px) scale(0.9);}
-  to{opacity:1;transform:translateY(0) scale(1);}
+@media (max-width:640px){
+  .chat-panel{right:12px;left:12px;width:auto;height:70vh;bottom:92px;}
+  .voice-assistant{right:12px;bottom:12px;}
+  .compliance-fab{left:12px;bottom:12px;padding:10px 12px;font-size:13px;}
+  .compliance-modal-content{width:calc(100% - 12px);margin:6px auto;max-height:calc(100vh - 12px);padding:10px;}
+  .compliance-modal-header h2{font-size:18px;}
 }
 </style>
 </head>
@@ -118,102 +95,158 @@ body{
 </div>
 
 <div class="features">
-  <!-- ✅ FEATURE LINKS -->
-  <a href="crop.html" class="feature" id="f1">🌱 फसल चयन</a>
-  <a href="disease.html" class="feature" id="f2">📷 रोग पहचान</a>
-  <a href="WeatherAdvice.html" class="feature" id="f3">🌦 मौसम सलाह</a>
-  <a href="AIKisanMitra.html" class="feature" id="f4">🧑‍🌾 एआई किसान मित्र</a>
-  <a href="SoilFertilizer.html" class="feature" id="f5">🧪 मिट्टी एवं उर्वरक</a>
-  <a href="MarketPrice.html" class="feature" id="f6">🏪 मंडी मूल्य</a>
-  <a href="GovtSchemes.html" class="feature" id="f7">🏛 सरकारी योजनाएँ</a>
-  <a href="EmergencyAlert.html" class="feature" id="f8">🚨 आपातकालीन अलर्ट</a>
-  <a href="FarmerCommunity.html" class="feature" id="f9">💬 किसान समुदाय</a>
-  <a href="RequestPickup.html" class="feature" id="f10">🚚 पिकअप अनुरोध</a>
-  <a href="CropLibrary.html" class="feature" id="f11">📚 फसल ज्ञान केंद्र</a>
+  <a href="crop.html" class="feature" id="f1">🌱 Crop Selection</a>
+  <a href="disease.html" class="feature" id="f2">📷 Disease Detection</a>
+  <a href="WeatherAdvice.html" class="feature" id="f3">🌦 Weather Advice</a>
+  <a href="AIKisanMitra.html" class="feature" id="f4">🧑‍🌾 AI Kisan Mitra</a>
+  <a href="SoilFertilizer.html" class="feature" id="f5">🧪 Soil and Fertilizer</a>
+  <a href="MarketPrice.html" class="feature" id="f6">🏪 Market Price</a>
+  <a href="GovtSchemes.html" class="feature" id="f7">🏛 Government Schemes</a>
+  <a href="EmergencyAlert.html" class="feature" id="f8">🚨 Emergency Alerts</a>
 
-
+  <a href="compliance.html" class="feature feature-compliance" id="f9" data-feature="compliance">
+    <div class="feature-main">
+      <i class="fas fa-shield-alt feature-icon" aria-hidden="true"></i>
+      <span class="feature-title">📋 Data Policy Compliance</span>
+    </div>
+    <div class="feature-preview" id="compliancePreview" data-preview="compliance">
+      <span class="compliance-rate" id="complianceRateValue" data-metric="compliance-rate">95%</span>
+      <span class="compliance-violations" id="complianceViolationCount" data-metric="violation-count">12 violations</span>
+    </div>
+  </a>
 </div>
+
+<div class="voice-assistant">
+  <button class="bot-toggle" onclick="toggleVoiceAssistant()">
+    <i class="fas fa-robot"></i>
+    <span>किसान मित्र</span>
+  </button>
+
+  <div class="chat-panel" id="chatPanel">
+    <div class="chat-header">
+      <span>Voice Kisan Mitra</span>
+      <select id="voiceLang" onchange="changeVoiceLanguage(this.value)">
+        <option value="hi">HI</option>
+        <option value="en">EN</option>
+        <option value="mr">MR</option>
+        <option value="pu">PU</option>
+        <option value="bh">BH</option>
+      </select>
+    </div>
+
+    <div class="chat-messages" id="chatMessages">
+      <div class="message bot">
+        <i class="fas fa-robot"></i>
+        <div class="bubble" id="welcomeMessage">नमस्ते! मैं आपकी खेती से जुड़े सवालों में मदद कर सकता हूँ।</div>
+      </div>
+    </div>
+
+    <div class="chat-input">
+      <input type="text" id="userInput" placeholder="अपना सवाल लिखें...">
+      <button id="micBtn" onclick="startVoiceInput()" title="Voice Input"><i class="fas fa-microphone"></i></button>
+      <button onclick="sendMessage()" title="Send"><i class="fas fa-paper-plane"></i></button>
+    </div>
+  </div>
+</div>
+
+<button class="compliance-fab" id="complianceFab" data-action="quick-compliance-check" title="Quick Compliance Check" aria-label="Quick Compliance Check" onclick="openComplianceDashboard(event)">
+  <i class="fas fa-shield-alt" aria-hidden="true"></i>
+  <span>Compliance</span>
+</button>
+
+<div class="compliance-modal hidden" id="complianceModal" data-modal="compliance" role="dialog" aria-modal="true" aria-labelledby="complianceModalTitle">
+  <div class="compliance-modal-overlay" data-action="close-compliance-modal" onclick="closeComplianceDashboard()"></div>
+  <div class="compliance-modal-content" id="complianceModalContent">
+    <div class="compliance-modal-header">
+      <h2 id="complianceModalTitle"><i class="fas fa-shield-alt" aria-hidden="true"></i> Data Policy Compliance</h2>
+      <div class="compliance-modal-actions">
+        <button class="compliance-refresh-btn" id="complianceRefreshBtn" data-action="refresh-compliance" type="button" onclick="refreshComplianceDashboard()"><i class="fas fa-sync-alt" aria-hidden="true"></i> Refresh</button>
+        <button class="compliance-close-btn" id="complianceCloseBtn" data-action="close-compliance-modal" type="button" onclick="closeComplianceDashboard()" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <div class="compliance-dashboard-root" id="complianceDashboard" data-component="compliance-dashboard" data-language="en" data-severity="all"></div>
+  </div>
+</div>
+
+<script src="js/compliance/compliance-data.js"></script>
+<script src="js/compliance/compliance-i18n.js"></script>
+<script src="js/compliance/compliance-agent.js"></script>
+<script src="js/compliance/policy-parser.js"></script>
+<script src="js/compliance/compliance-ui.js"></script>
 
 <script>
 const TEXT = {
   hi:{
     title:"🌾 किसान डैशबोर्ड",
-    features:[
-      "🌱 फसल चयन",
-      "📷 रोग पहचान",
-      "🌦 मौसम सलाह",
-      "🧑‍🌾 एआई किसान मित्र",
-      "🧪 मिट्टी एवं उर्वरक",
-      "🏪 मंडी मूल्य",
-      "🏛 सरकारी योजनाएँ",
-      "🚨 आपातकालीन अलर्ट"
-    ]
+    features:["🌱 फसल चयन","📷 रोग पहचान","🌦 मौसम सलाह","🧑‍🌾 एआई किसान मित्र","🧪 मिट्टी एवं उर्वरक","🏪 मंडी मूल्य","🏛 सरकारी योजनाएं","🚨 आपातकालीन अलर्ट","📋 डेटा पॉलिसी अनुपालन"]
   },
   en:{
     title:"🌾 Farmer Dashboard",
-    features:[
-      "🌱 Crop Selection",
-      "📷 Disease Detection",
-      "🌦 Weather Advice",
-      "🧑‍🌾 AI Kisan Mitra",
-      "🧪 Soil & Fertilizer",
-      "🏪 Market Price",
-      "🏛 Govt Schemes",
-      "🚨 Emergency Alerts"
-    ]
+    features:["🌱 Crop Selection","📷 Disease Detection","🌦 Weather Advice","🧑‍🌾 AI Kisan Mitra","🧪 Soil & Fertilizer","🏪 Market Price","🏛 Govt Schemes","🚨 Emergency Alerts","📋 Data Policy Compliance"]
   },
   bh:{
     title:"🌾 किसान डैशबोर्ड",
-    features:[
-      "🌱 फसल चुने",
-      "📷 रोग पहिचान",
-      "🌦 मौसम सलाह",
-      "🧑‍🌾 एआई किसान साथी",
-      "🧪 माटी अउ खाद",
-      "🏪 मंडी भाव",
-      "🏛 सरकारी योजना",
-      "🚨 आपात सूचना"
-    ]
+    features:["🌱 फसल चुने","📷 रोग पहचान","🌦 मौसम सलाह","🧑‍🌾 एआई किसान साथी","🧪 माटी अउर खाद","🏪 मंडी भाव","🏛 सरकारी योजना","🚨 आपात सूचना","📋 डेटा पॉलिसी अनुपालन"]
   },
   mr:{
     title:"🌾 शेतकरी डॅशबोर्ड",
-    features:[
-      "🌱 पीक निवड",
-      "📷 रोग ओळख",
-      "🌦 हवामान सल्ला",
-      "🧑‍🌾 एआय शेतकरी मित्र",
-      "🧪 माती व खत",
-      "🏪 बाजार भाव",
-      "🏛 सरकारी योजना",
-      "🚨 आपत्कालीन सूचना"
-    ]
+    features:["🌱 पीक निवड","📷 रोग ओळख","🌦 हवामान सल्ला","🧑‍🌾 एआय शेतकरी मित्र","🧪 माती व खत","🏪 बाजार भाव","🏛 सरकारी योजना","🚨 आपत्कालीन सूचना","📋 डेटा पॉलिसी अनुपालन"]
   },
   pa:{
     title:"🌾 ਕਿਸਾਨ ਡੈਸ਼ਬੋਰਡ",
-    features:[
-      "🌱 ਫਸਲ ਚੋਣ",
-      "📷 ਰੋਗ ਪਛਾਣ",
-      "🌦 ਮੌਸਮ ਸਲਾਹ",
-      "🧑‍🌾 ਏਆਈ ਕਿਸਾਨ ਮਿਤਰ",
-      "🧪 ਮਿੱਟੀ ਤੇ ਖਾਦ",
-      "🏪 ਮੰਡੀ ਭਾਅ",
-      "🏛 ਸਰਕਾਰੀ ਯੋਜਨਾਵਾਂ",
-      "🚨 ਐਮਰਜੈਂਸੀ ਅਲਰਟ"
-    ]
+    features:["🌱 ਫਸਲ ਚੋਣ","📷 ਰੋਗ ਪਛਾਣ","🌦 ਮੌਸਮ ਸਲਾਹ","🧑‍🌾 ਏਆਈ ਕਿਸਾਨ ਮਿਤਰ","🧪 ਮਿੱਟੀ ਤੇ ਖਾਦ","🏪 ਮੰਡੀ ਭਾਵ","🏛 ਸਰਕਾਰੀ ਯੋਜਨਾਵਾਂ","🚨 ਐਮਰਜੈਂਸੀ ਅਲਰਟ","📋 ਡਾਟਾ ਪਾਲਿਸੀ ਅਨੁਪਾਲਨਾ"]
   }
 };
 
+const VOICE_BOT_TEXT = {
+  hi:{welcome:"नमस्ते! मैं फसल, मौसम, रोग, मंडी भाव और सरकारी योजना में मदद कर सकता हूँ।",placeholder:"अपना सवाल लिखें...",default:"मैं फसल, रोग, मौसम, मंडी भाव, सरकारी योजनाओं और आपातकालीन मदद में सहायता कर सकता हूँ।",emergency:"ठीक है, मैं Emergency Alert फ़ॉर्म खोल रहा हूँ।"},
+  en:{welcome:"Hello! I can help with crops, disease, weather, market prices, schemes and emergencies.",placeholder:"Type your question...",default:"I can help with crops, diseases, weather, market prices, schemes, and emergencies.",emergency:"Okay, opening the Emergency Alert form."},
+  mr:{welcome:"नमस्कार! मी पीक, हवामान, रोग, बाजारभाव आणि सरकारी योजनांमध्ये मदत करू शकतो.",placeholder:"तुमचा प्रश्न लिहा...",default:"मी पीक, रोग, हवामान, बाजारभाव, सरकारी योजना आणि आपत्कालीन मदतीत सहाय्य करू शकतो.",emergency:"ठीक आहे, मी Emergency Alert फॉर्म उघडत आहे."},
+  pa:{welcome:"ਸਤ ਸ੍ਰੀ ਅਕਾਲ! ਮੈਂ ਫਸਲ, ਮੌਸਮ, ਰੋਗ, ਮੰਡੀ ਭਾਵ ਅਤੇ ਸਰਕਾਰੀ ਯੋਜਨਾਵਾਂ ਵਿੱਚ ਮਦਦ ਕਰ ਸਕਦਾ ਹਾਂ।",placeholder:"ਆਪਣਾ ਸਵਾਲ ਲਿਖੋ...",default:"ਮੈਂ ਫਸਲ, ਰੋਗ, ਮੌਸਮ, ਮੰਡੀ ਭਾਵ, ਸਰਕਾਰੀ ਯੋਜਨਾਵਾਂ ਅਤੇ ਐਮਰਜੈਂਸੀ ਮਦਦ ਵਿੱਚ ਸਹਾਇਤਾ ਕਰ ਸਕਦਾ ਹਾਂ।",emergency:"ਠੀਕ ਹੈ, ਮੈਂ Emergency Alert ਫਾਰਮ ਖੋਲ੍ਹ ਰਿਹਾ ਹਾਂ।"},
+  bh:{welcome:"प्रणाम! हम फसल, मौसम, रोग, मंडी भाव आ सरकारी योजना में मदद कर सकतानी।",placeholder:"अपना सवाल लिखीं...",default:"हम फसल, रोग, मौसम, मंडी भाव, सरकारी योजना आ आपात मदद में सहायता कर सकतानी।",emergency:"ठीक बा, हम Emergency Alert फॉर्म खोलतानी।"}
+};
+
+const WEATHER_BY_DISTRICT={agra:{temp:32,condition:"warm",advice:"light evening irrigation"},alwar:{temp:30,condition:"dry",advice:"use mulching"},bikaner:{temp:38,condition:"hot",advice:"increase irrigation frequency"},jaipur:{temp:31,condition:"warm",advice:"water crops early morning"},bijnor:{temp:28,condition:"humid",advice:"watch fungal diseases"},meerut:{temp:27,condition:"humid",advice:"maintain drainage"},kanpur:{temp:29,condition:"humid",advice:"timely fungicide spray"},ahmednagar:{temp:33,condition:"warm",advice:"maintain soil moisture"},nashik:{temp:28,condition:"mild",advice:"balanced irrigation"},ludhiana:{temp:24,condition:"cool",advice:"monitor leaf moisture"},amritsar:{temp:23,condition:"cool",advice:"avoid over-watering"}};
+const MARKET_BY_CROP={wheat:2200,rice:4500,maize:1950,cotton:5800,soybean:4100,onion:1800,potato:1500,tomato:2000};
+const DISEASE_RULES=[{keys:["yellow leaves","yellow","peela","pili"],disease:"Leaf Blight",solution:"Spray neem oil every 5-7 days"},{keys:["spots","dhabba"],disease:"Fungal Leaf Spot",solution:"Use Mancozeb spray and avoid waterlogging"},{keys:["curl","murjha"],disease:"Leaf Curl / Wilt",solution:"Use yellow traps and remove infected parts"}];
+
 function changeLang(){
-  const lang = document.getElementById("lang");
-  const l = lang.value;
-  
-  document.getElementById("dashTitle").innerText = TEXT[l].title;
-  for(let i = 0; i < 11; i++){
-    const el = document.getElementById("f" + (i + 1));
-    if(el) el.innerText = TEXT[l].features[i];
+  const l=document.getElementById("lang").value;
+  document.getElementById("dashTitle").innerText=TEXT[l].title;
+  for(let i=0;i<8;i++){
+    const el=document.getElementById("f"+(i+1));
+    if(el)el.innerText=TEXT[l].features[i];
   }
+  const complianceTitle=document.querySelector("#f9 .feature-title");
+  if(complianceTitle)complianceTitle.innerText=TEXT[l].features[8];
 }
+function normalizeVoiceLang(lang){return lang==="pu"?"pa":lang;}
+function getSpeechCode(lang){const map={hi:"hi-IN",en:"en-US",mr:"mr-IN",pa:"pa-IN",bh:"hi-IN"};return map[normalizeVoiceLang(lang)]||"hi-IN";}
+function toggleVoiceAssistant(){document.getElementById("chatPanel").classList.toggle("open");}
+function changeVoiceLanguage(lang){const t=VOICE_BOT_TEXT[normalizeVoiceLang(lang)]||VOICE_BOT_TEXT.hi;document.getElementById("welcomeMessage").innerText=t.welcome;document.getElementById("userInput").placeholder=t.placeholder;}
+function updateChatHistory(sender,message){const wrapper=document.createElement("div");wrapper.className=sender==="user"?"message user":"message bot";if(sender==="bot"){const icon=document.createElement("i");icon.className="fas fa-robot";wrapper.appendChild(icon);}const bubble=document.createElement("div");bubble.className="bubble";bubble.innerText=message;wrapper.appendChild(bubble);const box=document.getElementById("chatMessages");box.appendChild(wrapper);box.scrollTop=box.scrollHeight;}
+function sendMessage(){const input=document.getElementById("userInput");const query=input.value.trim();if(!query)return;updateChatHistory("user",query);input.value="";processQuery(query,document.getElementById("voiceLang").value);}
+function processQuery(text,language){const lang=normalizeVoiceLang(language);const response=getResponseFromModule(text,lang);updateChatHistory("bot",response);speakResponse(response,lang);}
+function getResponseFromModule(query,language){const q=query.toLowerCase();const botText=VOICE_BOT_TEXT[language]||VOICE_BOT_TEXT.hi;if(q.includes("weather")||q.includes("mausam")){const district=Object.keys(WEATHER_BY_DISTRICT).find(d=>q.includes(d));if(district){const w=WEATHER_BY_DISTRICT[district];return "In "+district+", temperature "+w.temp+"°C, "+w.condition+". Advice: "+w.advice+".";}return language==="en"?"Please tell district name for weather advice.":"मौसम सलाह के लिए जिला बताएं।";}if(q.includes("price")||q.includes("market")||q.includes("mandi")||q.includes("bhav")){const crop=Object.keys(MARKET_BY_CROP).find(c=>q.includes(c));if(crop)return "Price of "+crop+" is around Rs "+MARKET_BY_CROP[crop]+" per quintal.";return language==="en"?"Please tell crop name for market price.":"मंडी भाव के लिए फसल का नाम बताएं।";}if(q.includes("scheme")||q.includes("yojana")){return language==="en"?"Top schemes: PM Kisan Samman Nidhi, PM Fasal Bima Yojana, Soil Health Card, Kisan Credit Card.":"मुख्य योजनाएं: PM किसान सम्मान निधि, PM फसल बीमा योजना, Soil Health Card, Kisan Credit Card.";}if(q.includes("report problem")||q.includes("emergency")){setTimeout(()=>{window.location.href="EmergencyAlert.html";},900);return botText.emergency;}if(q.includes("grow")||q.includes("crop")||q.includes("fasal")){let season="Kharif";if(q.includes("rabi"))season="Rabi";if(q.includes("zaid"))season="Zaid";let soil="Loamy Soil";if(q.includes("black"))soil="Black Soil";if(q.includes("sandy"))soil="Sandy Soil";return "For "+season+" in "+soil+", I recommend Rice, Maize and Pulses.";}const disease=DISEASE_RULES.find(rule=>rule.keys.some(k=>q.includes(k)));if(disease)return "Based on symptoms, it might be "+disease.disease+". Treatment: "+disease.solution+".";if(q.includes("soil")||q.includes("fertilizer"))return language==="en"?"For fertilizer planning, select your soil and crop in Soil & Fertilizer module.":"उर्वरक सलाह के लिए Soil & Fertilizer मॉड्यूल में मिट्टी और फसल चुनें।";return botText.default;}
+function startVoiceInput(){const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SpeechRecognition){alert("Speech recognition is not supported in this browser.");return;}const lang=document.getElementById("voiceLang").value;const recognition=new SpeechRecognition();const micBtn=document.getElementById("micBtn");recognition.lang=getSpeechCode(lang);recognition.interimResults=false;recognition.maxAlternatives=1;micBtn.classList.add("listening");recognition.onresult=function(event){document.getElementById("userInput").value=event.results[0][0].transcript;sendMessage();};recognition.onend=function(){micBtn.classList.remove("listening");};recognition.onerror=function(){micBtn.classList.remove("listening");};recognition.start();}
+function speakResponse(text,language){if(!("speechSynthesis" in window))return;window.speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance(text);utterance.lang=getSpeechCode(language);utterance.rate=1;utterance.pitch=1;window.speechSynthesis.speak(utterance);}
+
+let complianceUIInstance=null;
+function getComplianceAgentInstance(){if(!window.AgriSenseCompliance)return null;if(window.AgriSenseCompliance.agent)return window.AgriSenseCompliance.agent;if(window.AgriSenseCompliance.ComplianceAgent)return new window.AgriSenseCompliance.ComplianceAgent();return null;}
+function updateCompliancePreview(){const rateEl=document.getElementById("complianceRateValue");const vioEl=document.getElementById("complianceViolationCount");const agent=getComplianceAgentInstance();if(!rateEl||!vioEl||!agent)return;try{const scan=agent.scanAllTransactions();const stats=agent.getStatistics(scan);rateEl.innerText=stats.compliance_rate_percent+"%";vioEl.innerText=stats.violation_transactions+" violations";}catch(e){rateEl.innerText="--%";vioEl.innerText="-- violations";}}
+function openComplianceDashboard(event){if(event)event.preventDefault();const modal=document.getElementById("complianceModal");if(!modal)return;modal.classList.remove("hidden");document.body.style.overflow="hidden";const agent=getComplianceAgentInstance();if(!agent||!window.AgriSenseCompliance||!window.AgriSenseCompliance.ComplianceUI)return;if(!complianceUIInstance){complianceUIInstance=new window.AgriSenseCompliance.ComplianceUI(agent,{containerId:"complianceDashboard",language:"en",severityFilter:"all"});complianceUIInstance.init("complianceDashboard");}else{complianceUIInstance.refresh();}}
+function closeComplianceDashboard(){const modal=document.getElementById("complianceModal");if(!modal)return;modal.classList.add("hidden");document.body.style.overflow="";}
+function refreshComplianceDashboard(){if(complianceUIInstance)complianceUIInstance.refresh();updateCompliancePreview();}
+
+document.getElementById("userInput").addEventListener("keydown",function(event){if(event.key==="Enter")sendMessage();});
+changeLang();
+changeVoiceLanguage(document.getElementById("voiceLang").value);
+updateCompliancePreview();
 </script>
+<script src="js/compliance/main.js"></script>
 
 </body>
 </html>
+
+
+
