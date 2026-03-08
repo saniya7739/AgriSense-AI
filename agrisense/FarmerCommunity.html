@@ -1,25 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Farmer Community</title>
     <link rel="stylesheet" href="FarmerCommunity.css">
 </head>
 <body>
+    <div class="top-bar">
+        <a href="dashboard.html" class="back-btn" id="backBtn">Back</a>
+        <select id="lang" class="lang-selector" onchange="changeLang()">
+            <option value="hi">Hindi</option>
+            <option value="en">English</option>
+            <option value="bh">Bhojpuri</option>
+            <option value="mr">Marathi</option>
+            <option value="pa">Punjabi</option>
+        </select>
+    </div>
 
-    <h1>🌾 Farmer Community Q&A</h1>
+    <h1 id="pageTitle">Farmer Community Q&A</h1>
 
-    <!-- Ask Question -->
     <div class="ask-section">
-        <textarea id="questionInput" placeholder="अपना सवाल यहाँ लिखें... (Write your question here)"></textarea>
-        <button onclick="postQuestion()">Post Question</button>
+        <textarea id="questionInput" placeholder="Write your question here..."></textarea>
+        <button id="postBtn" onclick="postQuestion()">Post Question</button>
     </div>
 
     <hr>
-
-    <!-- Question List -->
     <div id="questionList"></div>
 
-<script src="FarmerCommunity.js"></script>
+    <script src="FarmerCommunity.js"></script>
 </body>
 </html>
