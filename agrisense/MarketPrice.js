@@ -8,7 +8,8 @@ const DATA = {
     lowL: "न्यूनतम:",
     avgL: "औसत:",
     updateMsg: "अंतिम अपडेट: आज",
-    crops: ["गेहूं", "धान", "मक्का", "कपास", "सोयाबीन", "प्याज", "आलू", "टमाटर"]
+    crops: ["गेहूं", "धान", "मक्का", "कपास", "सोयाबीन", "प्याज", "आलू", "टमाटर"],
+    back: "वापस"
   },
   en: {
     heading: "🏪 Market Price",
@@ -19,7 +20,8 @@ const DATA = {
     lowL: "Lowest:",
     avgL: "Average:",
     updateMsg: "Last Updated: Today",
-    crops: ["Wheat", "Rice", "Maize", "Cotton", "Soybean", "Onion", "Potato", "Tomato"]
+    crops: ["Wheat", "Rice", "Maize", "Cotton", "Soybean", "Onion", "Potato", "Tomato"],
+    back: "Back"
   },
   bh: {
     heading: "🏪 मंडी भाव",
@@ -30,7 +32,8 @@ const DATA = {
     lowL: "कम:",
     avgL: "औसत:",
     updateMsg: "अंतिम अपडेट: आज",
-    crops: ["गेहूं", "धान", "मक्का", "कपास"]
+    crops: ["गेहूं", "धान", "मक्का", "कपास"],
+    back: "लौटिन"
   },
   mr: {
     heading: "🏪 बाजार भाव",
@@ -41,7 +44,8 @@ const DATA = {
     lowL: "सर्वनिम्न:",
     avgL: "सरासरी:",
     updateMsg: "शेवटचा अपडेट: आज",
-    crops: ["गहू", "भात", "मक्का", "कपास"]
+    crops: ["गहू", "भात", "मक्का", "कपास"],
+    back: "परत"
   },
   pa: {
     heading: "🏪 ਮੰਡੀ ਭਾਅ",
@@ -52,7 +56,8 @@ const DATA = {
     lowL: "ਸਰਵਨਿਮ:",
     avgL: "ਔਸਤ:",
     updateMsg: "ਆਖਰੀ ਅਪਡੇਟ: ਅੱਜ",
-    crops: ["ਕਣਕ", "ਚਾਵਲ", "ਮੱਕੀ", "ਪੇਜ"]
+    crops: ["ਕਣਕ", "ਚਾਵਲ", "ਮੱਕੀ", "ਪੇਜ"],
+    back: "ਵਾਪਸ"
   }
 };
 
@@ -70,11 +75,13 @@ const MARKET_PRICES = {
 function loadCrops(lang) {
   const crop = document.getElementById("crop");
   crop.innerHTML = '<option value="">-- Select --</option>';
-  
-  DATA[lang].crops.forEach(c => {
+
+  const canonicalCrops = DATA.en.crops;
+  const localizedCrops = DATA[lang].crops || [];
+  canonicalCrops.forEach((cropKey, idx) => {
     const opt = document.createElement("option");
-    opt.value = c;
-    opt.textContent = c;
+    opt.value = cropKey;
+    opt.textContent = localizedCrops[idx] || cropKey;
     crop.appendChild(opt);
   });
 }
@@ -92,6 +99,7 @@ function changeLang() {
   document.getElementById("lowL").innerText = d.lowL;
   document.getElementById("avgL").innerText = d.avgL;
   document.getElementById("updateMsg").innerText = d.updateMsg;
+  document.getElementById("backBtn").innerText = `← ${d.back}`;
   
   loadCrops(lang);
   document.getElementById("priceBox").classList.add("hidden");

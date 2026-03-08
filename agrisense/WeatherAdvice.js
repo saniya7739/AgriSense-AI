@@ -8,6 +8,7 @@ const WEATHER_DATA = {
     btn: "🌤 मौसम जानकारी प्राप्त करें",
     adviceTitle: "💡 खेती की सलाह",
     noDataMsg: "कृपया पहले एक जिला चुनें",
+    back: "वापस",
     temp: "तापमान",
     humidity: "नमी",
     wind: "हवा की गति",
@@ -71,6 +72,7 @@ const WEATHER_DATA = {
     btn: "🌤 Get Weather Information",
     adviceTitle: "💡 Farming Tips",
     noDataMsg: "Please select a district first",
+    back: "Back",
     temp: "Temperature",
     humidity: "Humidity",
     wind: "Wind Speed",
@@ -134,6 +136,7 @@ const WEATHER_DATA = {
     btn: "🌤 मौसम जानकारी ले",
     adviceTitle: "💡 खेती की सलाह",
     noDataMsg: "पहले एक जिला चुन ले",
+    back: "लौटिन",
     temp: "तापमान",
     humidity: "नमी",
     wind: "हवा की गति",
@@ -170,6 +173,7 @@ const WEATHER_DATA = {
     btn: "🌤 हवामान माहिती मिळवा",
     adviceTitle: "💡 शेती सल्ला",
     noDataMsg: "कृपया प्रथम जिल्हा निवडा",
+    back: "परत",
     temp: "तापमान",
     humidity: "आर्द्रता",
     wind: "वाऱ्याचा वेग",
@@ -200,6 +204,7 @@ const WEATHER_DATA = {
     btn: "🌤 ਮੌਸਮ ਜਾਣਕਾਰੀ ਪ੍ਰਾਪਤ ਕਰੋ",
     adviceTitle: "💡 ਖੇਤੀ ਸੁਝ",
     noDataMsg: "ਕਿਰਪਾ ਕਰ ਕੇ ਪਹਿਲਾਂ ਇੱਕ ਜ਼ਿਲ੍ਹਾ ਚੁਣੋ",
+    back: "ਵਾਪਸ",
     temp: "ਤਾਪਮਾਨ",
     humidity: "ਨਮੀ",
     wind: "ਹਵਾ ਦੀ ਗਤੀ",
@@ -243,11 +248,15 @@ const DISTRICT_WEATHER = {
 function loadDistricts(lang) {
   const locations = document.getElementById("location");
   locations.innerHTML = "<option value=''>Select District</option>";
-  
-  WEATHER_DATA[lang].districts.forEach(district => {
+
+  const canonicalDistricts = Object.keys(DISTRICT_WEATHER);
+  const localizedDistricts = WEATHER_DATA[lang].districts || [];
+  const fallbackDistricts = WEATHER_DATA.en.districts || [];
+
+  canonicalDistricts.forEach((districtName, idx) => {
     const option = document.createElement("option");
-    option.value = district;
-    option.textContent = district;
+    option.value = districtName;
+    option.textContent = localizedDistricts[idx] || fallbackDistricts[idx] || districtName;
     locations.appendChild(option);
   });
 }
@@ -262,6 +271,8 @@ function changeLang() {
   document.getElementById("locL").innerText = data.locL;
   document.getElementById("btn").innerText = data.btn;
   document.getElementById("adviceTitle").innerText = data.adviceTitle;
+  document.getElementById("noDataMsg").innerText = data.noDataMsg;
+  document.getElementById("backBtn").innerText = `← ${data.back}`;
   
   loadDistricts(lang);
   document.getElementById("weatherResult").classList.add("hidden");
@@ -278,8 +289,8 @@ function getWeather() {
     return;
   }
   
-  const districtName = location.split(" - ")[1];
-  const weatherData = DISTRICT_WEATHER[districtName] || {
+  const districtName = location;
+  const weatherData = DISTRICT_WEATHER[districtName] ? { ...DISTRICT_WEATHER[districtName] } : {
     temp: 28,
     humidity: 55,
     wind: 10,
@@ -290,7 +301,9 @@ function getWeather() {
   const variation = (Math.random() - 0.5) * 6;
   weatherData.temp = Math.round(weatherData.temp + variation);
   
-  displayWeather(location, weatherData, lang);
+  const selectedOption = document.getElementById("location").selectedOptions[0];
+  const displayLocation = selectedOption ? selectedOption.textContent : districtName;
+  displayWeather(displayLocation, weatherData, lang);
 }
 
 function displayWeather(location, weather, lang) {

@@ -110,23 +110,28 @@ const SCHEMES = {
 const TEXTS = {
   hi: {
     heading: "🏛 सरकारी योजनाएँ",
-    sub: "किसानों के लिए लाभकारी योजनाओं की जानकारी"
+    sub: "किसानों के लिए लाभकारी योजनाओं की जानकारी",
+    back: "वापस"
   },
   en: {
     heading: "🏛 Government Schemes",
-    sub: "Information on beneficial schemes for farmers"
+    sub: "Information on beneficial schemes for farmers",
+    back: "Back"
   },
   bh: {
     heading: "🏛 सरकारी योजना",
-    sub: "किसानों के लिए लाभकारी योजनाओं की जानकारी"
+    sub: "किसानों के लिए लाभकारी योजनाओं की जानकारी",
+    back: "लौटिन"
   },
   mr: {
     heading: "🏛 सरकारी योजना",
-    sub: "शेतकर्यांसाठी लाभकारी योजनांची माहिती"
+    sub: "शेतकर्यांसाठी लाभकारी योजनांची माहिती",
+    back: "परत"
   },
   pa: {
     heading: "🏛 ਸਰਕਾਰੀ ਯੋਜਨਾਵਾਂ",
-    sub: "ਕਿਸਾਨਾਂ ਲਈ ਲਾਭਕਾਰੀ ਯੋਜਨਾਵਾਂ ਬਾਰੇ ਜਾਣਕਾਰੀ"
+    sub: "ਕਿਸਾਨਾਂ ਲਈ ਲਾਭਕਾਰੀ ਯੋਜਨਾਵਾਂ ਬਾਰੇ ਜਾਣਕਾਰੀ",
+    back: "ਵਾਪਸ"
   }
 };
 
@@ -160,6 +165,7 @@ function changeLang() {
   
   document.querySelector("h1").innerText = texts.heading;
   document.querySelector("p").innerText = texts.sub;
+  document.getElementById("backBtn").innerText = `← ${texts.back}`;
   
   loadSchemes(lang);
 }

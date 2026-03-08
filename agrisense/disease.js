@@ -9,6 +9,7 @@ camera:"📸 कैमरा से फोटो लें",
 btn:"🔍 रोग पहचानें",
 analyzing:"🔍 फोटो का विश्लेषण हो रहा है...",
 result:"🦠 संभावित रोग और समाधान:",
+back:"वापस",
 d:[
 ["पत्ती झुलसा","नीम तेल छिड़कें"],
 ["धान ब्लास्ट","ट्राइसाइक्लाजोल दवा"],
@@ -25,6 +26,7 @@ camera:"📸 Capture Photo",
 btn:"🔍 Detect Disease",
 analyzing:"🔍 Analyzing image...",
 result:"🦠 Possible Diseases & Solutions:",
+back:"Back",
 d:[
 ["Leaf Blight","Spray neem oil"],
 ["Rice Blast","Use Tricyclazole"],
@@ -41,6 +43,7 @@ camera:"📸 कैमरा फोटो",
 btn:"🔍 जांच",
 analyzing:"🔍 जांच चल रहल बा...",
 result:"🦠 रोग अउ समाधान:",
+back:"लौटिन",
 d:[
 ["पत्ता झुलसा","नीम तेल"],
 ["धान रोग","दवा"],
@@ -57,6 +60,7 @@ camera:"📸 कॅमेरा",
 btn:"🔍 शोधा",
 analyzing:"🔍 विश्लेषण सुरू आहे...",
 result:"🦠 संभाव्य रोग:",
+back:"परत",
 d:[
 ["पान करपा","नीम तेल"],
 ["भात रोग","औषध"],
@@ -73,6 +77,7 @@ camera:"📸 ਕੈਮਰਾ",
 btn:"🔍 ਪਛਾਣੋ",
 analyzing:"🔍 ਜਾਂਚ ਹੋ ਰਹੀ ਹੈ...",
 result:"🦠 ਸੰਭਾਵੀ ਰੋਗ:",
+back:"ਵਾਪਸ",
 d:[
 ["ਪੱਤਾ ਰੋਗ","ਨੀਮ ਤੇਲ"],
 ["ਚਾਵਲ ਰੋਗ","ਦਵਾਈ"],
@@ -93,6 +98,7 @@ function changeLang(){
   document.getElementById("uploadText").innerText = L.upload;
   document.getElementById("cameraText").innerText = L.camera;
   document.getElementById("detectBtn").innerText = L.btn;
+  document.getElementById("backBtn").innerText = `← ${L.back}`;
   document.getElementById("result").innerText = "";
 }
 

@@ -4,35 +4,40 @@ const DATA = {
     sub: "अपने सवालों का जवाब पाएं",
     catL: "🎯 विषय चुनें",
     qL: "❓ प्रश्न चुनें",
-    btn: "💡 उत्तर प्राप्त करें"
+    btn: "💡 उत्तर प्राप्त करें",
+    back: "वापस"
   },
   en: {
     heading: "🧑‍🌾 AI Kisan Mitra",
     sub: "Get answers to your farming questions",
     catL: "🎯 Select Topic",
     qL: "❓ Select Question",
-    btn: "💡 Get Answer"
+    btn: "💡 Get Answer",
+    back: "Back"
   },
   bh: {
     heading: "🧑‍🌾 एआई किसान साथी",
     sub: "अपन सवालों का जवाब ले",
     catL: "🎯 विषय चुने",
     qL: "❓ प्रश्न चुने",
-    btn: "💡 जवाब पाव"
+    btn: "💡 जवाब पाव",
+    back: "लौटिन"
   },
   mr: {
     heading: "🧑‍🌾 एआय शेतकरी मित्र",
     sub: "आपल्या प्रश्नांची उत्तरे मिळवा",
     catL: "🎯 विषय निवडा",
     qL: "❓ प्रश्न निवडा",
-    btn: "💡 उत्तर मिळवा"
+    btn: "💡 उत्तर मिळवा",
+    back: "परत"
   },
   pa: {
     heading: "🧑‍🌾 ਏਆਈ ਕਿਸਾਨ ਮਿਤਰ",
     sub: "ਆਪਣੇ ਸਵਾਲਾਂ ਦੇ ਜਵਾਬ ਪਾਓ",
     catL: "🎯 ਵਿਸ਼ਾ ਚੁਣੋ",
     qL: "❓ ਪ੍ਰਸ਼ਨ ਚੁਣੋ",
-    btn: "💡 ਜਵਾਬ ਪਾਓ"
+    btn: "💡 ਜਵਾਬ ਪਾਓ",
+    back: "ਵਾਪਸ"
   }
 };
 
@@ -124,6 +129,7 @@ function changeLang() {
   document.getElementById("catL").innerText = d.catL;
   document.getElementById("qL").innerText = d.qL;
   document.getElementById("btn").innerText = d.btn;
+  document.getElementById("backBtn").innerText = `← ${d.back}`;
   
   loadCategories(lang);
   document.getElementById("question").innerHTML = '<option value="">-- Select Question --</option>';
