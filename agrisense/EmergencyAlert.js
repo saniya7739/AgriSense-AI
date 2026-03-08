@@ -74,7 +74,8 @@ const TEXTS = {
     descL: "विवरण:",
     reportBtn: "📤 रिपोर्ट भेजें",
     problems: ["कीट संक्रमण", "रोग", "मौसम समस्या", "जल संकट", "अन्य"],
-    success: "रिपोर्ट सफलतापूर्वक भेजी गई!"
+    success: "रिपोर्ट सफलतापूर्वक भेजी गई!",
+    back: "वापस"
   },
   en: {
     heading: "🚨 Emergency Alert",
@@ -84,7 +85,8 @@ const TEXTS = {
     descL: "Description:",
     reportBtn: "📤 Send Report",
     problems: ["Pest", "Disease", "Weather Issue", "Water Crisis", "Other"],
-    success: "Report sent successfully!"
+    success: "Report sent successfully!",
+    back: "Back"
   },
   bh: {
     heading: "🚨 आपातकालीन अलर्ट",
@@ -94,7 +96,8 @@ const TEXTS = {
     descL: "विवरण:",
     reportBtn: "📤 भेजव",
     problems: ["कीट", "रोग", "मौसम", "पानी", "अन्य"],
-    success: "रिपोर्ट भेजा गया!"
+    success: "रिपोर्ट भेजा गया!",
+    back: "लौटिन"
   },
   mr: {
     heading: "🚨 आपत्कालीन सूचना",
@@ -104,7 +107,8 @@ const TEXTS = {
     descL: "तपशील:",
     reportBtn: "📤 पाठवा",
     problems: ["कीट", "रोग", "हवामान", "पाणी", "इतर"],
-    success: "नोंद केली गेली!"
+    success: "नोंद केली गेली!",
+    back: "परत"
   },
   pa: {
     heading: "🚨 ਐਮਰਜੈਂਸੀ ਅਲਰਟ",
@@ -114,7 +118,8 @@ const TEXTS = {
     descL: "ਵਿਸਥਾਰ:",
     reportBtn: "📤 ਭੇਜੋ",
     problems: ["ਕੀੜਾ", "ਬਿਮਾਰੀ", "ਮੌਸਮ", "ਪਾਣੀ", "ਹੋਰ"],
-    success: "ਰਿਪੋਰਟ ਭੇਜੀ ਗਈ!"
+    success: "ਰਿਪੋਰਟ ਭੇਜੀ ਗਈ!",
+    back: "ਵਾਪਸ"
   }
 };
 
@@ -165,6 +170,7 @@ function changeLang() {
   document.getElementById("problemL").innerText = texts.problemL;
   document.getElementById("descL").innerText = texts.descL;
   document.getElementById("reportBtn").innerText = texts.reportBtn;
+  document.getElementById("backBtn").innerText = `← ${texts.back}`;
   
   loadAlerts(lang);
   loadProblems(lang);

@@ -1,0 +1,530 @@
+<!--
+  remediation-panel.html
+  Standalone component for displaying and managing remediation suggestions
+  Can be embedded in compliance dashboard or modal
+-->
+
+<style>
+  :root {
+    --primary: #2e7d32;
+    --accent: #4CAF50;
+    --info: #2196F3;
+    --success: #4CAF50;
+    --warning: #ff9800;
+    --danger: #f44336;
+  }
+
+  .remediation-panel {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  .remediation-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #f0f0f0;
+  }
+
+  .remediation-header h3 {
+    font-size: 16px;
+    color: var(--primary);
+    margin: 0;
+    flex: 1;
+  }
+
+  .remediation-badge {
+    background: #e3f2fd;
+    color: var(--info);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .remediation-suggestions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .remediation-item {
+    background: #f5f9ff;
+    border-left: 4px solid var(--info);
+    border-radius: 6px;
+    padding: 12px;
+    position: relative;
+  }
+
+  .remediation-item.priority-high {
+    border-left-color: var(--danger);
+    background: #ffebee;
+  }
+
+  .remediation-item.priority-medium {
+    border-left-color: var(--warning);
+    background: #fff3e0;
+  }
+
+  .remediation-item-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .remediation-icon {
+    font-size: 18px;
+    margin-top: 2px;
+    color: var(--info);
+  }
+
+  .remediation-item.priority-high .remediation-icon {
+    color: var(--danger);
+  }
+
+  .remediation-item.priority-medium .remediation-icon {
+    color: var(--warning);
+  }
+
+  .remediation-title {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+  }
+
+  .remediation-description {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+
+  .remediation-steps {
+    background: rgba(255,255,255,0.6);
+    border-radius: 4px;
+    padding: 8px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    color: #666;
+  }
+
+  .remediation-steps ol {
+    margin: 0;
+    margin-left: 20px;
+    padding: 0;
+  }
+
+  .remediation-steps li {
+    margin-bottom: 4px;
+  }
+
+  .remediation-timeline {
+    background: rgba(255,255,255,0.4);
+    border-radius: 4px;
+    padding: 8px;
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 8px;
+  }
+
+  .remediation-timeline strong {
+    color: #666;
+  }
+
+  .remediation-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .remediation-actions button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.3s;
+  }
+
+  .btn-apply {
+    background: var(--success);
+    color: white;
+  }
+
+  .btn-apply:hover {
+    background: var(--primary);
+  }
+
+  .btn-document {
+    background: var(--info);
+    color: white;
+  }
+
+  .btn-document:hover {
+    background: #1565c0;
+  }
+
+  .btn-defer {
+    background: #f0f0f0;
+    color: #666;
+  }
+
+  .btn-defer:hover {
+    background: #e0e0e0;
+  }
+
+  .remediation-status {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-left: auto;
+  }
+
+  .status-pending {
+    background: #fff3e0;
+    color: var(--warning);
+  }
+
+  .status-approved {
+    background: #e8f5e9;
+    color: var(--success);
+  }
+
+  .status-implemented {
+    background: #e3f2fd;
+    color: var(--info);
+  }
+
+  /* Remediation Summary */
+  .remediation-summary {
+    background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+  }
+
+  .summary-item {
+    text-align: center;
+  }
+
+  .summary-item-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 4px;
+  }
+
+  .summary-item-label {
+    font-size: 12px;
+    color: #666;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  /* Implementation Timeline */
+  .remediation-timeline-view {
+    margin: 16px 0;
+  }
+
+  .timeline-item {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .timeline-dot {
+    width: 12px;
+    height: 12px;
+    background: var(--info);
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+
+  .timeline-item.completed .timeline-dot {
+    background: var(--success);
+  }
+
+  .timeline-item.overdue .timeline-dot {
+    background: var(--danger);
+  }
+
+  .timeline-content {
+    flex: 1;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed #ddd;
+  }
+
+  .timeline-content:last-child {
+    border-bottom: none;
+  }
+
+  .timeline-title {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 2px;
+  }
+
+  .timeline-date {
+    font-size: 12px;
+    color: #999;
+  }
+
+  .timeline-status {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    background: #f0f0f0;
+    color: #666;
+    margin-left: 8px;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .remediation-item-header {
+      flex-wrap: wrap;
+    }
+
+    .remediation-summary {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .remediation-actions {
+      flex-wrap: wrap;
+    }
+
+    .remediation-actions button {
+      flex: 1;
+      min-width: 80px;
+    }
+  }
+
+  /* Print Styles */
+  @media print {
+    .remediation-actions {
+      display: none;
+    }
+
+    .remediation-item {
+      page-break-inside: avoid;
+    }
+  }
+</style>
+
+<div class="remediation-panel">
+  <div class="remediation-header">
+    <h3>
+      <i class="fas fa-lightbulb"></i> Remediation Suggestions
+    </h3>
+    <span class="remediation-badge">
+      <i class="fas fa-tasks"></i> 3 Actions
+    </span>
+  </div>
+
+  <!-- Summary -->
+  <div class="remediation-summary">
+    <div class="summary-item">
+      <div class="summary-item-value">3</div>
+      <div class="summary-item-label">Total Suggestions</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-item-value">1</div>
+      <div class="summary-item-label">High Priority</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-item-value">5d</div>
+      <div class="summary-item-label">Avg Implementation Time</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-item-value">₹2.4L</div>
+      <div class="summary-item-label">Potential Recovery</div>
+    </div>
+  </div>
+
+  <!-- Suggestions List -->
+  <div class="remediation-suggestions">
+    
+    <!-- High Priority Remediation -->
+    <div class="remediation-item priority-high">
+      <div class="remediation-item-header">
+        <i class="fas fa-exclamation-circle remediation-icon"></i>
+        <div style="flex: 1;">
+          <div class="remediation-title">Adjust Farm Size Claim</div>
+          <span class="remediation-status status-pending">PENDING</span>
+        </div>
+      </div>
+      <div class="remediation-description">
+        Farm land holding exceeds PM-KISAN eligibility limit of 2.0 hectares. 
+        Farmer must either reduce claimed area or split application across family members.
+      </div>
+      <div class="remediation-steps">
+        <strong>Implementation Steps:</strong>
+        <ol>
+          <li>Verify actual cultivated area through land records</li>
+          <li>Identify eligible co-owners for split claims</li>
+          <li>Resubmit adjusted claim with supporting documents</li>
+          <li>Wait for re-verification (7-10 days)</li>
+        </ol>
+      </div>
+      <div class="remediation-timeline">
+        <strong>Timeline:</strong> Should be completed within <strong>7 days</strong> to avoid penalty interest accrual
+      </div>
+      <div class="remediation-actions">
+        <button class="btn-apply" onclick="applyRemediation(1)">
+          <i class="fas fa-check"></i> Apply Action
+        </button>
+        <button class="btn-document" onclick="viewDocumentation(1)">
+          <i class="fas fa-file-pdf"></i> View Guide
+        </button>
+        <button class="btn-defer" onclick="deferRemediation(1)">
+          <i class="fas fa-clock"></i> Defer
+        </button>
+      </div>
+    </div>
+
+    <!-- Medium Priority Remediation -->
+    <div class="remediation-item priority-medium">
+      <div class="remediation-item-header">
+        <i class="fas fa-warning remediation-icon"></i>
+        <div style="flex: 1;">
+          <div class="remediation-title">Income Declaration Review</div>
+          <span class="remediation-status status-approved">APPROVED</span>
+        </div>
+      </div>
+      <div class="remediation-description">
+        Annual income declaration exceeds PM-KISAN threshold of ₹5 lakhs. 
+        Provide updated income certificate or ITR documents for verification.
+      </div>
+      <div class="remediation-steps">
+        <strong>Required Documents:</strong>
+        <ol>
+          <li>Latest Income Certificate from Taluk Office</li>
+          <li>Last 3 years IT Returns (if applicable)</li>
+          <li>Bank statements showing income sources</li>
+        </ol>
+      </div>
+      <div class="remediation-timeline">
+        <strong>Timeline:</strong> Documents should be submitted within <strong>10 days</strong>
+      </div>
+      <div class="remediation-actions">
+        <button class="btn-apply" onclick="applyRemediation(2)">
+          <i class="fas fa-upload"></i> Upload Documents
+        </button>
+        <button class="btn-document" onclick="viewDocumentation(2)">
+          <i class="fas fa-question-circle"></i> Need Help?
+        </button>
+      </div>
+    </div>
+
+    <!-- Low Priority Remediation -->
+    <div class="remediation-item">
+      <div class="remediation-item-header">
+        <i class="fas fa-info-circle remediation-icon"></i>
+        <div style="flex: 1;">
+          <div class="remediation-title">Update Contact Information</div>
+          <span class="remediation-status status-pending">PENDING</span>
+        </div>
+      </div>
+      <div class="remediation-description">
+        Mobile number in database is outdated. Update contact details to ensure 
+        receipt of official notifications and subsidy disbursement alerts.
+      </div>
+      <div class="remediation-steps">
+        <strong>Steps:</strong>
+        <ol>
+          <li>Log in to online portal with Aadhaar/Bank Account</li>
+          <li>Navigate to "Profile" section</li>
+          <li>Update mobile and email address</li>
+          <li>Submit and verify OTP</li>
+        </ol>
+      </div>
+      <div class="remediation-timeline">
+        <strong>Timeline:</strong> Can be updated anytime; <strong>recommended within 3 days</strong>
+      </div>
+      <div class="remediation-actions">
+        <button class="btn-apply" onclick="applyRemediation(3)">
+          <i class="fas fa-edit"></i> Update Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Implementation Timeline -->
+  <div class="remediation-timeline-view" style="margin-top: 24px;">
+    <h4 style="color: var(--primary); margin-bottom: 16px;">
+      <i class="fas fa-calendar-alt"></i> Implementation Schedule
+    </h4>
+
+    <div class="timeline-item completed">
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-title">Farm Size Verification</div>
+        <div class="timeline-date">
+          Due: Feb 22, 2026
+          <span class="timeline-status">COMPLETED</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-title">Claim Amendment Submission</div>
+        <div class="timeline-date">
+          Due: Feb 25, 2026 (In 3 days)
+          <span class="timeline-status">IN PROGRESS</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-title">Re-verification & Approval</div>
+        <div class="timeline-date">
+          Expected: Mar 05, 2026 (In 13 days)
+          <span class="timeline-status">PENDING</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item overdue">
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-title">Revised Subsidy Disbursement</div>
+        <div class="timeline-date">
+          Target: Mar 10, 2026 (In 18 days)
+          <span class="timeline-status">OVERDUE RISK</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function applyRemediation(id) {
+    alert('Remediation action #' + id + ' being processed...\n\nBackend will handle implementation and tracking.');
+  }
+
+  function viewDocumentation(id) {
+    alert('Opening detailed guide for remediation #' + id + '...\n\n(Backend: PDF/HTML guide generation)');
+  }
+
+  function deferRemediation(id) {
+    alert('Remediation deferred. Follow-up scheduled for next week.');
+  }
+</script>

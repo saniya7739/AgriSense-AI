@@ -1,0 +1,823 @@
+<!--
+  human-review-workflow.html
+  Interactive panel for human reviewers to approve/reject violations
+  Includes approval history, notes, and escalation workflow
+-->
+
+<style>
+  :root {
+    --primary: #2e7d32;
+    --success: #4CAF50;
+    --danger: #f44336;
+    --warning: #ff9800;
+    --info: #2196F3;
+    --light: #f5f5f5;
+  }
+
+  .review-workflow-panel {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    margin: 20px 0;
+    overflow: hidden;
+  }
+
+  .review-header {
+    background: linear-gradient(135deg, var(--primary) 0%, #1b5e20 100%);
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .review-header h3 {
+    font-size: 18px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .review-stats {
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+  }
+
+  .review-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .review-stat-value {
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .review-stat-label {
+    font-size: 11px;
+    opacity: 0.9;
+  }
+
+  /* Review Queue */
+  .review-queue {
+    background: var(--light);
+    border-bottom: 1px solid #ddd;
+    padding: 16px;
+  }
+
+  .queue-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .queue-header h4 {
+    margin: 0;
+    font-size: 14px;
+    color: var(--primary);
+  }
+
+  .queue-filter {
+    display: flex;
+    gap: 8px;
+  }
+
+  .filter-btn {
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.3s;
+  }
+
+  .filter-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+
+  .violation-queue {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 8px 0;
+  }
+
+  .queue-item {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 11px;
+    font-weight: 600;
+    color: white;
+    position: relative;
+  }
+
+  .queue-item.pending {
+    background: var(--warning);
+  }
+
+  .queue-item.approved {
+    background: var(--success);
+  }
+
+  .queue-item.rejected {
+    background: var(--danger);
+  }
+
+  .queue-item.info-requested {
+    background: var(--info);
+  }
+
+  .queue-item:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+
+  .queue-item.active {
+    box-shadow: 0 0 0 3px rgba(0,0,0,0.2);
+  }
+
+  .queue-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: white;
+    color: #333;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  /* Review Details */
+  .review-details {
+    padding: 24px;
+  }
+
+  .violation-summary {
+    background: #f9f9f9;
+    border-left: 4px solid var(--danger);
+    padding: 16px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+  }
+
+  .summary-row {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 16px;
+    margin-bottom: 12px;
+    font-size: 13px;
+  }
+
+  .summary-label {
+    font-weight: 600;
+    color: var(--primary);
+  }
+
+  .summary-value {
+    color: #666;
+  }
+
+  .evidence-review {
+    margin-bottom: 24px;
+  }
+
+  .evidence-review h4 {
+    font-size: 13px;
+    color: var(--primary);
+    font-weight: 700;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  .evidence-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
+
+  .evidence-item {
+    background: #f9f9f9;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+  }
+
+  .evidence-item-title {
+    font-weight: 600;
+    color: #333;
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+
+  .evidence-item-value {
+    color: #666;
+    font-size: 12px;
+    font-family: monospace;
+    word-break: break-all;
+  }
+
+  /* Review Section */
+  .review-section {
+    background: #e3f2fd;
+    border: 1px solid #90caf9;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+
+  .review-section h4 {
+    font-size: 13px;
+    color: var(--info);
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .review-form-group {
+    margin-bottom: 12px;
+  }
+
+  .review-form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 6px;
+  }
+
+  .review-form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 12px;
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  .review-form-group select,
+  .review-form-group input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 12px;
+  }
+
+  .priority-selector {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .priority-option {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .priority-option:hover {
+    border-color: var(--primary);
+  }
+
+  .priority-option.selected {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+
+  /* Decision Buttons */
+  .review-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+
+  .action-btn {
+    flex: 1;
+    min-width: 140px;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .btn-approve {
+    background: var(--success);
+    color: white;
+  }
+
+  .btn-approve:hover {
+    background: #1b5e20;
+  }
+
+  .btn-request-info {
+    background: var(--info);
+    color: white;
+  }
+
+  .btn-request-info:hover {
+    background: #1565c0;
+  }
+
+  .btn-reject {
+    background: var(--danger);
+    color: white;
+  }
+
+  .btn-reject:hover {
+    background: #c62828;
+  }
+
+  .btn-escalate {
+    background: var(--warning);
+    color: white;
+  }
+
+  .btn-escalate:hover {
+    background: #e65100;
+  }
+
+  /* Approval History */
+  .approval-history {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 20px;
+  }
+
+  .approval-history h4 {
+    font-size: 13px;
+    color: var(--primary);
+    font-weight: 700;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  .history-item {
+    display: flex;
+    gap: 12px;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    font-size: 12px;
+    align-items: flex-start;
+  }
+
+  .history-item:last-child {
+    border-bottom: none;
+  }
+
+  .history-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+
+  .history-icon.approved {
+    background: var(--success);
+  }
+
+  .history-icon.rejected {
+    background: var(--danger);
+  }
+
+  .history-icon.requested {
+    background: var(--info);
+  }
+
+  .history-content {
+    flex: 1;
+  }
+
+  .history-action {
+    font-weight: 600;
+    color: #333;
+  }
+
+  .history-details {
+    color: #666;
+    margin-top: 2px;
+  }
+
+  .history-timestamp {
+    font-size: 11px;
+    color: #999;
+    margin-top: 2px;
+  }
+
+  /* Escalation Panel */
+  .escalation-panel {
+    background: #fff3e0;
+    border: 1px solid #ffe0b2;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 16px;
+  }
+
+  .escalation-panel h5 {
+    color: var(--warning);
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+
+  .escalation-option {
+    padding: 6px 8px;
+    background: white;
+    border: 1px solid #ffe0b2;
+    border-radius: 4px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: all 0.3s;
+  }
+
+  .escalation-option:last-child {
+    margin-bottom: 0;
+  }
+
+  .escalation-option:hover {
+    background: var(--warning);
+    color: white;
+  }
+
+  /* Status Badge */
+  .status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .status-pending {
+    background: #fff3e0;
+    color: var(--warning);
+  }
+
+  .status-approved {
+    background: #e8f5e9;
+    color: var(--success);
+  }
+
+  .status-rejected {
+    background: #ffebee;
+    color: var(--danger);
+  }
+
+  .status-info-requested {
+    background: #e3f2fd;
+    color: var(--info);
+  }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .review-header {
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .review-stats {
+      width: 100%;
+      justify-content: space-around;
+    }
+
+    .evidence-items {
+      grid-template-columns: 1fr;
+    }
+
+    .review-actions {
+      flex-direction: column;
+    }
+
+    .action-btn {
+      width: 100%;
+    }
+  }
+</style>
+
+<div class="review-workflow-panel">
+  <!-- Header with Stats -->
+  <div class="review-header">
+    <h3>
+      <i class="fas fa-tasks"></i> Human Review Workflow
+    </h3>
+    <div class="review-stats">
+      <div class="review-stat">
+        <div class="review-stat-value">5</div>
+        <div class="review-stat-label">Pending</div>
+      </div>
+      <div class="review-stat">
+        <div class="review-stat-value">12</div>
+        <div class="review-stat-label">Reviewed</div>
+      </div>
+      <div class="review-stat">
+        <div class="review-stat-value">3</div>
+        <div class="review-stat-label">Escalated</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Review Queue -->
+  <div class="review-queue">
+    <div class="queue-header">
+      <h4>Review Queue</h4>
+      <div class="queue-filter">
+        <button class="filter-btn active">All</button>
+        <button class="filter-btn" onclick="this.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.scrollIntoView()">Pending</button>
+        <button class="filter-btn">Approved</button>
+        <button class="filter-btn">Rejected</button>
+      </div>
+    </div>
+
+    <div class="violation-queue">
+      <div class="queue-item pending active" title="V-001: Farm Size Violation">
+        V-001
+        <div class="queue-count">1</div>
+      </div>
+      <div class="queue-item pending" title="V-002: Duplicate Claims">
+        V-002
+        <div class="queue-count">1</div>
+      </div>
+      <div class="queue-item approved" title="V-003: Income Check">
+        V-003
+      </div>
+      <div class="queue-item rejected" title="V-004: Fertilizer Limit">
+        V-004
+      </div>
+      <div class="queue-item info-requested" title="V-005: Late Reporting">
+        V-005
+      </div>
+      <div class="queue-item pending" title="V-006: Documentation">
+        V-006
+        <div class="queue-count">1</div>
+      </div>
+      <div class="queue-item approved" title="V-007: Resolved">
+        V-007
+      </div>
+      <div class="queue-item pending" title="V-008: Market Price">
+        V-008
+        <div class="queue-count">1</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Review Details -->
+  <div class="review-details">
+    
+    <!-- Violation Summary -->
+    <div class="violation-summary">
+      <div class="summary-row">
+        <div class="summary-label">Violation ID:</div>
+        <div class="summary-value">V-001</div>
+      </div>
+      <div class="summary-row">
+        <div class="summary-label">Code:</div>
+        <div class="summary-value">subsidy_limit_exceeded</div>
+      </div>
+      <div class="summary-row">
+        <div class="summary-label">Policy:</div>
+        <div class="summary-value">PM-KISAN Farm Size Eligibility</div>
+      </div>
+      <div class="summary-row">
+        <div class="summary-label">Farmer:</div>
+        <div class="summary-value">Raj Kumar (F-001)</div>
+      </div>
+      <div class="summary-row">
+        <div class="summary-label">Severity:</div>
+        <div class="summary-value">
+          <span class="status-badge" style="background: #ffebee; color: var(--danger);">HIGH</span>
+        </div>
+      </div>
+      <div class="summary-row">
+        <div class="summary-label">Amount:</div>
+        <div class="summary-value">₹2,000 claimed | ₹2,480 (with penalty)</div>
+      </div>
+    </div>
+
+    <!-- Evidence Review -->
+    <div class="evidence-review">
+      <h4>Evidence & Details</h4>
+      <div class="evidence-items">
+        <div class="evidence-item">
+          <div class="evidence-item-title">Farm Size</div>
+          <div class="evidence-item-value">3.5 hectares</div>
+        </div>
+        <div class="evidence-item">
+          <div class="evidence-item-title">Max Allowed</div>
+          <div class="evidence-item-value">2.0 hectares</div>
+        </div>
+        <div class="evidence-item">
+          <div class="evidence-item-title">Excess Amount</div>
+          <div class="evidence-item-value">1.5 hectares</div>
+        </div>
+        <div class="evidence-item">
+          <div class="evidence-item-title">Claim Date</div>
+          <div class="evidence-item-value">2026-02-15</div>
+        </div>
+        <div class="evidence-item">
+          <div class="evidence-item-title">Detection Date</div>
+          <div class="evidence-item-value">2026-02-18</div>
+        </div>
+        <div class="evidence-item">
+          <div class="evidence-item-title">Status</div>
+          <div class="evidence-item-value">
+            <span class="status-badge status-pending">PENDING</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Review Section -->
+    <div class="review-section">
+      <h4><i class="fas fa-clipboard-check"></i> Your Review</h4>
+
+      <div class="review-form-group">
+        <label>Review Category:</label>
+        <select onchange="handleCategoryChange(event)">
+          <option value="">-- Select Decision --</option>
+          <option value="approve">Approve Violation</option>
+          <option value="request-info">Request More Information</option>
+          <option value="reject">Reject Violation</option>
+          <option value="escalate">Escalate to Manager</option>
+        </select>
+      </div>
+
+      <div class="review-form-group">
+        <label>Priority Level:</label>
+        <div class="priority-selector">
+          <div class="priority-option selected" onclick="selectPriority(this, 'high')">
+            <i class="fas fa-exclamation"></i> High
+          </div>
+          <div class="priority-option" onclick="selectPriority(this, 'medium')">
+            <i class="fas fa-minus"></i> Medium
+          </div>
+          <div class="priority-option" onclick="selectPriority(this, 'low')">
+            <i class="fas fa-chevron-down"></i> Low
+          </div>
+        </div>
+      </div>
+
+      <div class="review-form-group">
+        <label>Review Notes / Comments:</label>
+        <textarea placeholder="Enter your review findings, observations, or questions..."></textarea>
+      </div>
+
+      <div class="review-form-group">
+        <label>Recommendation:</label>
+        <select>
+          <option value="">-- Select Recommendation --</option>
+          <option value="recovery">Initiate Recovery Proceedings</option>
+          <option value="rectify">Allow 15 Days to Rectify</option>
+          <option value="waive">Waive Penalty (with justification)</option>
+          <option value="partial">Apply Partial Penalty</option>
+          <option value="refer">Refer to Higher Authority</option>
+        </select>
+      </div>
+
+      <!-- Escalation Panel (shown when needed) -->
+      <div class="escalation-panel" style="display: none;">
+        <h5><i class="fas fa-arrow-up"></i> Escalation Reason:</h5>
+        <div class="escalation-option">Requires Legal Review</div>
+        <div class="escalation-option">Policy Interpretation Needed</div>
+        <div class="escalation-option">Duplicate Violation Pattern</div>
+        <div class="escalation-option">Farmer Appeal/Exception Request</div>
+        <div class="escalation-option">Other (Specify in notes)</div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="review-actions">
+      <button class="action-btn btn-approve" onclick="submitReview('approve')">
+        <i class="fas fa-check-circle"></i> Approve
+      </button>
+      <button class="action-btn btn-request-info" onclick="submitReview('request-info')">
+        <i class="fas fa-comments"></i> Request Info
+      </button>
+      <button class="action-btn btn-reject" onclick="submitReview('reject')">
+        <i class="fas fa-times-circle"></i> Reject
+      </button>
+      <button class="action-btn btn-escalate" onclick="submitReview('escalate')">
+        <i class="fas fa-arrow-up"></i> Escalate
+      </button>
+    </div>
+
+    <!-- Approval History -->
+    <div class="approval-history">
+      <h4>Review History</h4>
+
+      <div class="history-item">
+        <div class="history-icon approved">
+          <i class="fas fa-check"></i>
+        </div>
+        <div class="history-content">
+          <div class="history-action">Approved by Priya Singh</div>
+          <div class="history-details">Farm size claim verified through land records. Documentation complete.</div>
+          <div class="history-timestamp">Feb 20, 2026 10:30 AM</div>
+        </div>
+      </div>
+
+      <div class="history-item">
+        <div class="history-icon requested">
+          <i class="fas fa-comment"></i>
+        </div>
+        <div class="history-content">
+          <div class="history-action">Information Requested by Amit Patel</div>
+          <div class="history-details">Waiting for updated land survey report. Expected by Feb 22.</div>
+          <div class="history-timestamp">Feb 18, 2026 02:15 PM</div>
+        </div>
+      </div>
+
+      <div class="history-item">
+        <div class="history-icon approved">
+          <i class="fas fa-check"></i>
+        </div>
+        <div class="history-content">
+          <div class="history-action">Initial Review by System</div>
+          <div class="history-details">Violation detected automatically. Flagged for human review.</div>
+          <div class="history-timestamp">Feb 16, 2026 11:45 AM</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function handleCategoryChange(event) {
+    const escalationPanel = event.target.parentElement.parentElement.querySelector('.escalation-panel');
+    if (event.target.value === 'escalate') {
+      escalationPanel.style.display = 'block';
+    } else {
+      escalationPanel.style.display = 'none';
+    }
+  }
+
+  function selectPriority(element, priority) {
+    element.parentElement.querySelectorAll('.priority-option').forEach(el => {
+      el.classList.remove('selected');
+    });
+    element.classList.add('selected');
+  }
+
+  function submitReview(action) {
+    const textarea = document.querySelector('textarea');
+    const notes = textarea.value;
+    
+    if (!notes.trim()) {
+      alert('Please add review notes before submitting.');
+      return;
+    }
+
+    const actionText = {
+      'approve': 'Approved',
+      'request-info': 'Information Requested',
+      'reject': 'Rejected',
+      'escalate': 'Escalated'
+    };
+
+    alert('Review ' + actionText[action] + '\n\nNotes: ' + notes.substring(0, 50) + '...\n\nBackend will save the review and update violation status.');
+    textarea.value = ''; // Clear form
+  }
+</script>

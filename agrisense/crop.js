@@ -9,7 +9,8 @@ const DATA = {
     soil:["काली मिट्टी","दोमट मिट्टी","रेतीली मिट्टी"],
     season:["खरीफ","रबी","जायद"],
     water:["कम","मध्यम","अधिक"],
-    result:"✅ सुझाई गई फसलें: "
+    result:"✅ सुझाई गई फसलें: ",
+    back:"वापस"
   },
   en:{
     heading:"🌱 Crop Selection",
@@ -21,7 +22,8 @@ const DATA = {
     soil:["Black Soil","Loamy Soil","Sandy Soil"],
     season:["Kharif","Rabi","Zaid"],
     water:["Low","Medium","High"],
-    result:"✅ Recommended Crops: "
+    result:"✅ Recommended Crops: ",
+    back:"Back"
   },
   bh:{
     heading:"🌱 फसल चुने",
@@ -33,7 +35,8 @@ const DATA = {
     soil:["काली माटी","दोमट माटी","रेती माटी"],
     season:["खरीफ","रबी","जायद"],
     water:["कम","मध्यम","ज्यादा"],
-    result:"✅ सुझावल फसल: "
+    result:"✅ सुझावल फसल: ",
+    back:"लौटिन"
   },
   mr:{
     heading:"🌱 पीक निवड",
@@ -45,7 +48,8 @@ const DATA = {
     soil:["काळी माती","दोमट माती","वाळूची माती"],
     season:["खरीप","रब्बी","जायद"],
     water:["कमी","मध्यम","जास्त"],
-    result:"✅ शिफारस पिके: "
+    result:"✅ शिफारस पिके: ",
+    back:"परत"
   },
   pa:{
     heading:"🌱 ਫਸਲ ਚੋਣ",
@@ -57,7 +61,8 @@ const DATA = {
     soil:["ਕਾਲੀ ਮਿੱਟੀ","ਦੋਮਟ ਮਿੱਟੀ","ਰੇਤੀਲੀ ਮਿੱਟੀ"],
     season:["ਖਰੀਫ","ਰੱਬੀ","ਜ਼ਾਇਦ"],
     water:["ਘੱਟ","ਦਰਮਿਆਨਾ","ਵੱਧ"],
-    result:"✅ ਸਿਫਾਰਸ਼ੀ ਫਸਲਾਂ: "
+    result:"✅ ਸਿਫਾਰਸ਼ੀ ਫਸਲਾਂ: ",
+    back:"ਵਾਪਸ"
   }
 };
 
@@ -103,6 +108,7 @@ function changeLang(){
   document.getElementById("seasonL").innerText = DATA[l].seasonL;
   document.getElementById("waterL").innerText = DATA[l].waterL;
   document.getElementById("btn").innerText = DATA[l].btn;
+  document.getElementById("backBtn").innerText = `← ${DATA[l].back}`;
   loadOptions(l);
   document.getElementById("result").innerText = "";
 }

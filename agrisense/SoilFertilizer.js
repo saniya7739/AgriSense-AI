@@ -8,7 +8,8 @@ const DATA = {
     fertL: "🥗 आवश्यक पोषक तत्व",
     doseL: "💊 खुराक (प्रति हेक्टेयर)",
     soils: ["काली मिट्टी", "दोमट मिट्टी", "रेतीली मिट्टी", "मटियार मिट्टी"],
-    crops: ["गेहूं", "धान", "मक्का", "कपास", "सोयाबीन"]
+    crops: ["गेहूं", "धान", "मक्का", "कपास", "सोयाबीन"],
+    back: "वापस"
   },
   en: {
     heading: "🧪 Soil & Fertilizer",
@@ -19,7 +20,8 @@ const DATA = {
     fertL: "🥗 Required Nutrients",
     doseL: "💊 Dose (per hectare)",
     soils: ["Black Soil", "Loamy Soil", "Sandy Soil", "Clayey Soil"],
-    crops: ["Wheat", "Rice", "Maize", "Cotton", "Soybean"]
+    crops: ["Wheat", "Rice", "Maize", "Cotton", "Soybean"],
+    back: "Back"
   },
   bh: {
     heading: "🧪 माटी अउ खाद",
@@ -30,7 +32,8 @@ const DATA = {
     fertL: "🥗 आवश्यक खाद",
     doseL: "💊 मात्रा",
     soils: ["काली माटी", "दोमट माटी", "रेती माटी"],
-    crops: ["गेहूं", "धान", "मक्का"]
+    crops: ["गेहूं", "धान", "मक्का"],
+    back: "लौटिन"
   },
   mr: {
     heading: "🧪 माती व खत",
@@ -41,7 +44,8 @@ const DATA = {
     fertL: "🥗 आवश्यक पोषक",
     doseL: "💊 मात्रा",
     soils: ["काळी माती", "दोमट माती", "वाळूची माती"],
-    crops: ["गहू", "भात", "मक्का"]
+    crops: ["गहू", "भात", "मक्का"],
+    back: "परत"
   },
   pa: {
     heading: "🧪 ਮਿੱਟੀ ਤੇ ਖਾਦ",
@@ -52,7 +56,8 @@ const DATA = {
     fertL: "🥗 ਜ਼ਰੂਰੀ ਖਾਦ",
     doseL: "💊 ਖੁਰਾਕ",
     soils: ["ਕਾਲੀ ਮਿੱਟੀ", "ਦੋਮਟ ਮਿੱਟੀ", "ਰੇਤੀਲੀ ਮਿੱਟੀ"],
-    crops: ["ਕਣਕ", "ਚਾਵਲ", "ਮੱਕੀ"]
+    crops: ["ਕਣਕ", "ਚਾਵਲ", "ਮੱਕੀ"],
+    back: "ਵਾਪਸ"
   }
 };
 
@@ -95,17 +100,22 @@ function loadOptions(lang) {
   soilType.innerHTML = "";
   crop.innerHTML = "";
   
-  d.soils.forEach(s => {
+  const canonicalSoils = DATA.en.soils;
+  const canonicalCrops = DATA.en.crops;
+  const localizedSoils = d.soils || [];
+  const localizedCrops = d.crops || [];
+
+  canonicalSoils.forEach((soilKey, idx) => {
     const opt = document.createElement("option");
-    opt.value = s;
-    opt.textContent = s;
+    opt.value = soilKey;
+    opt.textContent = localizedSoils[idx] || soilKey;
     soilType.appendChild(opt);
   });
   
-  d.crops.forEach(c => {
+  canonicalCrops.forEach((cropKey, idx) => {
     const opt = document.createElement("option");
-    opt.value = c;
-    opt.textContent = c;
+    opt.value = cropKey;
+    opt.textContent = localizedCrops[idx] || cropKey;
     crop.appendChild(opt);
   });
 }
@@ -122,6 +132,7 @@ function changeLang() {
   document.getElementById("btn").innerText = d.btn;
   document.getElementById("fertL").innerText = d.fertL;
   document.getElementById("doseL").innerText = d.doseL;
+  document.getElementById("backBtn").innerText = `← ${d.back}`;
   
   loadOptions(lang);
   document.getElementById("resultBox").classList.add("hidden");
@@ -144,7 +155,14 @@ function getRecommendation() {
   
   const soilData = SOIL_FERTILIZER[soil];
   if (!soilData || !soilData[crop]) {
-    alert(lang === "en" ? "No data available" : "कोई डेटा उपलब्ध नहीं");
+    const noDataByLang = {
+      en: "No data available",
+      hi: "Koi data uplabdh nahi hai",
+      bh: "Koi data uplabdh na ba",
+      mr: "Data upalabdh nahi",
+      pa: "Data uplabdh nahi"
+    };
+    alert(noDataByLang[lang] || noDataByLang.hi);
     return;
   }
   

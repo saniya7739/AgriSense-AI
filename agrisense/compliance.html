@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Policy Compliance - AgriSense AI</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="compliance.css">
+  <style>
+    :root {
+      --primary: #2e7d32;
+      --secondary: #1b5e20;
+      --accent: #4CAF50;
+      --danger: #d32f2f;
+      --warning: #f39c12;
+      --light: #f5f7f5;
+      --border: #ddd;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #f5f7f5 0%, #e8f5e9 100%);
+      min-height: 100vh;
+      color: #333;
+    }
+
+    .header-bar {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      padding: 20px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .header-bar h1 {
+      font-size: 28px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-controls {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .lang-selector select {
+      padding: 8px 12px;
+      border: 2px solid white;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .lang-selector select option {
+      color: #333;
+      background: white;
+    }
+
+    .btn-primary {
+      padding: 10px 16px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .btn-secondary {
+      padding: 8px 14px;
+      background: white;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .btn-secondary:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      background: white;
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .tab-btn {
+      padding: 10px 20px;
+      background: white;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+      color: #666;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Policy Manager */
+    .policy-manager {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .policy-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--light);
+    }
+
+    .policy-header h2 {
+      font-size: 20px;
+      color: var(--primary);
+    }
+
+    .upload-area {
+      border: 3px dashed var(--accent);
+      border-radius: 12px;
+      padding: 32px;
+      text-align: center;
+      background: rgba(76, 175, 80, 0.05);
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-bottom: 20px;
+    }
+
+    .upload-area:hover {
+      border-color: var(--primary);
+      background: rgba(46, 125, 50, 0.08);
+    }
+
+    .upload-area i {
+      font-size: 48px;
+      color: var(--primary);
+      margin-bottom: 12px;
+    }
+
+    .upload-area p {
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .upload-area small {
+      color: #999;
+    }
+
+    #policyFileInput {
+      display: none;
+    }
+
+    .policy-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .policy-card {
+      background: var(--light);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      transition: all 0.3s;
+    }
+
+    .policy-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .policy-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .policy-card-title {
+      font-weight: 600;
+      color: var(--primary);
+      flex: 1;
+    }
+
+    .policy-card-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .policy-card-actions button {
+      width: 32px;
+      height: 32px;
+      border: none;
+      border-radius: 6px;
+      background: white;
+      color: var(--primary);
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .policy-card-actions button:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    .policy-card-meta {
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 10px;
+    }
+
+    /* Compliance Dashboard */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border-left: 4px solid var(--primary);
+    }
+
+    .stat-card.danger {
+      border-left-color: var(--danger);
+    }
+
+    .stat-card.warning {
+      border-left-color: var(--warning);
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: #999;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    /* Violations List */
+    .violations-container {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .violations-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--light);
+    }
+
+    .filters-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .filter-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .filter-select {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: white;
+      cursor: pointer;
+    }
+
+    .violation-item {
+      background: var(--light);
+      border-left: 4px solid var(--danger);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .violation-item:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transform: translateX(4px);
+    }
+
+    .violation-item.medium {
+      border-left-color: var(--warning);
+    }
+
+    .violation-item.low {
+      border-left-color: #4CAF50;
+    }
+
+    .violation-item-header {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .violation-item-title {
+      font-weight: 600;
+      color: #333;
+    }
+
+    .violation-severity {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .severity-high {
+      background: #ffebee;
+      color: var(--danger);
+    }
+
+    .severity-medium {
+      background: #fff3e0;
+      color: var(--warning);
+    }
+
+    .severity-low {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .violation-details-collapsed {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .violation-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .violation-actions button {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .btn-review {
+      background: var(--accent);
+      color: white;
+    }
+
+    .btn-review:hover {
+      background: var(--primary);
+    }
+
+    .btn-export {
+      background: #2196F3;
+      color: white;
+    }
+
+    .btn-export:hover {
+      background: #1976D2;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 12px;
+      padding: 32px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--light);
+    }
+
+    .modal-header h2 {
+      font-size: 20px;
+      color: var(--primary);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #999;
+    }
+
+    .modal-section {
+      margin-bottom: 20px;
+    }
+
+    .modal-section h3 {
+      font-size: 14px;
+      color: var(--primary);
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .evidence-box {
+      background: var(--light);
+      border-left: 3px solid var(--accent);
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      margin-bottom: 8px;
+      color: #666;
+    }
+
+    .evidence-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+    }
+
+    .remediation-box {
+      background: #e3f2fd;
+      border-left: 3px solid #2196F3;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      margin-bottom: 12px;
+      color: #1565c0;
+    }
+
+    .approval-section {
+      display: flex;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .approval-section button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .btn-approve {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .btn-approve:hover {
+      background: #2e7d32;
+    }
+
+    .btn-reject {
+      background: #f44336;
+      color: white;
+    }
+
+    .btn-reject:hover {
+      background: #c62828;
+    }
+
+    /* Report */
+    .report-container {
+      background: white;
+      border-radius: 12px;
+      padding: 32px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .report-header {
+      text-align: center;
+      margin-bottom: 32px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--light);
+    }
+
+    .report-header h1 {
+      font-size: 24px;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .report-meta {
+      font-size: 12px;
+      color: #999;
+    }
+
+    .report-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .report-item {
+      text-align: center;
+      padding: 16px;
+      background: var(--light);
+      border-radius: 8px;
+    }
+
+    .report-item-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .report-item-label {
+      font-size: 12px;
+      color: #999;
+      text-transform: uppercase;
+    }
+
+    .report-violations {
+      margin-bottom: 32px;
+    }
+
+    .report-violations h2 {
+      font-size: 16px;
+      color: var(--primary);
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--light);
+    }
+
+    .report-violation-item {
+      margin-bottom: 16px;
+      padding: 12px;
+      background: var(--light);
+      border-radius: 6px;
+    }
+
+    .report-violation-title {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 4px;
+    }
+
+    .report-violation-details {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    .report-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 24px;
+    }
+
+    .btn-export-pdf {
+      padding: 10px 20px;
+      background: #d32f2f;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn-export-pdf:hover {
+      background: #b71c1c;
+    }
+
+    @media (max-width: 768px) {
+      .header-bar {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+
+      .header-controls {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .tabs {
+        flex-wrap: wrap;
+      }
+
+      .violation-item-header {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-content {
+        width: 95%;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header-bar">
+    <h1>
+      <i class="fas fa-shield-alt"></i>
+      <span id="pageTitle">Data Policy Compliance</span>
+    </h1>
+    <div class="header-controls">
+      <div class="lang-selector">
+        <select id="lang" onchange="changeLanguage(event)">
+          <option value="en">English</option>
+          <option value="hi">हिंदी</option>
+          <option value="mr">मराठी</option>
+        </select>
+      </div>
+      <a href="dashboard.html" class="btn-secondary">
+        <i class="fas fa-arrow-left"></i> Back
+      </a>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('dashboard')">
+        <i class="fas fa-chart-line"></i> Dashboard
+      </button>
+      <button class="tab-btn" onclick="switchTab('policies')">
+        <i class="fas fa-file-pdf"></i> Policies
+      </button>
+      <button class="tab-btn" onclick="switchTab('violations')">
+        <i class="fas fa-exclamation-triangle"></i> Violations
+      </button>
+      <button class="tab-btn" onclick="switchTab('report')">
+        <i class="fas fa-file-contract"></i> Report
+      </button>
+    </div>
+
+    <!-- Dashboard Tab -->
+    <div id="dashboard" class="tab-content active">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="complianceRate">95%</div>
+          <div class="stat-label">Compliance Rate</div>
+        </div>
+        <div class="stat-card danger">
+          <div class="stat-value" id="totalViolations">12</div>
+          <div class="stat-label">Active Violations</div>
+        </div>
+        <div class="stat-card warning">
+          <div class="stat-value" id="pendingReview">5</div>
+          <div class="stat-label">Pending Review</div>
+        </div>
+        <div class="stat-card danger">
+          <div class="stat-value" id="totalPenalty">₹2.4L</div>
+          <div class="stat-label">Potential Penalty</div>
+        </div>
+      </div>
+
+      <div class="violations-container">
+        <div class="violations-header">
+          <h2>Recent Violations</h2>
+          <button class="btn-primary" onclick="scanNow()">
+            <i class="fas fa-sync"></i> Scan Now
+          </button>
+        </div>
+        <div id="recentViolationsList"></div>
+      </div>
+    </div>
+
+    <!-- Policies Tab -->
+    <div id="policies" class="tab-content">
+      <div class="policy-manager">
+        <div class="policy-header">
+          <h2>
+            <i class="fas fa-file-pdf"></i> Policy Documents
+          </h2>
+          <button class="btn-primary" onclick="triggerPolicyUpload()">
+            <i class="fas fa-plus"></i> Upload Policy
+          </button>
+        </div>
+
+        <div class="upload-area" onclick="triggerPolicyUpload()">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <p>Drag and drop PDF files here</p>
+          <small>or click to select files (Max 10MB)</small>
+        </div>
+
+        <input type="file" id="policyFileInput" accept=".pdf" onchange="handlePolicyUpload(event)">
+
+        <h3 style="margin-bottom: 16px; color: var(--primary);">Uploaded Policies</h3>
+        <div class="policy-list" id="policyList">
+          <!-- Policy cards will be dynamically loaded here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Violations Tab -->
+    <div id="violations" class="tab-content">
+      <div class="violations-container">
+        <div class="violations-header">
+          <h2>All Violations</h2>
+        </div>
+
+        <div class="filters-bar">
+          <div class="filter-group">
+            <label>Severity:</label>
+            <select class="filter-select" onchange="filterViolations()">
+              <option value="all">All</option>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Status:</label>
+            <select class="filter-select" onchange="filterViolations()">
+              <option value="open">Open</option>
+              <option value="reviewed">Reviewed</option>
+              <option value="resolved">Resolved</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="violationsList"></div>
+      </div>
+    </div>
+
+    <!-- Report Tab -->
+    <div id="report" class="tab-content">
+      <div class="report-container">
+        <div class="report-header">
+          <h1>Compliance Report</h1>
+          <div class="report-meta" id="reportDate">Generated on Feb 20, 2026</div>
+        </div>
+
+        <div class="report-summary">
+          <div class="report-item">
+            <div class="report-item-value" id="reportCompliance">95%</div>
+            <div class="report-item-label">Compliance Rate</div>
+          </div>
+          <div class="report-item">
+            <div class="report-item-value" id="reportTotal">100</div>
+            <div class="report-item-label">Total Records</div>
+          </div>
+          <div class="report-item">
+            <div class="report-item-value" id="reportViolating">5</div>
+            <div class="report-item-label">Violating Records</div>
+          </div>
+          <div class="report-item">
+            <div class="report-item-value" id="reportPolicies">3</div>
+            <div class="report-item-label">Active Policies</div>
+          </div>
+        </div>
+
+        <div class="report-violations">
+          <h2>Violation Summary by Severity</h2>
+          <div id="reportViolationsSummary"></div>
+        </div>
+
+        <div class="report-actions">
+          <button class="btn-export-pdf" onclick="exportReportPDF()">
+            <i class="fas fa-file-pdf"></i> Export as PDF
+          </button>
+          <button class="btn-export" onclick="exportReportCSV()">
+            <i class="fas fa-download"></i> Export as CSV
+          </button>
+          <button class="btn-primary" onclick="printReport()">
+            <i class="fas fa-print"></i> Print
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Violation Detail Modal -->
+  <div id="violationModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">Violation Details</h2>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+
+      <div class="modal-section">
+        <h3>Violation Information</h3>
+        <div class="evidence-box">
+          <div id="modalViolationInfo"></div>
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <h3>Evidence</h3>
+        <div id="modalEvidence"></div>
+      </div>
+
+      <div class="modal-section">
+        <h3>Recommended Action</h3>
+        <div class="remediation-box" id="modalRemediation"></div>
+      </div>
+
+      <div class="modal-section">
+        <h3>Penalty</h3>
+        <div class="evidence-box" id="modalPenalty"></div>
+      </div>
+
+      <div class="modal-section">
+        <h3>Review & Action</h3>
+        <textarea id="reviewNotes" placeholder="Add review notes..." style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; min-height: 80px;"></textarea>
+        <div class="approval-section">
+          <button class="btn-approve" onclick="approveViolation()">
+            <i class="fas fa-check"></i> Approve
+          </button>
+          <button class="btn-reject" onclick="rejectViolation()">
+            <i class="fas fa-times"></i> Reject
+          </button>
+          <button class="btn-secondary" onclick="closeModal()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/compliance/compliance-agent.js"></script>
+  <script src="js/compliance/compliance-data.js"></script>
+  <script>
+    // Tab switching
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabName).classList.add('active');
+      event.target.closest('.tab-btn').classList.add('active');
+
+      if (tabName === 'violations') loadViolations();
+      if (tabName === 'report') generateReport();
+      if (tabName === 'policies') loadPolicies();
+    }
+
+    // Language change
+    function changeLanguage(event) {
+      const lang = event.target.value;
+      localStorage.setItem('compliance_lang', lang);
+      updateLanguage(lang);
+    }
+
+    function updateLanguage(lang) {
+      const translations = {
+        en: {
+          pageTitle: 'Data Policy Compliance',
+          complianceRate: 'Compliance Rate',
+          violations: 'Violations',
+          pendingReview: 'Pending Review',
+          penalty: 'Potential Penalty'
+        },
+        hi: {
+          pageTitle: 'डेटा नीति अनुपालन',
+          complianceRate: 'अनुपालन दर',
+          violations: 'उल्लंघन',
+          pendingReview: 'समीक्षा के लिए लंबित',
+          penalty: 'संभावित दंड'
+        },
+        mr: {
+          pageTitle: 'डेटा धोरण अनुपालन',
+          complianceRate: 'अनुपालन दर',
+          violations: 'उल्लंघन',
+          pendingReview: 'पुनरावलोकनसाठी प्रलंबित',
+          penalty: 'संभाव्य दंड'
+        }
+      };
+      
+      const current = translations[lang] || translations.en;
+      document.getElementById('pageTitle').textContent = current.pageTitle;
+    }
+
+    // Policy management
+    function triggerPolicyUpload() {
+      document.getElementById('policyFileInput').click();
+    }
+
+    function handlePolicyUpload(event) {
+      const files = event.target.files;
+      if (files.length > 0) {
+        const file = files[0];
+        const policyName = file.name.replace('.pdf', '');
+        
+        // Store in localStorage for demo
+        let policies = JSON.parse(localStorage.getItem('uploadedPolicies')) || [];
+        policies.push({
+          id: Date.now(),
+          name: policyName,
+          uploadedAt: new Date().toLocaleDateString(),
+          size: (file.size / 1024 / 1024).toFixed(2) + ' MB'
+        });
+        localStorage.setItem('uploadedPolicies', JSON.stringify(policies));
+        
+        loadPolicies();
+        alert('Policy uploaded: ' + policyName);
+      }
+    }
+
+    function loadPolicies() {
+      const policies = JSON.parse(localStorage.getItem('uploadedPolicies')) || [];
+      const policyList = document.getElementById('policyList');
+      
+      if (policies.length === 0) {
+        policyList.innerHTML = '<p style="color: #999; text-align: center;">No policies uploaded yet</p>';
+        return;
+      }
+
+      policyList.innerHTML = policies.map(policy => `
+        <div class="policy-card">
+          <div class="policy-card-header">
+            <div class="policy-card-title"><i class="fas fa-file-pdf" style="color: red; margin-right: 8px;"></i> ${policy.name}</div>
+            <div class="policy-card-actions">
+              <button title="View" onclick="viewPolicy(${policy.id})"><i class="fas fa-eye"></i></button>
+              <button title="Delete" onclick="deletePolicy(${policy.id})"><i class="fas fa-trash"></i></button>
+            </div>
+          </div>
+          <div class="policy-card-meta">Uploaded: ${policy.uploadedAt}</div>
+          <div class="policy-card-meta">Size: ${policy.size}</div>
+        </div>
+      `).join('');
+    }
+
+    function viewPolicy(id) {
+      alert('Policy view feature coming soon!');
+    }
+
+    function deletePolicy(id) {
+      let policies = JSON.parse(localStorage.getItem('uploadedPolicies')) || [];
+      policies = policies.filter(p => p.id !== id);
+      localStorage.setItem('uploadedPolicies', JSON.stringify(policies));
+      loadPolicies();
+    }
+
+    // Violations
+    function loadViolations() {
+      // Mock data for demonstration
+      const mockViolations = [
+        {
+          id: 1,
+          code: 'subsidy_limit_exceeded',
+          severity: 'high',
+          farmer: 'Raj Kumar',
+          amount: 2000,
+          policy: 'PM-KISAN Farm Size',
+          status: 'open'
+        },
+        {
+          id: 2,
+          code: 'duplicate_claims',
+          severity: 'high',
+          farmer: 'Priya Singh',
+          amount: 5000,
+          policy: 'Anti-Fraud Detection',
+          status: 'reviewed'
+        },
+        {
+          id: 3,
+          code: 'income_eligibility_failed',
+          severity: 'medium',
+          farmer: 'Amit Patel',
+          amount: 0,
+          policy: 'PM-KISAN Income Check',
+          status: 'open'
+        }
+      ];
+
+      const violationsList = document.getElementById('violationsList');
+      violationsList.innerHTML = mockViolations.map(v => `
+        <div class="violation-item ${v.severity}" onclick="openViolationModal(${v.id}, '${v.code}')">
+          <div class="violation-item-header">
+            <div>
+              <div class="violation-item-title">${v.code}</div>
+              <div class="violation-details-collapsed">${v.farmer} • ${v.policy}</div>
+            </div>
+            <span class="violation-severity severity-${v.severity}">${v.severity.toUpperCase()}</span>
+            <div class="violation-actions">
+              <button class="btn-review" onclick="event.stopPropagation(); openViolationModal(${v.id}, '${v.code}')">Review</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterViolations() {
+      loadViolations();
+    }
+
+    function openViolationModal(id, code) {
+      const modal = document.getElementById('violationModal');
+      // Mock data
+      const violationData = {
+        code: code,
+        severity: 'HIGH',
+        policy: 'PM-KISAN Eligibility',
+        farmer: 'Raj Kumar',
+        details: 'Farm size exceeds maximum allowed: 3.5 hectares > 2.0 hectares',
+        evidence: {
+          'Farm Size': '3.5 hectares',
+          'Max Allowed': '2.0 hectares',
+          'Amount Claimed': '₹2,000',
+          'Violation Date': '2026-02-18'
+        },
+        remedy: 'Farmer should reduce claimed land area to 2.0 hectares or split claim across family members',
+        penalty: {
+          principal: '₹2,000',
+          interest: '₹480 (24%)',
+          total: '₹2,480'
+        }
+      };
+
+      document.getElementById('modalTitle').textContent = violationData.code + ' (ID: ' + id + ')';
+      document.getElementById('modalViolationInfo').innerHTML = `
+        <strong>Policy:</strong> ${violationData.policy}<br>
+        <strong>Farmer:</strong> ${violationData.farmer}<br>
+        <strong>Severity:</strong> ${violationData.severity}<br>
+        <strong>Details:</strong> ${violationData.details}
+      `;
+
+      document.getElementById('modalEvidence').innerHTML = Object.entries(violationData.evidence)
+        .map(([key, value]) => `
+          <div class="evidence-item">
+            <strong>${key}:</strong>
+            <span>${value}</span>
+          </div>
+        `).join('');
+
+      document.getElementById('modalRemediation').textContent = violationData.remedy;
+      document.getElementById('modalPenalty').innerHTML = `
+        <div class="evidence-item"><strong>Principal:</strong> <span>${violationData.penalty.principal}</span></div>
+        <div class="evidence-item"><strong>Interest:</strong> <span>${violationData.penalty.interest}</span></div>
+        <div class="evidence-item"><strong>Total Recoverable:</strong> <span><strong>${violationData.penalty.total}</strong></span></div>
+      `;
+
+      modal.classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('violationModal').classList.remove('active');
+    }
+
+    function approveViolation() {
+      alert('Violation approved and recorded!');
+      closeModal();
+    }
+
+    function rejectViolation() {
+      alert('Violation rejected. Review notes saved.');
+      closeModal();
+    }
+
+    // Report
+    function generateReport() {
+      document.getElementById('reportDate').textContent = 'Generated on ' + new Date().toLocaleDateString();
+      document.getElementById('reportViolationsSummary').innerHTML = `
+        <div class="report-violation-item">
+          <div class="report-violation-title">High Severity (5)</div>
+          <div class="report-violation-details">Subsidy fraud, duplicate claims, excess amounts</div>
+        </div>
+        <div class="report-violation-item">
+          <div class="report-violation-title">Medium Severity (4)</div>
+          <div class="report-violation-details">Income eligibility failures, late reporting</div>
+        </div>
+        <div class="report-violation-item">
+          <div class="report-violation-title">Low Severity (2)</div>
+          <div class="report-violation-details">Minor documentation issues</div>
+        </div>
+      `;
+    }
+
+    function exportReportPDF() {
+      alert('PDF export feature coming soon! (Backend: html2pdf library)');
+    }
+
+    function exportReportCSV() {
+      alert('CSV export feature coming soon!');
+    }
+
+    function printReport() {
+      window.print();
+    }
+
+    function scanNow() {
+      alert('Scanning database for violations...');
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      const savedLang = localStorage.getItem('compliance_lang') || 'en';
+      document.getElementById('lang').value = savedLang;
+      updateLanguage(savedLang);
+      loadPolicies();
+      generateReport();
+    });
+  </script>
+</body>
+</html>
