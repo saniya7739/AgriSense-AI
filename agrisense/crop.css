@@ -38,39 +38,6 @@ body{
   background:#1b5e20;
 }
 
-/* 🌐 Language switcher */
-.lang-selector{
-  position:fixed;
-  top:18px;
-  right:18px;
-  background:#e8d8b0;
-  padding:0;
-  border-radius:8px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.35);
-  z-index:10;
-}
-
-#lang{
-  border:2px solid #2e7d32;
-  padding:12px 16px;
-  font-size:16px;
-  font-weight:600;
-  border-radius:8px;
-  background:#e8d8b0;
-  color:#2e7d32;
-  min-width:150px;
-  cursor:pointer;
-  transition:background 0.3s ease;
-}
-
-#lang:hover{
-  background:#d4c490;
-}
-
-#lang option{
-  padding:8px;
-}
-
 /* Center content */
 .container{
   max-width:440px;

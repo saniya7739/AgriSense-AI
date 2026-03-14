@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AgriSense AI</title>
+<!-- Include LanguageConfig first -->
+<script src="js/language-config.js"></script>
 <style>
 *{
   margin:0;
@@ -25,24 +27,6 @@ body{
   background:rgba(0,0,0,0.45);
   z-index:-1;
 }
-.lang-selector{
-  position:fixed;
-  top:20px;
-  right:20px;
-  z-index:10;
-}
-.lang-selector select{
-  padding:12px 16px;
-  font-size:16px;
-  font-weight:600;
-  border-radius:12px;
-  border:2px solid #2e7d32;
-  background:#e8d8b0;
-  color:#333;
-  cursor:pointer;
-  min-width:140px;
-}
-.lang-selector select:hover{ background:#d4c490; }
 .container{
   min-height:100vh;
   display:flex;
@@ -157,87 +141,35 @@ input{
 <body>
 <div class="overlay"></div>
 
-<div class="lang-selector">
-  <select id="lang" onchange="changeLang()">
-    <option value="hi">🇮🇳 हिंदी</option>
-    <option value="en">🇬🇧 English</option>
-    <option value="bh">🗣️ Bhojpuri</option>
-    <option value="mr">🇮🇳 Marathi</option>
-    <option value="pa">🇮🇳 ਪੰਜਾਬੀ</option>
-  </select>
-</div>
+<div id="language-selector-container"></div>
+
+<!-- Include the new language selector script -->
+<script src="js/language-selector.js"></script>
 
 <div id="introOverlay">
-  <h1 id="introTitle">Welcome To AgriSense AI / कृषि मित्र</h1>
-  <button id="startBtn" onclick="startApp()">Start</button>
+  <h1 data-i18n="intro.title">Welcome To AgriSense AI / कृषि मित्र</h1>
+  <button id="startBtn" data-i18n="intro.start" onclick="startApp()">Start</button>
 </div>
 
 <div class="container" id="mainContent" style="display:none;">
   <div class="card">
-    <h1 id="title">किसान का स्वागत है</h1>
-    <p id="tagline">AI Powered Farming Assistant</p>
+    <h1 data-i18n="login.title">किसान का स्वागत है</h1>
+    <p data-i18n="login.tagline">AI Powered Farming Assistant</p>
 
-    <input id="mobileInput" type="text" placeholder="मोबाइल नंबर">
+    <input id="mobileInput" type="text" data-i18n-placeholder="login.mobile.placeholder" placeholder="मोबाइल नंबर">
 
-    <button class="login-btn" id="loginBtn" onclick="login()">लॉगिन</button>
+    <button class="login-btn" id="loginBtn" data-i18n="login.button" onclick="login()">लॉगिन</button>
     <br>
-    <button class="guest-btn" id="guestBtn" onclick="guest()">अतिथि के रूप में जारी रखें</button>
+    <button class="guest-btn" id="guestBtn" data-i18n="login.guest" onclick="guest()">अतिथि के रूप में जारी रखें</button>
   </div>
 </div>
 
 <script>
-const TEXT = {
-  hi:{
-    title:"👨‍🌾 किसान का स्वागत है",
-    tag:"AI Powered Farming Assistant",
-    mobile:"📱 मोबाइल नंबर",
-    login:"Login",
-    guest:"Guest के रूप में जारी रखें",
-    intro:"Welcome To AgriSense AI / कृषि मित्र"
-  },
-  en:{
-    title:"👨‍🌾 Welcome Farmer",
-    tag:"AI Powered Farming Assistant",
-    mobile:"📱 Mobile Number",
-    login:"Login",
-    guest:"Continue as Guest",
-    intro:"Welcome To AgriSense AI / Krishi Mitra"
-  },
-  bh:{
-    title:"👨‍🌾 किसान के स्वागत बा",
-    tag:"AI से चल रहल खेती साथी",
-    mobile:"📱 मोबाइल नंबर",
-    login:"Login",
-    guest:"Guest बन के आगे बढ़ीं",
-    intro:"Welcome To AgriSense AI / Krishi Mitra"
-  },
-  mr:{
-    title:"👨‍🌾 शेतकऱ्याचे स्वागत आहे",
-    tag:"AI आधारित शेती सहाय्यक",
-    mobile:"📱 मोबाईल नंबर",
-    login:"Login",
-    guest:"Guest म्हणून पुढे जा",
-    intro:"Welcome To AgriSense AI / Krishi Mitra"
-  },
-  pa:{
-    title:"👨‍🌾 ਕਿਸਾਨ ਦਾ ਸਵਾਗਤ ਹੈ",
-    tag:"AI ਆਧਾਰਿਤ ਖੇਤੀ ਸਹਾਇਕ",
-    mobile:"📱 ਮੋਬਾਈਲ ਨੰਬਰ",
-    login:"Login",
-    guest:"Guest ਵਜੋਂ ਜਾਰੀ ਰੱਖੋ",
-    intro:"Welcome To AgriSense AI / Krishi Mitra"
-  }
-};
+// Initialize language config when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    LanguageConfig.init();
+});
 
-function changeLang(){
-  const l = document.getElementById("lang").value;
-  document.getElementById("title").innerText = TEXT[l].title;
-  document.getElementById("tagline").innerText = TEXT[l].tag;
-  document.getElementById("mobileInput").placeholder = TEXT[l].mobile;
-  document.getElementById("loginBtn").innerText = TEXT[l].login;
-  document.getElementById("guestBtn").innerText = TEXT[l].guest;
-  document.getElementById("introTitle").innerText = TEXT[l].intro;
-}
 
 function startApp(){
   document.getElementById("introOverlay").style.display = "none";
@@ -245,6 +177,7 @@ function startApp(){
 }
 
 function login(){
+  sessionStorage.setItem("agriLoggedIn","1");
   window.location.href = "dashboard.html";
 }
 

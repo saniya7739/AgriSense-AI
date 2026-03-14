@@ -1,0 +1,89 @@
+<!-- language-selector.html -->
+<div class="language-selector-container">
+    <div class="language-selector">
+        <button class="lang-option active" data-lang="hi">हिन्दी</button>
+        <button class="lang-option" data-lang="en">English</button>
+        <button class="lang-option" data-lang="bh">भोजपुरी</button>
+        <button class="lang-option" data-lang="mr">मराठी</button>
+        <button class="lang-option" data-lang="pa">ਪੰਜਾਬੀ</button>
+    </div>
+</div>
+
+<style>
+.language-selector-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.language-selector {
+    display: flex;
+    gap: 5px;
+    background: #f0f7f0;
+    padding: 5px;
+    border-radius: 40px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.lang-option {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: transparent;
+    color: #1f3b1f;
+    letter-spacing: 0.3px;
+}
+
+.lang-option:hover {
+    background: #d4e8d4;
+}
+
+.lang-option.active {
+    background: #2e7d32;
+    color: white;
+    box-shadow: 0 4px 10px rgba(46,125,50,0.3);
+}
+</style>
+
+<script>
+// Make language selector work on all pages
+document.addEventListener('DOMContentLoaded', function() {
+    const langButtons = document.querySelectorAll('.lang-option');
+    
+    // Load saved language
+    const savedLang = localStorage.getItem('selectedLanguage') || 'hi';
+    
+    langButtons.forEach(btn => {
+        if(btn.dataset.lang === savedLang) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+    
+    // Dispatch initial language event
+    window.dispatchEvent(new CustomEvent('languageChanged', { detail: savedLang }));
+    
+    // Add click handlers
+    langButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            
+            // Update active state
+            langButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Save to localStorage
+            localStorage.setItem('selectedLanguage', lang);
+            
+            // Trigger language change event
+            window.dispatchEvent(new CustomEvent('languageChanged', { detail: lang }));
+        });
+    });
+});
+</script>

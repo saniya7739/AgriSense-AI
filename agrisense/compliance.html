@@ -4,8 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Data Policy Compliance - AgriSense AI</title>
+  <script src="theme.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link rel="stylesheet" href="compliance.css">
+  <link rel="stylesheet" href="theme.css">
   <style>
     :root {
       --primary: #2e7d32;
@@ -51,21 +53,6 @@
       display: flex;
       gap: 16px;
       align-items: center;
-    }
-
-    .lang-selector select {
-      padding: 8px 12px;
-      border: 2px solid white;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.2);
-      color: white;
-      cursor: pointer;
-      font-weight: 600;
-    }
-
-    .lang-selector select option {
-      color: #333;
-      background: white;
     }
 
     .btn-primary {
@@ -688,7 +675,7 @@
     }
   </style>
 </head>
-<body>
+<body class="compliance-page">
   <!-- Header -->
   <div class="header-bar">
     <h1>
@@ -696,13 +683,6 @@
       <span id="pageTitle">Data Policy Compliance</span>
     </h1>
     <div class="header-controls">
-      <div class="lang-selector">
-        <select id="lang" onchange="changeLanguage(event)">
-          <option value="en">English</option>
-          <option value="hi">हिंदी</option>
-          <option value="mr">मराठी</option>
-        </select>
-      </div>
       <a href="dashboard.html" class="btn-secondary">
         <i class="fas fa-arrow-left"></i> Back
       </a>
@@ -953,12 +933,33 @@
           violations: 'उल्लंघन',
           pendingReview: 'पुनरावलोकनसाठी प्रलंबित',
           penalty: 'संभाव्य दंड'
+        },
+        bh: {
+          pageTitle: 'डेटा नीति अनुपालन',
+          complianceRate: 'अनुपालन दर',
+          violations: 'उल्लंघन',
+          pendingReview: 'समीक्षा खातिर लंबित',
+          penalty: 'संभावित दंड'
+        },
+        pa: {
+          pageTitle: 'ਡੇਟਾ ਨੀਤੀ ਅਨੁਪਾਲਨ',
+          complianceRate: 'ਅਨੁਪਾਲਨ ਦਰ',
+          violations: 'ਉਲੰਘਣਾ',
+          pendingReview: 'ਸਮੀਖਿਆ ਲਈ ਬਕਾਇਆ',
+          penalty: 'ਸੰਭਾਵੀ ਦੰਡ'
         }
       };
       
       const current = translations[lang] || translations.en;
       document.getElementById('pageTitle').textContent = current.pageTitle;
     }
+
+    // Listen for global language change event
+    window.addEventListener('languageChanged', function(event) {
+        const lang = event.detail;
+        localStorage.setItem('compliance_lang', lang);
+        updateLanguage(lang);
+    });
 
     // Policy management
     function triggerPolicyUpload() {
@@ -1184,3 +1185,4 @@
   </script>
 </body>
 </html>
+

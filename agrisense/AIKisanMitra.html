@@ -1,56 +1,610 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Kisan Mitra</title>
-  <link rel="stylesheet" href="AIKisanMitra.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Kishan Mitr - ChatGPT Style</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #66785a 0%, #2e4d2e 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-container {
+            width: 95%;
+            max-width: 1000px;
+            height: 90vh;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .chat-header {
+            background: #1a3b1a;
+            color: white;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            width: 42px;
+            height: 42px;
+            padding: 0;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.18);
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            transition: background 0.2s ease, transform 0.2s ease;
+            justify-content: center;
+        }
+
+        #backText {
+            display: none;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.18);
+            transform: translateY(-1px);
+        }
+
+        .bot-avatar {
+            width: 48px;
+            height: 48px;
+            background: #4caf50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .bot-info h1 {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        .bot-info p {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,0.1);
+            padding: 6px 12px;
+            border-radius: 40px;
+            font-size: 13px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #4caf50;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.1); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .lang-select {
+            padding: 6px 12px;
+            border-radius: 40px;
+            border: none;
+            background: rgba(255,255,255,0.15);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .lang-select option {
+            background: #1a3b1a;
+            color: white;
+        }
+
+        /* Messages Area */
+        .messages-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            background: #f5f7f5;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Welcome Message */
+        .welcome-message {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .welcome-avatar-large {
+            width: 80px;
+            height: 80px;
+            background: #1a3b1a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 40px;
+            color: white;
+            box-shadow: 0 10px 20px rgba(26,59,26,0.2);
+        }
+
+        .welcome-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a3b1a;
+            margin-bottom: 8px;
+        }
+
+        .welcome-text {
+            color: #4f6b4f;
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Message Bubbles */
+        .message {
+            display: flex;
+            gap: 12px;
+            max-width: 80%;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            margin-left: auto;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #1a3b1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .message.user .message-avatar {
+            background: #4caf50;
+        }
+
+        .message-content {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            position: relative;
+            word-break: break-word;
+        }
+
+        .message.user .message-content {
+            background: #1a3b1a;
+            color: white;
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: #8ba58b;
+            margin-top: 4px;
+            text-align: right;
+        }
+
+        .message.user .message-time {
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 12px 16px;
+            background: white;
+            border-radius: 40px;
+            width: fit-content;
+            margin-left: 48px;
+            margin-bottom: 8px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #1a3b1a;
+            border-radius: 50%;
+            animation: typingBounce 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typingBounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* Input Area */
+        .input-area {
+            background: white;
+            border-top: 1px solid #e0e8e0;
+            padding: 16px 24px;
+        }
+
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f5f7f5;
+            border-radius: 50px;
+            padding: 4px 4px 4px 20px;
+            border: 1px solid #e0e8e0;
+        }
+
+        .input-wrapper input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 12px 0;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 4px;
+        }
+
+        .action-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+            color: #4f6b4f;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 18px;
+        }
+
+        .action-btn:hover {
+            background: #e8f5e9;
+            color: #1a3b1a;
+        }
+
+        .action-btn.send {
+            background: #1a3b1a;
+            color: white;
+        }
+
+        .action-btn.send:hover {
+            background: #2e4d2e;
+        }
+
+        .action-btn.recording {
+            background: #d32f2f;
+            color: white;
+            animation: pulse-red 1.5s infinite;
+        }
+
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.5); }
+            70% { box-shadow: 0 0 0 10px rgba(211, 47, 47, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .chat-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+
+            .header-right {
+                justify-content: space-between;
+                flex-wrap: wrap;
+            }
+
+            .message {
+                max-width: 90%;
+            }
+            
+            .status span {
+                display: none;
+            }
+            
+            .welcome-title {
+                font-size: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="overlay"></div>
+    <div class="chat-container">
+        <!-- Header -->
+        <div class="chat-header">
+            <div class="header-left">
+                <a href="dashboard.html" class="back-btn" id="backBtn">
+                    <i class="fas fa-arrow-left"></i>
+                    <span id="backText">Back</span>
+                </a>
+                <div class="bot-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="bot-info">
+                    <h1>AI Kishan Mitr</h1>
+                    <p id="headerSub"><i class="fas fa-leaf"></i> आपका किसान मित्र</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="status">
+                    <span class="status-dot"></span>
+                    <span id="statusText">Online</span>
+                </div>
+                </div>
+        </div>
 
-  <div class="lang-selector">
-    <select id="lang" onchange="changeLang()">
-      <option value="hi">🇮🇳 हिंदी</option>
-      <option value="en">🇬🇧 English</option>
-      <option value="bh">🗣️ Bhojpuri</option>
-      <option value="mr">🇮🇳 Marathi</option>
-      <option value="pa">🇮🇳 ਪੰਜਾਬੀ</option>
-    </select>
-  </div>
+        <!-- Messages Area -->
+        <div class="messages-area" id="messageArea">
+            <!-- Welcome Message (Dynamic) -->
+            <div class="welcome-message" id="welcomeMessage">
+                <div class="welcome-avatar-large">
+                    🤖
+                </div>
+                <div class="welcome-title" id="welcomeTitle">नमस्ते! मैं AI Kishan Mitr हूँ</div>
+                <div class="welcome-text" id="welcomeText">
+                    आप खेती से जुड़े किसी भी सवाल को पूछ सकते हैं<br>
+                    मैं हिन्दी, English, भोजपुरी, मराठी और ਪੰਜਾਬੀ में बात कर सकता हूँ
+                </div>
+            </div>
+        </div>
 
-  <a href="dashboard.html" class="back-btn" id="backBtn">← Back</a>
-
-  <div class="container">
-    <h1 id="heading">🧑‍🌾 एआई किसान मित्र</h1>
-    <p id="sub">अपने सवालों का जवाब पाएं</p>
-
-    <div class="card">
-      <label id="catL">🎯 विषय चुनें</label>
-      <select id="category" onchange="updateQuestions()">
-        <option value="">-- Select Topic --</option>
-      </select>
-
-      <label id="qL">❓ प्रश्न चुनें</label>
-      <select id="question"></select>
-      <button id="btn" type="button" onclick="getAnswer()" class="submit-btn">💡 उत्तर प्राप्त करें</button>
-
-      <label id="askL">💬 अपना सवाल पूछें</label>
-      <textarea id="userQuestion" rows="4" placeholder="Type your farming question"></textarea>
-
-      <div class="action-row">
-        <button id="micBtn" type="button" class="aux-btn" onclick="startListening()">🎤 Speak</button>
-        <button id="askBtn" type="button" class="submit-btn" onclick="askAssistant()">🤖 Ask Kisan Sahayak</button>
-        <button id="speakBtn" type="button" class="aux-btn" onclick="speakAnswer()">🔊 Listen</button>
-      </div>
-
-      <div id="answerBox" class="answer-box hidden">
-        <h3 id="ansTitle"></h3>
-        <p id="ansText"></p>
-      </div>
+        <!-- Input Area -->
+        <div class="input-area">
+            <div class="input-wrapper">
+                <input type="text" id="messageInput" placeholder="अपना सवाल लिखें...">
+                <div class="action-buttons">
+                    <button class="action-btn" id="voiceBtn">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button class="action-btn send" id="sendBtn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <script src="AIKisanMitra.js"></script>
+    <script>
+        // ========== MULTI-LANGUAGE TRANSLATIONS ==========
+        const translations = {
+            hi: {
+                back: "वापस",
+                headerSub: "🧑‍🌾 आपका किसान मित्र",
+                statusText: "ऑनलाइन",
+                welcomeTitle: "नमस्ते! मैं AI Kishan Mitr हूँ",
+                welcomeText: "आप खेती से जुड़े किसी भी सवाल को पूछ सकते हैं। मैं हिन्दी, English, भोजपुरी, मराठी और ਪੰਜਾਬੀ में बात कर सकता हूँ।",
+                inputPlaceholder: "अपना सवाल लिखें...",
+                defaultResponse: "धन्यवाद! कृपया अपना सवाल स्पष्ट करें। मैं मिट्टी, खाद, बीज, सिंचाई, कीट, रोग, फसल, मंडी भाव और सरकारी योजनाओं के बारे में जानकारी दे सकता हूँ।"
+            },
+            en: {
+                back: "Back",
+                headerSub: "🧑‍🌾 Your Farmer Friend",
+                statusText: "Online",
+                welcomeTitle: "Hello! I'm AI Kishan Mitr",
+                welcomeText: "You can ask any farming question. I can talk in Hindi, English, Bhojpuri, Marathi, and Punjabi.",
+                inputPlaceholder: "Type your question...",
+                defaultResponse: "Thank you! Please clarify your question. I can help with soil, fertilizer, seeds, irrigation, pests, diseases, crops, market prices, and government schemes."
+            },
+            bh: {
+                back: "लौटिन",
+                headerSub: "🧑‍🌾 तोहार किसान साथी",
+                statusText: "ऑनलाइन",
+                welcomeTitle: "प्रणाम! हम AI Kishan Mitr हईं",
+                welcomeText: "आप खेती से जुड़ल कवनो सवाल पूछ सकतानी। हम हिन्दी, English, भोजपुरी, मराठी आ ਪੰਜਾਬੀ में बात कर सकतानी।",
+                inputPlaceholder: "अपना सवाल लिखीं...",
+                defaultResponse: "धन्यवाद! कृपया अपना सवाल स्पष्ट करीं। हम माटी, खाद, बीज, सिंचाई, कीट, रोग, फसल, मंडी भाव आ सरकारी योजना के बारे में जानकारी दे सकतानी।"
+            },
+            mr: {
+                back: "परत",
+                headerSub: "🧑‍🌾 तुमचा शेतकरी मित्र",
+                statusText: "ऑनलाइन",
+                welcomeTitle: "नमस्कार! मी AI Kishan Mitr आहे",
+                welcomeText: "तुम्ही शेतीशी संबंधित कोणताही प्रश्न विचारू शकता. मी हिन्दी, English, भोजपुरी, मराठी आणि ਪੰਜਾਬी मध्ये बोलू शकतो.",
+                inputPlaceholder: "तुमचा प्रश्न लिहा...",
+                defaultResponse: "धन्यवाद! कृपया तुमचा प्रश्न स्पष्ट करा. मी माती, खत, बीज, सिंचन, कीड, रोग, पीक, बाजार भाव आणि सरकारी योजनांबद्दल माहिती देऊ शकतो."
+            },
+            pa: {
+                back: "ਵਾਪਸ",
+                headerSub: "🧑‍🌾 ਤੁਹਾਡਾ ਕਿਸਾਨ ਮਿੱਤਰ",
+                statusText: "ਆਨਲਾਈਨ",
+                welcomeTitle: "ਸਤ ਸ੍ਰੀ ਅਕਾਲ! ਮੈਂ AI Kishan Mitr ਹਾਂ",
+                welcomeText: "ਤੁਸੀਂ ਖੇਤੀ ਬਾਰੇ ਕੋਈ ਵੀ ਸਵਾਲ ਪੁੱਛ ਸਕਦੇ ਹੋ। ਮੈਂ ਹਿੰਦੀ, English, ਭੋਜਪੁਰੀ, ਮਰਾਠੀ ਅਤੇ ਪੰਜਾਬੀ ਵਿੱਚ ਗੱਲ ਕਰ ਸਕਦਾ ਹਾਂ।",
+                inputPlaceholder: "ਆਪਣਾ ਸਵਾਲ ਲਿਖੋ...",
+                defaultResponse: "ਧੰਨਵਾਦ! ਕਿਰਪਾ ਕਰਕੇ ਆਪਣਾ ਸਵਾਲ ਸਪੱਸ਼ਟ ਕਰੋ। ਮੈਂ ਮਿੱਟੀ, ਖਾਦ, ਬੀਜ, ਸਿੰਚਾਈ, ਕੀੜੇ, ਰੋਗ, ਫਸਲ, ਮੰਡੀ ਭਾਅ ਅਤੇ ਸਰਕਾਰੀ ਯੋਜਨਾਵਾਂ ਬਾਰੇ ਜਾਣਕਾਰੀ ਦੇ ਸਕਦਾ ਹਾਂ।"
+            }
+        };
+
+        // ========== DOM ELEMENTS ==========
+        const messageArea = document.getElementById('messageArea');
+        const messageInput = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const voiceBtn = document.getElementById('voiceBtn');
+        const languageSelect = document.getElementById('language');
+        const backText = document.getElementById('backText');
+        const headerSub = document.getElementById('headerSub');
+        const statusText = document.getElementById('statusText');
+        const welcomeTitle = document.getElementById('welcomeTitle');
+        const welcomeText = document.getElementById('welcomeText');
+
+        let firstMessage = true;
+
+        // ========== CHANGE LANGUAGE FUNCTION ==========
+        function changeLanguage(lang) {
+            const t = translations[lang];
+             
+            // Update header
+            backText.textContent = t.back;
+            headerSub.innerHTML = `<i class="fas fa-leaf"></i> ${t.headerSub}`;
+            statusText.textContent = t.statusText;
+            
+            // Update welcome message
+            welcomeTitle.textContent = t.welcomeTitle;
+            welcomeText.textContent = t.welcomeText;
+            
+            // Update input placeholder
+            messageInput.placeholder = t.inputPlaceholder;
+        }
+
+        // ========== SEND MESSAGE FUNCTION ==========
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+
+            // Add user message
+            addMessage(message, 'user');
+            messageInput.value = '';
+
+            // Remove welcome message
+            if (firstMessage) {
+                const welcome = document.getElementById('welcomeMessage');
+                if (welcome) welcome.remove();
+                firstMessage = false;
+            }
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            // Simulate bot response
+            setTimeout(() => {
+                removeTypingIndicator();
+                const lang = languageSelect.value;
+                addMessage(translations[lang].defaultResponse, 'bot');
+            }, 1500);
+        }
+
+        // ========== ADD MESSAGE TO CHAT ==========
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const now = new Date();
+            const timeStr = now.getHours() + ':' + now.getMinutes().toString().padStart(2, '0');
+
+            messageDiv.innerHTML = `
+                <div class="message-avatar">
+                    <i class="fas ${sender === 'user' ? 'fa-user' : 'fa-robot'}"></i>
+                </div>
+                <div class="message-content">
+                    ${text}
+                    <div class="message-time">${timeStr}</div>
+                </div>
+            `;
+
+            messageArea.appendChild(messageDiv);
+            messageArea.scrollTop = messageArea.scrollHeight;
+        }
+
+        // ========== TYPING INDICATOR ==========
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            `;
+            messageArea.appendChild(typingDiv);
+            messageArea.scrollTop = messageArea.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const typing = document.getElementById('typingIndicator');
+            if (typing) typing.remove();
+        }
+
+        // ========== VOICE INPUT ==========
+        voiceBtn.addEventListener('click', () => {
+            voiceBtn.classList.add('recording');
+            
+            // Simulate voice recognition
+            setTimeout(() => {
+                voiceBtn.classList.remove('recording');
+                const lang = languageSelect.value;
+                if (lang === 'hi') messageInput.value = 'गेहूं की फसल के बारे में बताएं';
+                else if (lang === 'en') messageInput.value = 'Tell me about wheat farming';
+                else if (lang === 'bh') messageInput.value = 'गेहूं के फसल के बारे में बताईं';
+                else if (lang === 'mr') messageInput.value = 'गव्हाच्या पिकाबद्दल सांगा';
+                else if (lang === 'pa') messageInput.value = 'ਕਣਕ ਦੀ ਫਸਲ ਬਾਰੇ ਦੱਸੋ';
+            }, 2000);
+        });
+
+        // ========== EVENT LISTENERS ==========
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        sendBtn.addEventListener('click', sendMessage);
+
+        // Initialize with default language (Hindi)
+        changeLanguage('hi');
+    </script>
 </body>
 </html>
+

@@ -121,8 +121,7 @@ function loadOptions(lang) {
 }
 
 function changeLang() {
-  const langSelect = document.getElementById("lang");
-  const lang = langSelect.value;
+  const lang = localStorage.getItem('selectedLanguage') || 'hi';
   const d = DATA[lang];
   
   document.getElementById("heading").innerText = d.heading;
@@ -137,6 +136,11 @@ function changeLang() {
   loadOptions(lang);
   document.getElementById("resultBox").classList.add("hidden");
 }
+
+// Listen for language change event
+window.addEventListener('languageChanged', function(event) {
+    changeLang();
+});
 
 function updateSoilInfo() {
   updateFertilizer();

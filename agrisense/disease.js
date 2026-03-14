@@ -89,8 +89,7 @@ d:[
 };
 
 function changeLang(){
-  const langSelect = document.getElementById("lang");
-  currentLang = langSelect.value;
+  currentLang = localStorage.getItem('selectedLanguage') || 'hi';
   const L = DATA[currentLang];
   
   document.getElementById("title").innerText = L.title;
@@ -101,6 +100,11 @@ function changeLang(){
   document.getElementById("backBtn").innerText = `← ${L.back}`;
   document.getElementById("result").innerText = "";
 }
+
+// Listen for language change event
+window.addEventListener('languageChanged', function(event) {
+    changeLang();
+});
 
 function detectDisease(){
   const upload = document.getElementById("upload");

@@ -87,8 +87,7 @@ function loadCrops(lang) {
 }
 
 function changeLang() {
-  const langSelect = document.getElementById("lang");
-  const lang = langSelect.value;
+  const lang = localStorage.getItem('selectedLanguage') || 'hi';
   const d = DATA[lang];
   
   document.getElementById("heading").innerText = d.heading;
@@ -104,6 +103,11 @@ function changeLang() {
   loadCrops(lang);
   document.getElementById("priceBox").classList.add("hidden");
 }
+
+// Listen for language change event
+window.addEventListener('languageChanged', function(event) {
+    changeLang();
+});
 
 function getPrice() {
   const crop = document.getElementById("crop").value;

@@ -4,42 +4,139 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Request Pickup</title>
+    <script src="theme.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="RequestPickup.css">
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="feature-shell.css">
 </head>
 <body>
-    <div class="top-bar">
-        <a href="dashboard.html" class="back-btn" id="backBtn">Back</a>
-        <select id="lang" class="lang-selector" onchange="changeLang()">
-            <option value="hi">हिन्दी</option>
-            <option value="en">English</option>
-            <option value="bh">भोजपुरी</option>
-            <option value="mr">मराठी</option>
-            <option value="pa">ਪੰਜਾਬੀ</option>
-        </select>
-    </div>
 
-    <h1 id="pageTitle">Crop Pickup Request</h1>
+<header class="page-header">
+        <a href="dashboard.html" class="back-btn" id="backBtn">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i>
+            <span id="backBtnText">वापस</span>
+        </a>
+    </header>
 
-    <div class="form-container">
-        <input type="text" id="farmerName" placeholder="Farmer Name">
-        <input type="text" id="cropName" placeholder="Crop Name">
-        <input type="number" id="quantity" min="0.01" step="0.01" placeholder="Quantity">
+    <main class="pickup-page">
+        <section class="pickup-shell">
+            <div class="hero-card">
+                <div class="hero-icon" aria-hidden="true">
+                    <i class="fas fa-truck-ramp-box"></i>
+                </div>
+                <div class="hero-copy">
+                    <div class="progress-pill" id="progressText">स्टेप 1 / 2</div>
+                    <h1 id="pageTitle">🚚 फसल पिकअप अनुरोध</h1>
+                    <p id="pageSubtitle">नीचे दिए गए फॉर्म को भरें</p>
+                </div>
+            </div>
 
-        <select id="quantityUnit">
-            <option value="">Select Unit</option>
-            <option value="kg">KG</option>
-            <option value="gr">GR</option>
-        </select>
+            <div class="content-grid">
+                <section class="form-card">
+                    <form id="pickupForm" novalidate>
+                        <div class="field-card">
+                            <label for="farmerName" id="farmerNameLabel">किसान का नाम</label>
+                            <div class="input-wrap">
+                                <input type="text" id="farmerName" placeholder="अपना नाम लिखें">
+                            </div>
+                        </div>
 
-        <input type="text" id="state" placeholder="State">
-        <input type="text" id="village" placeholder="Village">
-        <input type="text" id="pincode" inputmode="numeric" maxlength="6" placeholder="Pincode (6 digits)">
-        <input type="text" id="phone" placeholder="Phone Number">
+                        <div class="field-card">
+                            <label for="cropName" id="cropNameLabel">फसल का नाम</label>
+                            <div class="input-wrap">
+                                <input type="text" id="cropName" placeholder="जैसे गेहूं, धान, बाजरा">
+                            </div>
+                        </div>
 
-        <button id="submitBtn" onclick="submitPickup()">Submit Request</button>
-        <p id="message"></p>
-    </div>
+                        <div class="field-grid">
+                            <div class="field-card">
+                                <label for="quantity" id="quantityLabel">मात्रा</label>
+                                <div class="input-wrap">
+                                    <input type="number" id="quantity" min="0.01" step="0.01" placeholder="कुल मात्रा">
+                                </div>
+                            </div>
+
+                            <div class="field-card">
+                                <label for="quantityUnit" id="unitLabel">यूनिट</label>
+                                <div class="input-wrap">
+                                    <select id="quantityUnit">
+                                        <option value="">यूनिट चुनें</option>
+                                        <option value="kg">KG</option>
+                                        <option value="gr">GR</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field-grid">
+                            <div class="field-card">
+                                <label for="state" id="stateLabel">राज्य</label>
+                                <div class="input-wrap">
+                                    <input type="text" id="state" placeholder="राज्य का नाम">
+                                </div>
+                            </div>
+
+                            <div class="field-card">
+                                <label for="village" id="villageLabel">गांव</label>
+                                <div class="input-wrap">
+                                    <input type="text" id="village" placeholder="गांव का नाम">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field-grid">
+                            <div class="field-card">
+                                <label for="pincode" id="pincodeLabel">पिनकोड</label>
+                                <div class="input-wrap">
+                                    <input type="text" id="pincode" inputmode="numeric" maxlength="6" placeholder="6 अंकों का पिनकोड">
+                                </div>
+                            </div>
+
+                            <div class="field-card">
+                                <label for="phone" id="phoneLabel">मोबाइल नंबर</label>
+                                <div class="input-wrap">
+                                    <input type="text" id="phone" inputmode="tel" placeholder="10 अंकों का नंबर">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="terms-card">
+                            <label class="checkbox-row" for="terms">
+                                <span id="termsText">I confirm that the information provided is accurate.</span>
+                                <input type="checkbox" id="terms">
+                            </label>
+                        </div>
+
+                        <button type="submit" id="submitBtn" class="submit-btn">पिकअप अनुरोध भेजें</button>
+                    </form>
+
+                    <div id="message" class="message-box" aria-live="polite"></div>
+                </section>
+
+                <aside class="info-column">
+                    <div class="summary-card">
+                        <div class="summary-header">
+                            <span class="summary-badge" id="summaryBadge">अगला चरण</span>
+                            <h2 id="summaryTitle">सबमिट करने के बाद क्या होगा</h2>
+                        </div>
+                        <ul class="summary-list">
+                            <li id="summaryStep1">1. हमारी लॉजिस्टिक्स टीम आपके अनुरोध की पुष्टि करेगी।</li>
+                            <li id="summaryStep2">2. पिकअप का समय और वाहन विवरण साझा किया जाएगा।</li>
+                            <li id="summaryStep3">3. आपको कॉल या संदेश के माध्यम से अपडेट मिलेगा।</li>
+                        </ul>
+                    </div>
+
+                    <div class="tips-card">
+                        <h3 id="tipsTitle">सही जानकारी क्यों जरूरी है</h3>
+                        <p id="tipsBody">सटीक पता, मात्रा और संपर्क नंबर देने से पिकअप शेड्यूल जल्दी बनता है और देरी कम होती है।</p>
+                    </div>
+                </aside>
+            </div>
+        </section>
+    </main>
 
     <script src="RequestPickup.js"></script>
 </body>
 </html>
+

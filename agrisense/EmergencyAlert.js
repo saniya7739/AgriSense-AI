@@ -160,8 +160,7 @@ function loadProblems(lang) {
 }
 
 function changeLang() {
-  const langSelect = document.getElementById("lang");
-  const lang = langSelect.value;
+  const lang = localStorage.getItem('selectedLanguage') || 'hi';
   const texts = TEXTS[lang];
   
   document.querySelector("h1").innerText = texts.heading;
@@ -177,7 +176,7 @@ function changeLang() {
 }
 
 function submitReport() {
-  const lang = document.getElementById("lang").value;
+  const lang = localStorage.getItem('selectedLanguage') || 'hi';
   const problem = document.getElementById("problem").value;
   const description = document.getElementById("description").value;
   
@@ -190,5 +189,10 @@ function submitReport() {
   document.getElementById("problem").value = "";
   document.getElementById("description").value = "";
 }
+
+// Listen for language change event
+window.addEventListener('languageChanged', function(event) {
+    changeLang();
+});
 
 changeLang();

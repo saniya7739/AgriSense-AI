@@ -1,0 +1,200 @@
+html.dark-mode {
+  color-scheme: dark;
+  --theme-surface: rgba(15, 30, 22, 0.92);
+  --theme-surface-strong: rgba(10, 22, 16, 0.96);
+  --theme-surface-soft: rgba(155, 209, 138, 0.1);
+  --theme-border: rgba(155, 209, 138, 0.26);
+  --theme-border-strong: rgba(155, 209, 138, 0.42);
+  --theme-text: #edf7ed;
+  --theme-text-muted: #c7d8c7;
+  --theme-text-soft: #9cb39c;
+  --theme-accent: #9bd18a;
+  --theme-shadow: 0 12px 28px rgba(0, 0, 0, 0.32);
+}
+
+html.dark-mode body {
+  color: var(--theme-text);
+}
+
+html.dark-mode body.compliance-page {
+  background: linear-gradient(135deg, #07120c 0%, #12231a 100%) !important;
+}
+
+html.dark-mode .overlay {
+  background: rgba(4, 10, 7, 0.6) !important;
+}
+
+html.dark-mode .container,
+html.dark-mode .dashboard-grid,
+html.dark-mode .compliance-dashboard {
+  color: var(--theme-text);
+}
+
+html.dark-mode .back-btn,
+html.dark-mode .lang-selector,
+html.dark-mode .lang-selector select,
+html.dark-mode select.lang-selector,
+html.dark-mode #lang,
+html.dark-mode .page-back,
+html.dark-mode .page-theme-toggle,
+html.dark-mode .page-lang-pills,
+html.dark-mode .search-box input {
+  background: var(--theme-surface-strong) !important;
+  color: var(--theme-text) !important;
+  border-color: var(--theme-border-strong) !important;
+  box-shadow: var(--theme-shadow);
+}
+
+html.dark-mode .back-btn:hover,
+html.dark-mode .lang-selector:hover,
+html.dark-mode .lang-selector select:hover,
+html.dark-mode select.lang-selector:hover,
+html.dark-mode .page-back:hover,
+html.dark-mode .page-theme-toggle:hover,
+html.dark-mode #lang:hover {
+  background: rgba(22, 42, 31, 0.98) !important;
+}
+
+html.dark-mode .card,
+html.dark-mode .weather-card,
+html.dark-mode .answer-box,
+html.dark-mode .result-box,
+html.dark-mode #result,
+html.dark-mode .price-box,
+html.dark-mode .scheme-card,
+html.dark-mode .scheme-body,
+html.dark-mode .alert-body,
+html.dark-mode .bottom-section,
+html.dark-mode .form-container,
+html.dark-mode .ask-section,
+html.dark-mode .question-box,
+html.dark-mode .crop-card,
+html.dark-mode .crop-details,
+html.dark-mode .stat-card,
+html.dark-mode .policy-card,
+html.dark-mode .grid-item,
+html.dark-mode .violation-item {
+  background: var(--theme-surface) !important;
+  color: var(--theme-text) !important;
+  border-color: var(--theme-border) !important;
+  box-shadow: var(--theme-shadow) !important;
+}
+
+html.dark-mode .weather-card h2,
+html.dark-mode .weather-card .info-box .label,
+html.dark-mode .weather-card .info-box .value,
+html.dark-mode .advice-box h3,
+html.dark-mode .advice-box li,
+html.dark-mode .weather-btn,
+html.dark-mode .back-btn,
+html.dark-mode .container,
+html.dark-mode p,
+html.dark-mode label,
+html.dark-mode select,
+html.dark-mode .weather-info {
+  color: var(--theme-text) !important;
+}
+
+html.dark-mode .weather-card {
+  background: var(--theme-surface-soft) !important;
+  border: 1px solid var(--theme-border) !important;
+}
+
+
+html.dark-mode .scheme-header,
+html.dark-mode .alert-header,
+html.dark-mode .header-bar {
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+}
+
+html.dark-mode .info-box,
+html.dark-mode .advice-box,
+html.dark-mode .info-section,
+html.dark-mode .price-item,
+html.dark-mode .update-info {
+  background: var(--theme-surface-soft) !important;
+  color: var(--theme-text) !important;
+  border-color: var(--theme-border-strong) !important;
+}
+
+html.dark-mode input,
+html.dark-mode select,
+html.dark-mode textarea,
+html.dark-mode .filter-select {
+  background: var(--theme-surface-strong) !important;
+  color: var(--theme-text) !important;
+  border-color: var(--theme-border-strong) !important;
+}
+
+html.dark-mode input::placeholder,
+html.dark-mode textarea::placeholder {
+  color: var(--theme-text-soft);
+}
+
+html.dark-mode button,
+html.dark-mode .btn-primary,
+html.dark-mode .filter-btn,
+html.dark-mode .submit-btn,
+html.dark-mode .weather-btn,
+html.dark-mode #reportBtn {
+  background: #2f7a39 !important;
+  color: #f7fff7 !important;
+}
+
+html.dark-mode .view-btn {
+  background: transparent !important;
+  color: var(--theme-accent) !important;
+  border-color: var(--theme-accent) !important;
+}
+
+html.dark-mode h1,
+html.dark-mode h2,
+html.dark-mode h3,
+html.dark-mode h4,
+html.dark-mode h5,
+html.dark-mode label,
+html.dark-mode .page-title,
+html.dark-mode .page-kicker,
+html.dark-mode .page-date-badge,
+html.dark-mode .scheme-body strong,
+html.dark-mode .alert-body strong,
+html.dark-mode .policy-details h4,
+html.dark-mode .farmer-name,
+html.dark-mode .weather-card h2,
+html.dark-mode .info-box .label,
+html.dark-mode .info-box .value,
+html.dark-mode .price-item .label,
+html.dark-mode .price-item .price,
+html.dark-mode .answer-box h3,
+html.dark-mode .crop-details h2,
+html.dark-mode #message {
+  color: var(--theme-text) !important;
+}
+
+html.dark-mode p,
+html.dark-mode li,
+html.dark-mode .page-subtitle,
+html.dark-mode .scheme-body p,
+html.dark-mode .alert-body p,
+html.dark-mode .answer-box p,
+html.dark-mode .policy-details p,
+html.dark-mode .update-time,
+html.dark-mode .stat-label,
+html.dark-mode .weather-stat-label {
+  color: var(--theme-text-muted) !important;
+}
+
+html.dark-mode a,
+html.dark-mode .page-lang-pill,
+html.dark-mode .scheme-body a {
+  color: var(--theme-accent) !important;
+}
+
+html.dark-mode .page-lang-pill.active {
+  background: var(--theme-accent) !important;
+  color: #061109 !important;
+}
+
+html.dark-mode hr {
+  border-top-color: var(--theme-border-strong) !important;
+}

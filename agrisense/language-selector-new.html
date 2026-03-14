@@ -1,0 +1,51 @@
+<!-- Language Selector Component -->
+<div class="language-selector-container">
+    <div class="language-selector">
+        <button class="lang-pill active" data-lang="hi">हिन्दी</button>
+        <button class="lang-pill" data-lang="en">English</button>
+        <button class="lang-pill" data-lang="bh">भोजपुरी</button>
+        <button class="lang-pill" data-lang="mr">मराठी</button>
+        <button class="lang-pill" data-lang="pa">ਪੰਜਾਬੀ</button>
+    </div>
+</div>
+
+<style>
+.language-selector-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.language-selector {
+    display: flex;
+    gap: 5px;
+    background: #f0f7f0;
+    padding: 5px;
+    border-radius: 40px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.lang-pill {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 40px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    background: transparent;
+    color: #1f3b1f;
+    transition: all 0.2s ease;
+}
+
+.lang-pill:hover:not(.active) {
+    background: rgba(46, 125, 50, 0.1);
+    transform: translateY(-1px);
+}
+
+.lang-pill.active {
+    background: #2e7d32;
+    color: white;
+    box-shadow: 0 2px 8px rgba(46, 125, 50, 0.3);
+}
+</style>

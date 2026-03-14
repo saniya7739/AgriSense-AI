@@ -4,252 +4,1020 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AgriSense AI - Dashboard</title>
+<!-- Include LanguageConfig first -->
+<script src="js/language-config.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",sans-serif;}
-body{background:url("farm.jpg") no-repeat center center fixed;background-size:cover;}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:-1;}
+:root {
+  --bg-tint: rgba(255, 255, 255, 0.68);
+  --text-primary: #1f3b1f;
+  --text-secondary: #4f6b4f;
+  --text-muted: #6f8f6f;
+  --text-soft: #8ba58b;
+  --accent: #2d5a27;
+  --accent-soft: #e8f0e8;
+  --surface: rgba(255, 255, 255, 0.92);
+  --surface-strong: #ffffff;
+  --surface-muted: #f8fff8;
+  --border: #e0e8e0;
+  --border-soft: #eef5ee;
+  --shadow: 0 4px 12px rgba(0, 40, 0, 0.08);
+  --icon-surface: #e8f3e5;
+  --interactive-border: #9bbf8b;
+  --interactive-shadow: 0 8px 24px rgba(45, 90, 39, 0.15);
+  --weather-shadow: 0 10px 25px rgba(45, 90, 39, 0.3);
+}
 
-.lang-selector{position:fixed;top:20px;right:20px;z-index:10;}
-.lang-selector select{padding:12px 16px;font-size:16px;font-weight:600;border-radius:12px;border:2px solid #2e7d32;background:#e8d8b0;color:#333;cursor:pointer;min-width:150px;}
-.lang-selector select:hover{background:#d4c490;}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
 
-.header{padding:60px 20px 40px;text-align:center;}
-.header h1{font-size:44px;font-weight:900;color:#F1F8E9;text-shadow:0 4px 8px #1B5E20;animation:slideDown 1s ease;}
-@keyframes slideDown{from{opacity:0;transform:translateY(-40px);}to{opacity:1;transform:translateY(0);}}
+body {
+  background-image:
+    linear-gradient(var(--bg-tint), var(--bg-tint)),
+    url("crop-bg.jpg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  min-height: 100vh;
+  color: var(--text-primary);
+  transition: background-image 0.3s ease, color 0.3s ease;
+}
 
-.features{display:flex;flex-direction:column;gap:26px;padding:30px 20px 60px;max-width:520px;margin:auto;}
-.feature{background:#e8d8b0;padding:28px 30px;font-size:20px;font-weight:600;border-radius:28px;color:#333;cursor:pointer;animation:pop 0.8s ease;text-decoration:none;transition:all 0.3s ease;}
-.feature:hover{transform:scale(1.03);box-shadow:0 8px 16px rgba(0,0,0,0.2);}
-@keyframes pop{from{opacity:0;transform:translateY(40px) scale(0.9);}to{opacity:1;transform:translateY(0) scale(1);}}
+body.dark-mode {
+  --bg-tint: rgba(7, 18, 12, 0.78);
+  --text-primary: #edf7ed;
+  --text-secondary: #cadfc9;
+  --text-muted: #9fbc9f;
+  --text-soft: #7f9b7f;
+  --accent: #9bd18a;
+  --accent-soft: rgba(155, 209, 138, 0.14);
+  --surface: rgba(13, 28, 20, 0.86);
+  --surface-strong: rgba(17, 35, 25, 0.94);
+  --surface-muted: rgba(155, 209, 138, 0.08);
+  --border: rgba(155, 209, 138, 0.2);
+  --border-soft: rgba(155, 209, 138, 0.12);
+  --shadow: 0 10px 28px rgba(0, 0, 0, 0.32);
+  --icon-surface: rgba(155, 209, 138, 0.12);
+  --interactive-border: rgba(155, 209, 138, 0.5);
+  --interactive-shadow: 0 12px 26px rgba(0, 0, 0, 0.28);
+  --weather-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+}
 
-.feature-compliance{display:flex;flex-direction:column;gap:8px;}
-.feature-main{display:flex;align-items:center;gap:10px;}
-.feature-icon{font-size:22px;}
-.feature-preview{display:flex;gap:12px;flex-wrap:wrap;font-size:14px;font-weight:700;color:#1b5e20;}
+/* Main container */
+.dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
 
-.voice-assistant{position:fixed;right:20px;bottom:20px;z-index:1200;}
-.bot-toggle{width:72px;height:72px;border:none;border-radius:50%;background:#4CAF50;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 18px rgba(0,0,0,0.25);transition:transform 0.25s ease, box-shadow 0.25s ease;}
-.bot-toggle:hover{transform:scale(1.1);}
-.bot-toggle i{font-size:22px;margin-bottom:2px;}
-.bot-toggle span{font-size:11px;font-weight:700;line-height:1;}
+/* Header with greeting */
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
 
-.chat-panel{position:fixed;right:20px;bottom:100px;width:350px;height:500px;background:#fff;border-radius:15px;box-shadow:0 5px 20px rgba(0,0,0,0.2);overflow:hidden;display:flex;flex-direction:column;transform:translateY(16px);opacity:0;pointer-events:none;transition:opacity 0.25s ease, transform 0.25s ease;}
-.chat-panel.open{transform:translateY(0);opacity:1;pointer-events:auto;}
-.chat-header{background:#4CAF50;color:#fff;padding:12px;display:flex;justify-content:space-between;align-items:center;gap:8px;}
-.chat-header span{font-weight:700;font-size:15px;}
-.chat-header select{border:none;border-radius:8px;padding:6px 8px;font-weight:600;}
-.chat-messages{flex:1;padding:12px;overflow-y:auto;background:#f8fbf8;}
-.message{display:flex;align-items:flex-start;gap:8px;margin-bottom:12px;}
-.message .bubble{max-width:78%;padding:10px 12px;border-radius:12px;font-size:14px;line-height:1.35;white-space:pre-wrap;}
-.message.bot .bubble{background:#eaf7eb;color:#1c4f21;}
-.message.user{justify-content:flex-end;}
-.message.user .bubble{background:#4CAF50;color:#fff;}
-.chat-input{display:flex;gap:8px;padding:10px;border-top:1px solid #e4e4e4;background:#fff;}
-.chat-input input{flex:1;padding:10px;border:1px solid #ccc;border-radius:10px;outline:none;font-size:14px;}
-.chat-input button{width:38px;border:none;border-radius:10px;background:#4CAF50;color:#fff;cursor:pointer;}
-.chat-input button:hover{background:#3f9843;}
-.chat-input button.listening{background:#d32f2f;}
+.greeting-section h2 {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--accent);
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
-.compliance-fab{position:fixed;left:20px;bottom:20px;z-index:1200;border:none;border-radius:999px;background:#2e7d32;color:#fff;padding:12px 16px;font-weight:700;cursor:pointer;box-shadow:0 8px 18px rgba(0,0,0,0.25);display:flex;gap:8px;align-items:center;}
-.compliance-fab:hover{background:#1b5e20;}
+.greeting-section h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-.hidden{display:none !important;}
-.compliance-modal{position:fixed;inset:0;z-index:1400;}
-.compliance-modal-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.55);}
-.compliance-modal-content{position:relative;width:min(1100px, calc(100% - 24px));max-height:calc(100vh - 24px);overflow:auto;margin:12px auto;border-radius:16px;background:#f5f7f5;box-shadow:0 16px 36px rgba(0,0,0,0.32);padding:14px;}
-.compliance-modal-header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;}
-.compliance-modal-header h2{margin:0;font-size:22px;color:#1b5e20;display:flex;gap:8px;align-items:center;}
-.compliance-modal-actions{display:flex;gap:8px;}
-.compliance-refresh-btn,.compliance-close-btn{border:none;border-radius:10px;cursor:pointer;font-weight:700;padding:10px 12px;}
-.compliance-refresh-btn{background:#2e7d32;color:#fff;}
-.compliance-close-btn{background:#ececec;color:#333;}
-.compliance-dashboard-root{min-height:420px;}
+.greeting-section h1 i {
+  color: #f4b740;
+  font-size: 28px;
+}
 
-@media (max-width:640px){
-  .chat-panel{right:12px;left:12px;width:auto;height:70vh;bottom:92px;}
-  .voice-assistant{right:12px;bottom:12px;}
-  .compliance-fab{left:12px;bottom:12px;padding:10px 12px;font-size:13px;}
-  .compliance-modal-content{width:calc(100% - 12px);margin:6px auto;max-height:calc(100vh - 12px);padding:10px;}
-  .compliance-modal-header h2{font-size:18px;}
+.date-badge {
+  background: var(--accent-soft);
+  padding: 8px 16px;
+  border-radius: 40px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.theme-toggle {
+  border: 1px solid var(--border);
+  background: var(--surface-strong);
+  color: var(--text-primary);
+  border-radius: 999px;
+  padding: 10px 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s, background 0.2s, color 0.2s;
+}
+
+.theme-toggle:hover {
+  transform: translateY(-1px);
+}
+
+.theme-toggle i {
+  color: var(--accent);
+}
+
+.theme-toggle-label {
+  min-width: 72px;
+  text-align: left;
+}
+
+/* Quick Actions Row - like image */
+.quick-actions-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.quick-action-card {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.quick-action-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--interactive-shadow);
+  border-color: var(--interactive-border);
+}
+
+.quick-action-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--icon-surface);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.quick-action-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.quick-action-sub {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* Weather Card - like image */
+.weather-card {
+  background: linear-gradient(135deg, #2d5a27 0%, #4b8c3a 100%);
+  border-radius: 20px;
+  padding: 24px;
+  color: white;
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  box-shadow: var(--weather-shadow);
+}
+
+.weather-left h3 {
+  font-size: 16px;
+  font-weight: 500;
+  opacity: 0.9;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.weather-temp {
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 5px;
+}
+
+.weather-desc {
+  font-size: 18px;
+  opacity: 0.95;
+}
+
+.weather-stats {
+  display: flex;
+  gap: 30px;
+}
+
+.weather-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.weather-stat i {
+  font-size: 24px;
+  opacity: 0.9;
+}
+
+.weather-stat-value {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.weather-stat-label {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+/* Two column layout */
+.two-column {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+/* Mandi Prices - like image */
+.mandi-card {
+  background: var(--surface);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.card-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.view-all {
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.price-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.price-item:last-child {
+  border-bottom: none;
+}
+
+.price-crop {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.price-value {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.price-change {
+  color: #4caf50;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--accent-soft);
+  padding: 3px 8px;
+  border-radius: 20px;
+  margin-left: 10px;
+}
+
+/* Community Updates - like image */
+.community-card {
+  background: var(--surface);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+
+.community-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.community-item:last-child {
+  border-bottom: none;
+}
+
+.community-avatar {
+  width: 40px;
+  height: 40px;
+  background: var(--icon-surface);
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.community-content {
+  flex: 1;
+}
+
+.community-name {
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.community-text {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.community-time {
+  font-size: 12px;
+  color: var(--text-soft);
+}
+
+/* Logistics Card - like image */
+.logistics-card {
+  background: var(--surface);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.logistics-left h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 5px;
+}
+
+.logistics-left p {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.logistics-badge {
+  background: var(--surface-muted);
+  padding: 10px 20px;
+  border-radius: 40px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* Features Grid */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.feature-item {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  border: 1px solid var(--border-soft);
+  transition: all 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.feature-item:hover {
+  background: var(--surface-muted);
+  border-color: var(--interactive-border);
+  transform: translateX(3px);
+}
+
+.feature-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--icon-surface);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  font-size: 18px;
+}
+
+.feature-text {
+  font-weight: 600;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.dashboard-section-title,
+.location-icon {
+  color: var(--accent);
+}
+
+/* Voice Assistant */
+.voice-assistant {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 1200;
+}
+
+.bot-toggle {
+  width: 60px;
+  height: 60px;
+  border: none;
+  border-radius: 60px;
+  background: var(--accent);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(45,90,39,0.3);
+  transition: transform 0.2s;
+}
+
+.bot-toggle i {
+  font-size: 24px;
+}
+
+.bot-toggle span {
+  font-size: 10px;
+  margin-top: 2px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .quick-actions-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .two-column {
+    grid-template-columns: 1fr;
+  }
+  
+  .weather-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .greeting-section h1 {
+    font-size: 24px;
+  }
 }
 </style>
 </head>
 
 <body>
-<div class="overlay"></div>
 
-<div class="lang-selector">
-  <select id="lang" onchange="changeLang()">
-    <option value="hi">🇮🇳 हिंदी</option>
-    <option value="en">🇬🇧 English</option>
-    <option value="bh">🗣️ Bhojpuri</option>
-    <option value="mr">🇮🇳 Marathi</option>
-    <option value="pa">🇮🇳 ਪੰਜਾਬੀ</option>
-  </select>
-</div>
+<div id="language-selector-container"></div>
 
-<div class="header">
-  <h1 id="dashTitle">🌾 किसान डैशबोर्ड</h1>
-</div>
+<!-- Include the new language selector script -->
+<script src="js/language-selector.js"></script>
 
-<div class="features">
-  <a href="crop.html" class="feature" id="f1">🌱 Crop Selection</a>
-  <a href="disease.html" class="feature" id="f2">📷 Disease Detection</a>
-  <a href="WeatherAdvice.html" class="feature" id="f3">🌦 Weather Advice</a>
-  <a href="AIKisanMitra.html" class="feature" id="f4">🧑‍🌾 AI Kisan Mitra</a>
-  <a href="SoilFertilizer.html" class="feature" id="f5">🧪 Soil and Fertilizer</a>
-  <a href="MarketPrice.html" class="feature" id="f6">🏪 Market Price</a>
-  <a href="GovtSchemes.html" class="feature" id="f7">🏛 Government Schemes</a>
-  <a href="EmergencyAlert.html" class="feature" id="f8">🚨 Emergency Alerts</a>
-  <a href="CropLibrary.html" class="feature" id="f9">📚 Crop Library</a>
-  <a href="FarmerCommunity.html" class="feature" id="f10">👥 Farmer Community</a>
-  <a href="RequestPickup.html" class="feature" id="f11">🚚 Request Pickup</a>
-
-  <a href="compliance.html" class="feature feature-compliance" id="f12" data-feature="compliance">
-    <div class="feature-main">
-      <i class="fas fa-shield-alt feature-icon" aria-hidden="true"></i>
-      <span class="feature-title">📋 Data Policy Compliance</span>
+<div class="dashboard-container">
+  
+  <!-- Header with Greeting -->
+  <div class="header-top">
+    <div class="greeting-section">
+      <h2 id="greetingSub">
+        <i class="fas fa-map-marker-alt location-icon"></i> 
+        <span id="locationText" data-i18n="dashboard.location">2°C, Clear in Palwal</span>
+      </h2>
+      <h1 id="greetingMain">
+        <span id="greetingText" data-i18n="dashboard.greeting">Good morning, Prachi ji</span>
+        <i class="fas fa-tree"></i><i class="fas fa-tree"></i>
+      </h1>
+      <div class="date-badge" id="dateDisplay">
+        <i class="far fa-calendar-alt"></i>
+        <span id="dateText" data-i18n="dashboard.date">Saturday, 1 March 2025</span>
+      </div>
     </div>
-    <div class="feature-preview" id="compliancePreview" data-preview="compliance">
-      <span class="compliance-rate" id="complianceRateValue" data-metric="compliance-rate">95%</span>
-      <span class="compliance-violations" id="complianceViolationCount" data-metric="violation-count">12 violations</span>
+    
+    <div class="header-actions">
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle color mode">
+        <i class="fas fa-moon" id="themeToggleIcon"></i>
+        <span class="theme-toggle-label" id="themeToggleText" data-i18n="dashboard.themeToggle">Dark Mode</span>
+      </button>
+
     </div>
-  </a>
+  </div>
+  
+  <!-- Quick Actions Row -->
+  <div class="quick-actions-row">
+    <div class="quick-action-card" onclick="location.href='CropLibrary.html'">
+      <div class="quick-action-icon"><i class="fas fa-leaf"></i></div>
+      <div class="quick-action-title" data-i18n="dashboard.cropLibrary">Crop Library</div>
+      <div class="quick-action-sub" data-i18n="dashboard.browseGallery">Browse this gallery.</div>
+    </div>
+    
+    <div class="quick-action-card" onclick="location.href='WeatherAdvice.html'">
+      <div class="quick-action-icon"><i class="fas fa-cloud-sun"></i></div>
+      <div class="quick-action-title" data-i18n="dashboard.liveMandi">Weather</div>
+      <div class="quick-action-sub" data-i18n="dashboard.weatherData">Current weather data.</div>
+    </div>
+    
+    <div class="quick-action-card" onclick="location.href='RequestPickup.html'">
+      <div class="quick-action-icon"><i class="fas fa-truck"></i></div>
+      <div class="quick-action-title" data-i18n="dashboard.transport">Transport</div>
+      <div class="quick-action-sub" data-i18n="dashboard.organise">How to organise.</div>
+    </div>
+    
+    <div class="quick-action-card" onclick="location.href='EmergencyAlert.html'">
+      <div class="quick-action-icon"><i class="fas fa-bell"></i></div>
+      <div class="quick-action-title" data-i18n="dashboard.farmAlerts">Farm Alerts</div>
+      <div class="quick-action-sub" data-i18n="dashboard.zoningUpdates">Zoning updates.</div>
+    </div>
+  </div>
+  
+  <!-- Weather Card -->
+  <div class="weather-card" id="weatherCard">
+    <div class="weather-left">
+      <h3 data-i18n="dashboard.weatherToday">Weather Today</h3>
+      <div class="weather-location" id="weatherLocation" data-i18n="dashboard.weatherLocation">Palwal</div>
+      <div class="weather-temp" id="weatherTemp">27° clear</div>
+    </div>
+    <div class="weather-stats">
+      <div class="weather-stat">
+        <i class="fas fa-thermometer-half"></i>
+        <span class="weather-stat-value" id="weatherHigh">40°</span>
+        <span class="weather-stat-label" data-i18n="dashboard.weatherHigh">high</span>
+      </div>
+      <div class="weather-stat">
+        <i class="fas fa-wind"></i>
+        <span class="weather-stat-value" id="weatherWind">2.8 km/h</span>
+        <span class="weather-stat-label" data-i18n="dashboard.weatherWind">wind</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Two Column Layout -->
+  <div class="two-column">
+    <!-- Mandi Prices -->
+    <div class="mandi-card">
+      <div class="card-header">
+        <h3 data-i18n="dashboard.mandiPrices">Mandi Prices</h3>
+        <a href="MarketPrice.html" class="view-all" data-i18n="dashboard.todaysPrices">Today's prices</a>
+      </div>
+      
+      <div class="price-item">
+        <span class="price-crop" data-i18n="dashboard.bajra">Bajra/Pearl Millet/Cornflour</span>
+        <div>
+          <span class="price-value">₹2,230.44</span>
+          <span class="price-change">+0.45%</span>
+        </div>
+      </div>
+      
+      <div class="price-item">
+        <span class="price-crop" data-i18n="dashboard.barley">Barley/Ladi</span>
+        <div>
+          <span class="price-value">₹1,967.17</span>
+          <span class="price-change">+0.44%</span>
+        </div>
+      </div>
+      
+      <div class="price-item">
+        <span class="price-crop" data-i18n="dashboard.jowar">Jowar (Sorghum)</span>
+        <div>
+          <span class="price-value">₹4,772.26</span>
+          <span class="price-change">+0.55%</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Community Updates -->
+    <div class="community-card">
+      <div class="card-header">
+        <h3 data-i18n="dashboard.communityUpdates">Community Updates</h3>
+        <a href="FarmerCommunity.html" class="view-all" data-i18n="dashboard.viewAll">View all</a>
+      </div>
+      
+      <div class="community-item">
+        <div class="community-avatar">RS</div>
+        <div class="community-content">
+          <div class="community-name">Ramesh Singh</div>
+          <div class="community-text" data-i18n="dashboard.communityPost1">आज मंडी में गेहूं का भाव 2200 रु प्रति क्विंटल मिला।</div>
+          <div class="community-time">2 hours ago</div>
+        </div>
+      </div>
+      
+      <div class="community-item">
+        <div class="community-avatar">SP</div>
+        <div class="community-content">
+          <div class="community-name">Suresh Patil</div>
+          <div class="community-text" data-i18n="dashboard.communityPost2">कपास में कीट लग गया है, कोई उपाय बताओ।</div>
+          <div class="community-time">5 hours ago</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Logistics Card -->
+  <div class="logistics-card">
+    <div class="logistics-left">
+      <h3 data-i18n="dashboard.logistics">Logistics</h3>
+      <p data-i18n="dashboard.ordersInspections">Orders & Inspections</p>
+    </div>
+    <div class="logistics-badge" data-i18n="dashboard.activeOrders">3 Active Orders</div>
+  </div>
+  
+  <!-- All Features Grid -->
+  <h3 class="dashboard-section-title" style="margin: 20px 0 10px;" data-i18n="dashboard.allFeatures">All Features</h3>
+  
+  <div class="features-grid">
+    <a href="crop.html" class="feature-item"><span class="feature-icon"><i class="fas fa-seedling"></i></span><span class="feature-text" data-i18n="dashboard.cropSelection">🌱 Crop Selection</span></a>
+    <a href="disease.html" class="feature-item"><span class="feature-icon"><i class="fas fa-leaf"></i></span><span class="feature-text" data-i18n="dashboard.diseaseDetection">📷 Disease Detection</span></a>
+    <a href="WeatherAdvice.html" class="feature-item"><span class="feature-icon"><i class="fas fa-cloud-sun"></i></span><span class="feature-text" data-i18n="dashboard.weatherAdvice">🌦 Weather Advice</span></a>
+    <a href="AIKisanMitra.html" class="feature-item"><span class="feature-icon"><i class="fas fa-robot"></i></span><span class="feature-text" data-i18n="dashboard.aiKisanMitra">🧑‍🌾 AI Kisan Mitra</span></a>
+    <a href="SoilFertilizer.html" class="feature-item"><span class="feature-icon"><i class="fas fa-flask"></i></span><span class="feature-text" data-i18n="dashboard.soilFertilizer">🧪 Soil & Fertilizer</span></a>
+    <a href="MarketPrice.html" class="feature-item"><span class="feature-icon"><i class="fas fa-chart-line"></i></span><span class="feature-text" data-i18n="dashboard.marketPrice">🏪 Market Price</span></a>
+    <a href="GovtSchemes.html" class="feature-item"><span class="feature-icon"><i class="fas fa-building"></i></span><span class="feature-text" data-i18n="dashboard.govtSchemes">🏛 Government Schemes</span></a>
+    <a href="EmergencyAlert.html" class="feature-item"><span class="feature-icon"><i class="fas fa-exclamation-triangle"></i></span><span class="feature-text" data-i18n="dashboard.emergencyAlerts">🚨 Emergency Alerts</span></a>
+    <a href="CropLibrary.html" class="feature-item"><span class="feature-icon"><i class="fas fa-book"></i></span><span class="feature-text" data-i18n="dashboard.cropLibrary">📚 Crop Library</span></a>
+    <a href="FarmerCommunity.html" class="feature-item"><span class="feature-icon"><i class="fas fa-users"></i></span><span class="feature-text" data-i18n="dashboard.farmerCommunity">👥 Farmer Community</span></a>
+    <a href="RequestPickup.html" class="feature-item"><span class="feature-icon"><i class="fas fa-truck"></i></span><span class="feature-text" data-i18n="dashboard.requestPickup">🚚 Request to send grains</span></a>
+    <a href="compliance.html" class="feature-item"><span class="feature-icon"><i class="fas fa-shield-alt"></i></span><span class="feature-text" data-i18n="dashboard.compliance">📋 Data Policy Compliance</span></a>
+  </div>
 </div>
 
+<!-- Voice Assistant -->
 <div class="voice-assistant">
   <button class="bot-toggle" onclick="toggleVoiceAssistant()">
     <i class="fas fa-robot"></i>
-    <span>किसान मित्र</span>
+    <span data-i18n="dashboard.voiceAssistant">किसान मित्र</span>
   </button>
-
-  <div class="chat-panel" id="chatPanel">
-    <div class="chat-header">
-      <span>Voice Kisan Mitra</span>
-      <select id="voiceLang" onchange="changeVoiceLanguage(this.value)">
-        <option value="hi">HI</option>
-        <option value="en">EN</option>
-        <option value="mr">MR</option>
-        <option value="pa">PA</option>
-        <option value="bh">BH</option>
-      </select>
-    </div>
-
-    <div class="chat-messages" id="chatMessages">
-      <div class="message bot">
-        <i class="fas fa-robot"></i>
-        <div class="bubble" id="welcomeMessage">नमस्ते! मैं आपकी खेती से जुड़े सवालों में मदद कर सकता हूँ।</div>
-      </div>
-    </div>
-
-    <div class="chat-input">
-      <input type="text" id="userInput" placeholder="अपना सवाल लिखें...">
-      <button id="micBtn" onclick="startVoiceInput()" title="Voice Input"><i class="fas fa-microphone"></i></button>
-      <button onclick="sendMessage()" title="Send"><i class="fas fa-paper-plane"></i></button>
-    </div>
-  </div>
 </div>
-
-<button class="compliance-fab" id="complianceFab" data-action="quick-compliance-check" title="Quick Compliance Check" aria-label="Quick Compliance Check" onclick="openComplianceDashboard(event)">
-  <i class="fas fa-shield-alt" aria-hidden="true"></i>
-  <span>Compliance</span>
-</button>
-
-<div class="compliance-modal hidden" id="complianceModal" data-modal="compliance" role="dialog" aria-modal="true" aria-labelledby="complianceModalTitle">
-  <div class="compliance-modal-overlay" data-action="close-compliance-modal" onclick="closeComplianceDashboard()"></div>
-  <div class="compliance-modal-content" id="complianceModalContent">
-    <div class="compliance-modal-header">
-      <h2 id="complianceModalTitle"><i class="fas fa-shield-alt" aria-hidden="true"></i> Data Policy Compliance</h2>
-      <div class="compliance-modal-actions">
-        <button class="compliance-refresh-btn" id="complianceRefreshBtn" data-action="refresh-compliance" type="button" onclick="refreshComplianceDashboard()"><i class="fas fa-sync-alt" aria-hidden="true"></i> Refresh</button>
-        <button class="compliance-close-btn" id="complianceCloseBtn" data-action="close-compliance-modal" type="button" onclick="closeComplianceDashboard()" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
-      </div>
-    </div>
-    <div class="compliance-dashboard-root" id="complianceDashboard" data-component="compliance-dashboard" data-language="en" data-severity="all"></div>
-  </div>
-</div>
-
-<script src="js/compliance/compliance-data.js"></script>
-<script src="js/compliance/compliance-i18n.js"></script>
-<script src="js/compliance/compliance-agent.js"></script>
-<script src="js/compliance/policy-parser.js"></script>
-<script src="js/compliance/compliance-ui.js"></script>
 
 <script>
-const TEXT = {
-  hi:{
-    title:"🌾 किसान डैशबोर्ड",
-    features:["🌱 फसल चयन","📷 रोग पहचान","🌦 मौसम सलाह","🧑‍🌾 एआई किसान मित्र","🧪 मिट्टी एवं उर्वरक","🏪 मंडी मूल्य","🏛 सरकारी योजनाएं","🚨 आपातकालीन अलर्ट","📚 फसल लाइब्रेरी","👥 किसान समुदाय","🚚 अनाज भेजने का अनुरोध","📋 डेटा पॉलिसी अनुपालन"]
+// Complete translations for 5 languages
+const TRANSLATIONS = {
+  hi: {
+    greetingSub: "2°C, पलवल में साफ मौसम",
+    greetingMain: "सुप्रभात, प्राची जी",
+    dateText: "शनिवार, 1 मार्च 2025",
+    locationText: "पलवल",
+    weatherToday: "आज का मौसम",
+    high: "उच्च",
+    wind: "हवा",
+    mandiPrices: "मंडी भाव",
+    todaysPrices: "आज के भाव",
+    bajra: "बाजरा",
+    barley: "जौ",
+    jowar: "ज्वार",
+    communityUpdates: "किसान समुदाय",
+    viewAll: "सभी देखें",
+    communityPost1: "आज मंडी में गेहूं का भाव 2200 रु प्रति क्विंटल मिला।",
+    communityPost2: "कपास में कीट लग गया है, कोई उपाय बताओ।",
+    logistics: "लॉजिस्टिक्स",
+    ordersInspections: "ऑर्डर और निरीक्षण",
+    activeOrders: "3 सक्रिय ऑर्डर",
+    allFeatures: "सभी सुविधाएं",
+    cropLibrary: "फसल लाइब्रेरी",
+    browseGallery: "गैलरी ब्राउज़ करें",
+    liveMandi: "मौसम",
+    weatherData: "मौसम डेटा",
+    transport: "परिवहन",
+    organise: "कैसे व्यवस्थित करें",
+    farmAlerts: "फार्म अलर्ट",
+    zoningUpdates: "ज़ोनिंग अपडेट",
+    cropSelection: "🌱 फसल चयन",
+    diseaseDetection: "📷 रोग पहचान",
+    weatherAdvice: "🌦 मौसम सलाह",
+    aiKisanMitra: "🧑‍🌾 एआई किसान मित्र",
+    soilFertilizer: "🧪 मिट्टी और उर्वरक",
+    marketPrice: "🏪 मंडी मूल्य",
+    govtSchemes: "🏛 सरकारी योजनाएं",
+    emergencyAlerts: "🚨 आपातकालीन अलर्ट",
+    farmerCommunity: "👥 किसान समुदाय",
+    requestPickup: "🚚 अनाज भेजने का अनुरोध",
+    compliance: "📋 डेटा पॉलिसी अनुपालन"
   },
-  en:{
-    title:"🌾 Farmer Dashboard",
-    features:["🌱 Crop Selection","📷 Disease Detection","🌦 Weather Advice","🧑‍🌾 AI Kisan Mitra","🧪 Soil & Fertilizer","🏪 Market Price","🏛 Govt Schemes","🚨 Emergency Alerts","📚 Crop Library","👥 Farmer Community","🚚 Request to send grains","📋 Data Policy Compliance"]
+  en: {
+    greetingSub: "2°C, Clear in Palwal",
+    greetingMain: "Good morning, Prachi ji",
+    dateText: "Saturday, 1 March 2025",
+    locationText: "Palwal",
+    weatherToday: "Weather Today",
+    high: "high",
+    wind: "wind",
+    mandiPrices: "Mandi Prices",
+    todaysPrices: "Today's prices",
+    bajra: "Bajra/Pearl Millet/Cornflour",
+    barley: "Barley/Ladi",
+    jowar: "Jowar (Sorghum)",
+    communityUpdates: "Community Updates",
+    viewAll: "View all",
+    communityPost1: "Today wheat price in mandi is ₹2200 per quintal.",
+    communityPost2: "Cotton has pests, any solution?",
+    logistics: "Logistics",
+    ordersInspections: "Orders & Inspections",
+    activeOrders: "3 Active Orders",
+    allFeatures: "All Features",
+    cropLibrary: "Crop Library",
+    browseGallery: "Browse this gallery.",
+    liveMandi: "Weather",
+    weatherData: "Current weather data.",
+    transport: "Transport",
+    organise: "How to organise.",
+    farmAlerts: "Farm Alerts",
+    zoningUpdates: "Zoning updates.",
+    cropSelection: "🌱 Crop Selection",
+    diseaseDetection: "📷 Disease Detection",
+    weatherAdvice: "🌦 Weather Advice",
+    aiKisanMitra: "🧑‍🌾 AI Kisan Mitra",
+    soilFertilizer: "🧪 Soil & Fertilizer",
+    marketPrice: "🏪 Market Price",
+    govtSchemes: "🏛 Govt Schemes",
+    emergencyAlerts: "🚨 Emergency Alerts",
+    farmerCommunity: "👥 Farmer Community",
+    requestPickup: "🚚 Request to send grains",
+    compliance: "📋 Data Policy Compliance"
   },
-  bh:{
-    title:"🌾 किसान डैशबोर्ड",
-    features:["🌱 फसल चुने","📷 रोग पहचान","🌦 मौसम सलाह","🧑‍🌾 एआई किसान साथी","🧪 माटी अउर खाद","🏪 मंडी भाव","🏛 सरकारी योजना","🚨 आपात सूचना","📚 फसल लाइब्रेरी","👥 किसान समुदाय","🚚 अनाज भेजे के निहोरा","📋 डेटा पॉलिसी अनुपालन"]
+  bh: {
+    greetingSub: "2°C, पलवल में साफ मौसम",
+    greetingMain: "सुप्रभात, प्राची जी",
+    dateText: "शनिच्चर, 1 मार्च 2025",
+    locationText: "पलवल",
+    weatherToday: "आज के मौसम",
+    high: "उंच",
+    wind: "हवा",
+    mandiPrices: "मंडी भाव",
+    todaysPrices: "आज के भाव",
+    bajra: "बाजरा",
+    barley: "जौ",
+    jowar: "ज्वार",
+    communityUpdates: "किसान समुदाय",
+    viewAll: "सब देखीं",
+    communityPost1: "आज मंडी में गेहूं के भाव 2200 रु प्रति क्विंटल मिलल।",
+    communityPost2: "कपास में कीट लाग गईल बा, कवनो उपाय बताईं?",
+    logistics: "लॉजिस्टिक्स",
+    ordersInspections: "ऑर्डर अउर निरीक्षण",
+    activeOrders: "3 सक्रिय ऑर्डर",
+    allFeatures: "सब सुविधा",
+    cropLibrary: "फसल लाइब्रेरी",
+    browseGallery: "गैलरी ब्राउज़ करीं",
+    liveMandi: "मौसम",
+    weatherData: "मौसम डेटा",
+    transport: "परिवहन",
+    organise: "कइसे व्यवस्थित करीं",
+    farmAlerts: "फार्म अलर्ट",
+    zoningUpdates: "ज़ोनिंग अपडेट",
+    cropSelection: "🌱 फसल चयन",
+    diseaseDetection: "📷 रोग पहचान",
+    weatherAdvice: "🌦 मौसम सलाह",
+    aiKisanMitra: "🧑‍🌾 एआई किसान मित्र",
+    soilFertilizer: "🧪 माटी अउर खाद",
+    marketPrice: "🏪 मंडी भाव",
+    govtSchemes: "🏛 सरकारी योजना",
+    emergencyAlerts: "🚨 आपात सूचना",
+    farmerCommunity: "👥 किसान समुदाय",
+    requestPickup: "🚚 अनाज भेजे के निहोरा",
+    compliance: "📋 डेटा पॉलिसी अनुपालन"
   },
-  mr:{
-    title:"🌾 शेतकरी डॅशबोर्ड",
-    features:["🌱 पीक निवड","📷 रोग ओळख","🌦 हवामान सल्ला","🧑‍🌾 एआय शेतकरी मित्र","🧪 माती व खत","🏪 बाजार भाव","🏛 सरकारी योजना","🚨 आपत्कालीन सूचना","📚 पीक लायब्ररी","👥 शेतकरी समुदाय","🚚 धान्य पाठविण्याची विनंती","📋 डेटा पॉलिसी अनुपालन"]
+  mr: {
+    greetingSub: "2°C, पलवल मध्ये स्वच्छ हवामान",
+    greetingMain: "शुभ प्रभात, प्राची जी",
+    dateText: "शनिवार, 1 मार्च 2025",
+    locationText: "पलवल",
+    weatherToday: "आजचे हवामान",
+    high: "उच्च",
+    wind: "वारा",
+    mandiPrices: "मंडी भाव",
+    todaysPrices: "आजचे भाव",
+    bajra: "बाजरी",
+    barley: "जवस",
+    jowar: "ज्वारी",
+    communityUpdates: "शेतकरी समुदाय",
+    viewAll: "सर्व पहा",
+    communityPost1: "आज मंडीत गव्हाचा भाव 2200 रु प्रति क्विंटल मिळाला.",
+    communityPost2: "कापसाला कीड लागली आहे, काही उपाय सांगा?",
+    logistics: "लॉजिस्टिक्स",
+    ordersInspections: "ऑर्डर आणि तपासणी",
+    activeOrders: "3 सक्रिय ऑर्डर",
+    allFeatures: "सर्व सुविधा",
+    cropLibrary: "पीक लायब्ररी",
+    browseGallery: "गॅलरी ब्राउझ करा",
+    liveMandi: "हवामान",
+    weatherData: "हवामान डेटा",
+    transport: "वाहतूक",
+    organise: "कसे व्यवस्थित करावे",
+    farmAlerts: "शेत अलर्ट",
+    zoningUpdates: "झोनिंग अपडेट",
+    cropSelection: "🌱 पीक निवड",
+    diseaseDetection: "📷 रोग ओळख",
+    weatherAdvice: "🌦 हवामान सल्ला",
+    aiKisanMitra: "🧑‍🌾 एआय शेतकरी मित्र",
+    soilFertilizer: "🧪 माती व खत",
+    marketPrice: "🏪 बाजार भाव",
+    govtSchemes: "🏛 सरकारी योजना",
+    emergencyAlerts: "🚨 आपत्कालीन सूचना",
+    farmerCommunity: "👥 शेतकरी समुदाय",
+    requestPickup: "🚚 धान्य पाठविण्याची विनंती",
+    compliance: "📋 डेटा पॉलिसी अनुपालन"
   },
-  pa:{
-    title:"🌾 ਕਿਸਾਨ ਡੈਸ਼ਬੋਰਡ",
-    features:["🌱 ਫਸਲ ਚੋਣ","📷 ਰੋਗ ਪਛਾਣ","🌦 ਮੌਸਮ ਸਲਾਹ","🧑‍🌾 ਏਆਈ ਕਿਸਾਨ ਮਿਤਰ","🧪 ਮਿੱਟੀ ਤੇ ਖਾਦ","🏪 ਮੰਡੀ ਭਾਵ","🏛 ਸਰਕਾਰੀ ਯੋਜਨਾਵਾਂ","🚨 ਐਮਰਜੈਂਸੀ ਅਲਰਟ","📚 ਫਸਲ ਲਾਇਬ੍ਰੇਰੀ","👥 ਕਿਸਾਨ ਕਮਿਊਨਟੀ","🚚 ਅਨਾਜ ਭੇਜਣ ਦੀ ਬੇਨਤੀ","📋 ਡਾਟਾ ਪਾਲਿਸੀ ਅਨੁਪਾਲਨਾ"]
+  pa: {
+    greetingSub: "2°C, ਪਲਵਲ ਵਿੱਚ ਸਾਫ ਮੌਸਮ",
+    greetingMain: "ਸ਼ੁਭ ਸਵੇਰ, ਪ੍ਰਾਚੀ ਜੀ",
+    dateText: "ਸ਼ਨੀਵਾਰ, 1 ਮਾਰਚ 2025",
+    locationText: "ਪਲਵਲ",
+    weatherToday: "ਅੱਜ ਦਾ ਮੌਸਮ",
+    high: "ਉੱਚ",
+    wind: "ਹਵਾ",
+    mandiPrices: "ਮੰਡੀ ਭਾਅ",
+    todaysPrices: "ਅੱਜ ਦੇ ਭਾਅ",
+    bajra: "ਬਾਜਰਾ",
+    barley: "ਜੌਂ",
+    jowar: "ਜਵਾਰ",
+    communityUpdates: "ਕਿਸਾਨ ਭਾਈਚਾਰਾ",
+    viewAll: "ਸਭ ਦੇਖੋ",
+    communityPost1: "ਅੱਜ ਮੰਡੀ ਵਿੱਚ ਕਣਕ ਦਾ ਭਾਅ 2200 ਰੁ ਪ੍ਰਤੀ ਕੁਇੰਟਲ ਮਿਲਿਆ।",
+    communityPost2: "ਕਪਾਹ ਵਿੱਚ ਕੀੜੇ ਲੱਗ ਗਏ ਹਨ, ਕੋਈ ਉਪਾਅ ਦੱਸੋ?",
+    logistics: "ਲੌਜਿਸਟਿਕਸ",
+    ordersInspections: "ਆਰਡਰ ਅਤੇ ਨਿਰੀਖਣ",
+    activeOrders: "3 ਸਰਗਰਮ ਆਰਡਰ",
+    allFeatures: "ਸਾਰੀਆਂ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ",
+    cropLibrary: "ਫਸਲ ਲਾਇਬ੍ਰੇਰੀ",
+    browseGallery: "ਗੈਲਰੀ ਬ੍ਰਾਊਜ਼ ਕਰੋ",
+    liveMandi: "ਮੌਸਮ",
+    weatherData: "ਮੌਜੂਦਾ ਮੌਸਮ ਡਾਟਾ",
+    transport: "ਆਵਾਜਾਈ",
+    organise: "ਕਿਵੇਂ ਵਿਵਸਥਿਤ ਕਰਨਾ ਹੈ",
+    farmAlerts: "ਫਾਰਮ ਅਲਰਟ",
+    zoningUpdates: "ਜ਼ੋਨਿੰਗ ਅੱਪਡੇਟ",
+    cropSelection: "🌱 ਫਸਲ ਚੋਣ",
+    diseaseDetection: "📷 ਰੋਗ ਪਛਾਣ",
+    weatherAdvice: "🌦 ਮੌਸਮ ਸਲਾਹ",
+    aiKisanMitra: "🧑‍🌾 ਏਆਈ ਕਿਸਾਨ ਮਿਤ੍ਰ",
+    soilFertilizer: "🧪 ਮਿੱਟੀ ਅਤੇ ਖਾਦ",
+    marketPrice: "🏪 ਮੰਡੀ ਭਾਅ",
+    govtSchemes: "🏛 ਸਰਕਾਰੀ ਯੋਜਨਾਵਾਂ",
+    emergencyAlerts: "🚨 ਐਮਰਜੈਂਸੀ ਅਲਰਟ",
+    farmerCommunity: "👥 ਕਿਸਾਨ ਭਾਈਚਾਰਾ",
+    requestPickup: "🚚 ਅਨਾਜ ਭੇਜਣ ਲਈ ਬੇਨਤੀ",
+    compliance: "📋 ਡਾਟਾ ਨੀਤੀ ਅਨੁਕੂਲਤਾ"
   }
 };
 
-const VOICE_BOT_TEXT = {
-  hi:{welcome:"नमस्ते! मैं फसल, मौसम, रोग, मंडी भाव और सरकारी योजना में मदद कर सकता हूँ।",placeholder:"अपना सवाल लिखें...",default:"मैं फसल, रोग, मौसम, मंडी भाव, सरकारी योजनाओं और आपातकालीन मदद में सहायता कर सकता हूँ।",emergency:"ठीक है, मैं Emergency Alert फ़ॉर्म खोल रहा हूँ।"},
-  en:{welcome:"Hello! I can help with crops, disease, weather, market prices, schemes and emergencies.",placeholder:"Type your question...",default:"I can help with crops, diseases, weather, market prices, schemes, and emergencies.",emergency:"Okay, opening the Emergency Alert form."},
-  mr:{welcome:"नमस्कार! मी पीक, हवामान, रोग, बाजारभाव आणि सरकारी योजनांमध्ये मदत करू शकतो.",placeholder:"तुमचा प्रश्न लिहा...",default:"मी पीक, रोग, हवामान, बाजारभाव, सरकारी योजना आणि आपत्कालीन मदतीत सहाय्य करू शकतो.",emergency:"ठीक आहे, मी Emergency Alert फॉर्म उघडत आहे."},
-  pa:{welcome:"ਸਤ ਸ੍ਰੀ ਅਕਾਲ! ਮੈਂ ਫਸਲ, ਮੌਸਮ, ਰੋਗ, ਮੰਡੀ ਭਾਵ ਅਤੇ ਸਰਕਾਰੀ ਯੋਜਨਾਵਾਂ ਵਿੱਚ ਮਦਦ ਕਰ ਸਕਦਾ ਹਾਂ।",placeholder:"ਆਪਣਾ ਸਵਾਲ ਲਿਖੋ...",default:"ਮੈਂ ਫਸਲ, ਰੋਗ, ਮੌਸਮ, ਮੰਡੀ ਭਾਵ, ਸਰਕਾਰੀ ਯੋਜਨਾਵਾਂ ਅਤੇ ਐਮਰਜੈਂਸੀ ਮਦਦ ਵਿੱਚ ਸਹਾਇਤਾ ਕਰ ਸਕਦਾ ਹਾਂ।",emergency:"ਠੀਕ ਹੈ, ਮੈਂ Emergency Alert ਫਾਰਮ ਖੋਲ੍ਹ ਰਿਹਾ ਹਾਂ।"},
-  bh:{welcome:"प्रणाम! हम फसल, मौसम, रोग, मंडी भाव आ सरकारी योजना में मदद कर सकतानी।",placeholder:"अपना सवाल लिखीं...",default:"हम फसल, रोग, मौसम, मंडी भाव, सरकारी योजना आ आपात मदद में सहायता कर सकतानी।",emergency:"ठीक बा, हम Emergency Alert फॉर्म खोलतानी।"}
-};
+function applyTranslations(lang) {
+  const translations = TRANSLATIONS[lang] || TRANSLATIONS.hi;
 
-const WEATHER_BY_DISTRICT={agra:{temp:32,condition:"warm",advice:"light evening irrigation"},alwar:{temp:30,condition:"dry",advice:"use mulching"},bikaner:{temp:38,condition:"hot",advice:"increase irrigation frequency"},jaipur:{temp:31,condition:"warm",advice:"water crops early morning"},bijnor:{temp:28,condition:"humid",advice:"watch fungal diseases"},meerut:{temp:27,condition:"humid",advice:"maintain drainage"},kanpur:{temp:29,condition:"humid",advice:"timely fungicide spray"},ahmednagar:{temp:33,condition:"warm",advice:"maintain soil moisture"},nashik:{temp:28,condition:"mild",advice:"balanced irrigation"},ludhiana:{temp:24,condition:"cool",advice:"monitor leaf moisture"},amritsar:{temp:23,condition:"cool",advice:"avoid over-watering"}};
-const MARKET_BY_CROP={wheat:2200,rice:4500,maize:1950,cotton:5800,soybean:4100,onion:1800,potato:1500,tomato:2000};
-const DISEASE_RULES=[{keys:["yellow leaves","yellow","peela","pili"],disease:"Leaf Blight",solution:"Spray neem oil every 5-7 days"},{keys:["spots","dhabba"],disease:"Fungal Leaf Spot",solution:"Use Mancozeb spray and avoid waterlogging"},{keys:["curl","murjha"],disease:"Leaf Curl / Wilt",solution:"Use yellow traps and remove infected parts"}];
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    const key = element.getAttribute("data-i18n");
+    if (translations[key]) {
+      element.textContent = translations[key];
+    }
+  });
 
-function changeLang(){
-  const l=document.getElementById("lang").value;
-  document.getElementById("dashTitle").innerText=TEXT[l].title;
-  for(let i=0;i<11;i++){
-    const el=document.getElementById("f"+(i+1));
-    if(el)el.innerText=TEXT[l].features[i];
+  const greetingSub = document.getElementById("greetingSub");
+  const greetingMain = document.getElementById("greetingMain");
+  const dateText = document.getElementById("dateText");
+  const locationText = document.getElementById("locationText");
+  const weatherLocation = document.getElementById("weatherLocation");
+
+  if (greetingSub && translations.greetingSub) {
+    const subSpan = greetingSub.querySelector("#locationText");
+    if (subSpan) subSpan.textContent = translations.greetingSub;
   }
-  const complianceTitle=document.querySelector("#f12 .feature-title");
-  if(complianceTitle)complianceTitle.innerText=TEXT[l].features[11];
+
+  if (greetingMain && translations.greetingMain) {
+    const mainSpan = greetingMain.querySelector("#greetingText");
+    if (mainSpan) mainSpan.textContent = translations.greetingMain;
+  }
+
+  if (dateText && translations.dateText) {
+    dateText.textContent = translations.dateText;
+  }
+
+  if (locationText && translations.locationText) {
+    locationText.textContent = translations.locationText;
+  }
+
+  if (weatherLocation && translations.locationText) {
+    weatherLocation.textContent = translations.locationText;
+  }
 }
-function normalizeVoiceLang(lang){return lang==="pu"?"pa":lang;}
-function getSpeechCode(lang){const map={hi:"hi-IN",en:"en-US",mr:"mr-IN",pa:"pa-IN",bh:"hi-IN"};return map[normalizeVoiceLang(lang)]||"hi-IN";}
-function toggleVoiceAssistant(){document.getElementById("chatPanel").classList.toggle("open");}
-function changeVoiceLanguage(lang){const t=VOICE_BOT_TEXT[normalizeVoiceLang(lang)]||VOICE_BOT_TEXT.hi;document.getElementById("welcomeMessage").innerText=t.welcome;document.getElementById("userInput").placeholder=t.placeholder;}
-function updateChatHistory(sender,message){const wrapper=document.createElement("div");wrapper.className=sender==="user"?"message user":"message bot";if(sender==="bot"){const icon=document.createElement("i");icon.className="fas fa-robot";wrapper.appendChild(icon);}const bubble=document.createElement("div");bubble.className="bubble";bubble.innerText=message;wrapper.appendChild(bubble);const box=document.getElementById("chatMessages");box.appendChild(wrapper);box.scrollTop=box.scrollHeight;}
-function sendMessage(){const input=document.getElementById("userInput");const query=input.value.trim();if(!query)return;updateChatHistory("user",query);input.value="";processQuery(query,document.getElementById("voiceLang").value);}
-function processQuery(text,language){const lang=normalizeVoiceLang(language);const response=getResponseFromModule(text,lang);updateChatHistory("bot",response);speakResponse(response,lang);}
-function getResponseFromModule(query,language){const q=query.toLowerCase();const botText=VOICE_BOT_TEXT[language]||VOICE_BOT_TEXT.hi;if(q.includes("weather")||q.includes("mausam")){const district=Object.keys(WEATHER_BY_DISTRICT).find(d=>q.includes(d));if(district){const w=WEATHER_BY_DISTRICT[district];return "In "+district+", temperature "+w.temp+"°C, "+w.condition+". Advice: "+w.advice+".";}return language==="en"?"Please tell district name for weather advice.":"मौसम सलाह के लिए जिला बताएं।";}if(q.includes("price")||q.includes("market")||q.includes("mandi")||q.includes("bhav")){const crop=Object.keys(MARKET_BY_CROP).find(c=>q.includes(c));if(crop)return "Price of "+crop+" is around Rs "+MARKET_BY_CROP[crop]+" per quintal.";return language==="en"?"Please tell crop name for market price.":"मंडी भाव के लिए फसल का नाम बताएं।";}if(q.includes("scheme")||q.includes("yojana")){return language==="en"?"Top schemes: PM Kisan Samman Nidhi, PM Fasal Bima Yojana, Soil Health Card, Kisan Credit Card.":"मुख्य योजनाएं: PM किसान सम्मान निधि, PM फसल बीमा योजना, Soil Health Card, Kisan Credit Card.";}if(q.includes("report problem")||q.includes("emergency")){setTimeout(()=>{window.location.href="EmergencyAlert.html";},900);return botText.emergency;}if(q.includes("grow")||q.includes("crop")||q.includes("fasal")){let season="Kharif";if(q.includes("rabi"))season="Rabi";if(q.includes("zaid"))season="Zaid";let soil="Loamy Soil";if(q.includes("black"))soil="Black Soil";if(q.includes("sandy"))soil="Sandy Soil";return "For "+season+" in "+soil+", I recommend Rice, Maize and Pulses.";}const disease=DISEASE_RULES.find(rule=>rule.keys.some(k=>q.includes(k)));if(disease)return "Based on symptoms, it might be "+disease.disease+". Treatment: "+disease.solution+".";if(q.includes("soil")||q.includes("fertilizer"))return language==="en"?"For fertilizer planning, select your soil and crop in Soil & Fertilizer module.":"उर्वरक सलाह के लिए Soil & Fertilizer मॉड्यूल में मिट्टी और फसल चुनें।";return botText.default;}
-function startVoiceInput(){const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SpeechRecognition){alert("Speech recognition is not supported in this browser.");return;}const lang=document.getElementById("voiceLang").value;const recognition=new SpeechRecognition();const micBtn=document.getElementById("micBtn");recognition.lang=getSpeechCode(lang);recognition.interimResults=false;recognition.maxAlternatives=1;micBtn.classList.add("listening");recognition.onresult=function(event){document.getElementById("userInput").value=event.results[0][0].transcript;sendMessage();};recognition.onend=function(){micBtn.classList.remove("listening");};recognition.onerror=function(){micBtn.classList.remove("listening");};recognition.start();}
-function speakResponse(text,language){if(!("speechSynthesis" in window))return;window.speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance(text);utterance.lang=getSpeechCode(language);utterance.rate=1;utterance.pitch=1;window.speechSynthesis.speak(utterance);}
 
-let complianceUIInstance=null;
-function getComplianceAgentInstance(){if(!window.AgriSenseCompliance)return null;if(window.AgriSenseCompliance.agent)return window.AgriSenseCompliance.agent;if(window.AgriSenseCompliance.ComplianceAgent)return new window.AgriSenseCompliance.ComplianceAgent();return null;}
-function updateCompliancePreview(){const rateEl=document.getElementById("complianceRateValue");const vioEl=document.getElementById("complianceViolationCount");const agent=getComplianceAgentInstance();if(!rateEl||!vioEl||!agent)return;try{const scan=agent.scanAllTransactions();const stats=agent.getStatistics(scan);rateEl.innerText=stats.compliance_rate_percent+"%";vioEl.innerText=stats.violation_transactions+" violations";}catch(e){rateEl.innerText="--%";vioEl.innerText="-- violations";}}
-function openComplianceDashboard(event){if(event)event.preventDefault();const modal=document.getElementById("complianceModal");if(!modal)return;modal.classList.remove("hidden");document.body.style.overflow="hidden";const agent=getComplianceAgentInstance();if(!agent||!window.AgriSenseCompliance||!window.AgriSenseCompliance.ComplianceUI)return;if(!complianceUIInstance){complianceUIInstance=new window.AgriSenseCompliance.ComplianceUI(agent,{containerId:"complianceDashboard",language:"en",severityFilter:"all"});complianceUIInstance.init("complianceDashboard");}else{complianceUIInstance.refresh();}}
-function closeComplianceDashboard(){const modal=document.getElementById("complianceModal");if(!modal)return;modal.classList.add("hidden");document.body.style.overflow="";}
-function refreshComplianceDashboard(){if(complianceUIInstance)complianceUIInstance.refresh();updateCompliancePreview();}
+const THEME_STORAGE_KEY = "agrisense-dashboard-theme";
+const themeToggle = document.getElementById("themeToggle");
+const themeToggleIcon = document.getElementById("themeToggleIcon");
+const themeToggleText = document.getElementById("themeToggleText");
 
-document.getElementById("userInput").addEventListener("keydown",function(event){if(event.key==="Enter")sendMessage();});
-changeLang();
-changeVoiceLanguage(document.getElementById("voiceLang").value);
-updateCompliancePreview();
+function updateThemeToggle(mode) {
+  const isDark = mode === "dark";
+  if (themeToggleIcon) {
+    themeToggleIcon.className = isDark ? "fas fa-sun" : "fas fa-moon";
+  }
+  if (themeToggleText) {
+    themeToggleText.textContent = isDark ? "Light Mode" : "Dark Mode";
+  }
+}
+
+function applyTheme(mode) {
+  const isDark = mode === "dark";
+  document.documentElement.classList.toggle("dark-mode", isDark);
+  document.body.classList.toggle("dark-mode", isDark);
+  updateThemeToggle(isDark ? "dark" : "light");
+  localStorage.setItem(THEME_STORAGE_KEY, isDark ? "dark" : "light");
+}
+
+function getInitialTheme() {
+  const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+  if (savedTheme === "dark" || savedTheme === "light") {
+    return savedTheme;
+  }
+
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+// Listen for language change event
+window.addEventListener('languageChanged', function(event) {
+  applyTranslations(event.detail);
+});
+
+if (themeToggle) {
+  themeToggle.addEventListener("click", () => {
+    const nextMode = document.body.classList.contains("dark-mode") ? "light" : "dark";
+    applyTheme(nextMode);
+  });
+}
+
+function toggleVoiceAssistant() {
+  alert("Voice assistant coming soon.");
+}
+
+applyTheme(getInitialTheme());
+const initialLang = localStorage.getItem('selectedLanguage') || 'hi';
+applyTranslations(initialLang);
 </script>
-<script src="js/compliance/main.js"></script>
-
 </body>
 </html>
-
-
-

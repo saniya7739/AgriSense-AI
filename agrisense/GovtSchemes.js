@@ -159,8 +159,7 @@ function loadSchemes(lang) {
 }
 
 function changeLang() {
-  const langSelect = document.getElementById("lang");
-  const lang = langSelect.value;
+  const lang = localStorage.getItem('selectedLanguage') || 'hi';
   const texts = TEXTS[lang];
   
   document.querySelector("h1").innerText = texts.heading;
@@ -169,5 +168,10 @@ function changeLang() {
   
   loadSchemes(lang);
 }
+
+// Listen for language change event
+window.addEventListener('languageChanged', function(event) {
+    changeLang();
+});
 
 changeLang();

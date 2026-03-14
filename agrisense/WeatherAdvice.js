@@ -262,8 +262,7 @@ function loadDistricts(lang) {
 }
 
 function changeLang() {
-  const langSelect = document.getElementById("lang");
-  const lang = langSelect.value;
+  const lang = localStorage.getItem('selectedLanguage') || 'hi';
   const data = WEATHER_DATA[lang];
   
   document.getElementById("heading").innerText = data.heading;
@@ -279,23 +278,30 @@ function changeLang() {
   document.getElementById("noData").classList.add("hidden");
 }
 
+// Listen for language change event
+window.addEventListener('languageChanged', function(event) {
+    changeLang();
+});
+
 function getWeather() {
-  const lang = document.getElementById("lang").value;
-  const location = document.getElementById("location").value;
+  const lang = localStorage.getItem('selectedLanguage') || 'hi';
+  const locationValue = document.getElementById("location").value;
   
-  if (!location) {
+  if (!locationValue) {
     document.getElementById("noData").classList.remove("hidden");
     document.getElementById("weatherResult").classList.add("hidden");
     return;
   }
   
-  const districtName = location;
-  const weatherData = DISTRICT_WEATHER[districtName] ? { ...DISTRICT_WEATHER[districtName] } : {
-    temp: 28,
-    humidity: 55,
-    wind: 10,
-    rain: 25
-  };
+  const districtName = locationValue;
+  if (!DISTRICT_WEATHER[districtName]) {
+    document.getElementById("noDataMsg").innerText = WEATHER_DATA[lang].noDataMsg + " (डेटा उपलब्ध नहीं है)";
+    document.getElementById("noData").classList.remove("hidden");
+    document.getElementById("weatherResult").classList.add("hidden");
+    return;
+  }
+
+  const weatherData = { ...DISTRICT_WEATHER[districtName] };
   
   // Add some variation
   const variation = (Math.random() - 0.5) * 6;
@@ -310,9 +316,11 @@ function displayWeather(location, weather, lang) {
   const data = WEATHER_DATA[lang];
   document.getElementById("noData").classList.add("hidden");
   document.getElementById("weatherResult").classList.remove("hidden");
-  
-  // Display location name
-  document.getElementById("locName").innerText = location;
+
+  // Display location and state (if present)
+  const [selectedState, selectedDistrict] = location.split('-').map(s => s.trim()).reverse();
+  const formattedName = selectedDistrict ? `${selectedDistrict}, ${selectedState}` : location;
+  document.getElementById("locName").innerText = formattedName;
   
   // Display weather info
   document.getElementById("tempDisplay").innerText = weather.temp + "°C";
