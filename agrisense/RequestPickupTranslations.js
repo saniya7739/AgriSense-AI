@@ -1,4 +1,4 @@
-const PICKUP_TEXT = {
+export const PICKUP_TEXT = {
     hi: {
         title: "🚚 फसल पिकअप अनुरोध",
         subtitle: "नीचे दिए गए फॉर्म को भरें",
