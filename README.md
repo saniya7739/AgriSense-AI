@@ -6,15 +6,6 @@ AgriSense AI is an intelligent farming assistant designed to empower farmers wit
 
 The goal of AgriSense AI is to make agricultural decision-making easier, faster, and more accessible for farmers, helping them reduce losses and improve productivity.
 
-🎥 Demo & Presentation
-
-📹 Project Demo Video and Pitch Deck
-🔗 [https://drive.google.com/your-demo-link](https://drive.google.com/drive/folders/1l0O_0U1NgbFbywU_OdNEQ9FhzaGSMkZz?usp=drive_link)
-
-📄 Project PPT
-🔗[ https://drive.google.com/your-ppt-link](https://drive.google.com/file/d/1CAqhAjF7zrDLD42nV3SD7bmF5ktgatgv/view?usp=drive_link)
-
-
 
 ✨ Features
 🌱 Core Modules
